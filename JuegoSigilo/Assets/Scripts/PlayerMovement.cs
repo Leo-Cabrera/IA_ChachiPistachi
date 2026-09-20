@@ -3,13 +3,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("References")]
     [SerializeField] private Rigidbody rb;
-
-    [Header("Movement")]
     [SerializeField] private float speed = 3f;
-
-    [Header("Rotation")]
     [SerializeField] private float rotationSpeed = 10f;
 
     private Vector2 movementInput;
@@ -31,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
         if (Keyboard.current.aKey.isPressed)
             movementInput.x -= 1f;
 
-        // Evita que diagonal sea más rápida.
+        // Evita que diagonal sea mas rapida.
         movementInput = Vector2.ClampMagnitude(movementInput, 1f);
     }
 

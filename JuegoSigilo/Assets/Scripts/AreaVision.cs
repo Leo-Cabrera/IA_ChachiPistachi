@@ -1,28 +1,27 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
-public class PlayerVisionMesh : MonoBehaviour
+public class AreaVision : MonoBehaviour
 {
-    [SerializeField] private float viewDistance = 10f;
-    [SerializeField, Range(1f, 360f)] private float viewAngle = 90f;
+    public float viewDistance = 2f;
+    [SerializeField, Range(1f, 360f)] private float viewAngle = 360f;
     [SerializeField, Range(10, 200)] private int rayCount = 100;
-    [SerializeField] private float eyeHeight = 1f;
+    public float eyeHeight = 0.01f;
 
     [SerializeField] private LayerMask obstacleMask;
     [SerializeField] private LayerMask visionTargetMask;
 
-    // Enemigos que eran visibles por el cono en el frame anterior
-    private List<RefEnemy> previousTargets = new List<RefEnemy>();
-
     private Mesh visionMesh;
+
+    // Enemigos que estaban dentro del area durante el frame anterior
+    private List<RefEnemy> previousTargets = new List<RefEnemy>();
 
     private void Awake()
     {
         visionMesh = new Mesh();
-        visionMesh.name = "Player Vision";
+        visionMesh.name = "Area Vision";
 
         GetComponent<MeshFilter>().sharedMesh = visionMesh;
     }
@@ -88,25 +87,25 @@ public class PlayerVisionMesh : MonoBehaviour
 
     private void UpdateVisionTargets()
     {
-        // 1. Los que eran visibles el frame anterior
-        // dejan de estar visibles por el cono.
+        // Primero quitamos la visibilidad del area
+        // a todos los enemigos que estaban dentro anteriormente.
         foreach (RefEnemy enemy in previousTargets)
         {
             if (enemy == null)
                 continue;
 
-            enemy.coneVisibility = false;
+            enemy.areaVisibility = false;
             enemy.changeVisibility();
         }
 
-        // 2. Buscamos los enemigos que están dentro del alcance.
+        // Buscamos quien esta dentro del area AHORA.
         Collider[] targets = Physics.OverlapSphere(
             transform.position,
             viewDistance,
             visionTargetMask
         );
 
-        // 3. Creamos la lista de enemigos visibles en ESTE frame.
+        // Nueva lista para este frame.
         List<RefEnemy> currentTargets = new List<RefEnemy>();
 
         foreach (Collider target in targets)
@@ -118,11 +117,9 @@ public class PlayerVisionMesh : MonoBehaviour
 
             bool visible = IsTargetVisible(target);
 
-            // Si está dentro del cono y no hay obstáculos,
-            // pertenece a los objetivos actuales.
             if (visible)
             {
-                refEnemy.coneVisibility = true;
+                refEnemy.areaVisibility = true;
                 refEnemy.changeVisibility();
 
                 if (!currentTargets.Contains(refEnemy))
@@ -132,7 +129,7 @@ public class PlayerVisionMesh : MonoBehaviour
             }
         }
 
-        // 4. Guardamos los objetivos actuales para el siguiente frame.
+        // Guardamos quien esta dentro para el siguiente frame.
         previousTargets = currentTargets;
     }
 
@@ -147,15 +144,7 @@ public class PlayerVisionMesh : MonoBehaviour
 
         float distance = direction.magnitude;
 
-        if (distance > viewDistance)
-            return false;
-
-        float angle = Vector3.Angle(
-            transform.forward,
-            direction
-        );
-
-        if (angle > viewAngle / 2f)
+        if (distance - 0.5f > viewDistance)
             return false;
 
         if (Physics.Raycast(
