@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        // Sintaxis alternativa que no da error CS0411:
+        
         miSphereCollider = (SphereCollider)GetComponent(typeof(SphereCollider));
 
         if (target == null)

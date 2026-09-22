@@ -475,6 +475,7 @@ GameObject:
   - component: {fileID: 503806640}
   - component: {fileID: 503806641}
   - component: {fileID: 503806642}
+  - component: {fileID: 503806643}
   m_Layer: 6
   m_Name: Enemigo (Placeholder)
   m_TagString: Untagged
@@ -721,7 +722,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 5.505876
+  m_Radius: 5
   m_Center: {x: -0.040401936, y: 0, z: 0}
 --- !u!82 &503806641
 AudioSource:
@@ -834,6 +835,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayStinger
   stinger: {fileID: 503806641}
   hasPlayed: 0
+--- !u!114 &503806643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503806632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2a9d6568db13344f8db73e7ce7d366b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  target: {fileID: 1663826100}
+  velocidad: 3
+  RotacionVel: 5
+  TiempoCambio: 4
+  crono: 0
+  direccionRandom: {x: 0, y: 0, z: 0}
 --- !u!1 &775509231
 GameObject:
   m_ObjectHideFlags: 0
