@@ -12,6 +12,14 @@ public class Enemy : MonoBehaviour
 
     private SphereCollider miSphereCollider;
 
+    [SerializeField] float maxSpeed = 6f;
+    [SerializeField] float arriveDistance = .4f;
+
+    Vector3 targetPosition;
+    Vector3 delta;
+    Vector3 steering;
+    Vector3 currentVelocity;
+
     void Start()
     {
         
@@ -57,15 +65,34 @@ public class Enemy : MonoBehaviour
 
     void SeguirObjetivo(Vector3 posicionObjetivo)
     {
-        Vector3 direccion = (posicionObjetivo - transform.position);
-        direccion.y = 0;
+        //SEEK BEHAVIOUR: Un poco chustera pero bueno va que es lo importante aquí
+        targetPosition = posicionObjetivo;
 
-        if (direccion != Vector3.zero)
-        {
-            Quaternion rotacionDeseada = Quaternion.LookRotation(direccion);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
-            transform.position += transform.forward * velocidad * Time.deltaTime;
-        }
+        delta = targetPosition - transform.position;
+        delta.y = 0; // Ignorar la componente vertical para el movimiento en el plano horizontal
+        Vector3 desiredVelocity = delta.normalized * maxSpeed;
+
+        steering = desiredVelocity - currentVelocity;
+        currentVelocity = currentVelocity + steering * Time.deltaTime;
+        currentVelocity = Vector3.ClampMagnitude(currentVelocity, maxSpeed);
+
+        float brakingFactor = Mathf.Sqrt(Mathf.Clamp01(delta.magnitude / arriveDistance));
+        currentVelocity = currentVelocity * brakingFactor;
+
+        Quaternion rotacionDeseada = Quaternion.LookRotation(posicionObjetivo - transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
+
+        transform.position = transform.position + (Vector3)currentVelocity * Time.deltaTime;
+
+        // Vector3 direccion = (posicionObjetivo - transform.position);
+        // direccion.y = 0;
+
+        // if (direccion != Vector3.zero)
+        // {
+        //     Quaternion rotacionDeseada = Quaternion.LookRotation(direccion);
+        //     transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
+        //     transform.position += transform.forward * velocidad * Time.deltaTime;
+        // }
     }
 
     void Patrullar()
