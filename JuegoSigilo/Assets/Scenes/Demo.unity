@@ -842,8 +842,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 5.505876
-  m_Center: {x: -0.040401936, y: 0, z: 0}
+  m_Radius: 5.8811746
+  m_Center: {x: -0.040401936, y: 0, z: 0.37529898}
 --- !u!82 &503806641
 AudioSource:
   m_ObjectHideFlags: 0
@@ -973,6 +973,8 @@ MonoBehaviour:
   TiempoCambio: 4
   crono: 0
   direccionRandom: {x: 0, y: 0, z: 0}
+  maxSpeed: 6
+  arriveDistance: 0.4
 --- !u!54 &503806644
 Rigidbody:
   m_ObjectHideFlags: 0

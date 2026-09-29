@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
@@ -20,9 +21,23 @@ public class Enemy : MonoBehaviour
     Vector3 steering;
     Vector3 currentVelocity;
 
+    // private bool dentroAhora = false;
+    // private bool dentroAntes = false;
+
+    int roleAssigned = -1; // -1: no asignado, 0: SEEK, 1: PURSUIT
+
+    enum EnemyState
+    {
+        SEEK,
+        PURSUIT,
+        PATROL
+    }
+
+    EnemyState currentState;
+
     void Start()
     {
-        
+        currentState = EnemyState.PATROL;
         miSphereCollider = (SphereCollider)GetComponent(typeof(SphereCollider));
 
         if (target == null)
@@ -34,21 +49,20 @@ public class Enemy : MonoBehaviour
         EligirNuevaDireccion();
     }
 
-    void Update()
-    {
-        if (target == null) return;
-
-        float radioDeteccion = ObtenerRadioSphereCollider();
-
-        float distancia = Vector3.Distance(transform.position, target.position);
-
-        if (distancia <= radioDeteccion)
+    void Update() {
+        Debug.Log("Current state: " + currentState);
+        
+        if (target != null)
         {
-            SeguirObjetivo(target.position);
-        }
-        else
-        {
-            Patrullar();
+            float distanceToTarget = Vector3.Distance(transform.position, target.position);
+            float radioSphereCollider = ObtenerRadioSphereCollider();
+
+            if(currentState == EnemyState.PATROL) {
+                Patrullar();
+            }
+            else if (currentState == EnemyState.SEEK || currentState == EnemyState.PURSUIT) {
+                Atacar();
+            }
         }
     }
 
@@ -63,36 +77,58 @@ public class Enemy : MonoBehaviour
         return 7f; // Radio por defecto si no se encuentra el SphereCollider
     }
 
-    void SeguirObjetivo(Vector3 posicionObjetivo)
+    void OnTriggerEnter(Collider sphereCollider)
     {
-        //SEEK BEHAVIOUR: Un poco chustera pero bueno va que es lo importante aquí
-        targetPosition = posicionObjetivo;
+        if (sphereCollider.gameObject.CompareTag("Player") && sphereCollider is CapsuleCollider)
+        {
+            roleAssigned = Random.Range(0, 2); // Genera un número aleatorio entre 0 y 1
+            //Debug.Log("Role assigned: " + roleAssigned);
+            if (roleAssigned == 0) {
+                currentState = EnemyState.SEEK;
+            }
+            else {
+                currentState = EnemyState.PURSUIT;
+            }
+        }
+        else {
+            return;
+        }
+    }
 
-        delta = targetPosition - transform.position;
-        delta.y = 0; // Ignorar la componente vertical para el movimiento en el plano horizontal
-        Vector3 desiredVelocity = delta.normalized * maxSpeed;
+    void Atacar() {
+        if (currentState == EnemyState.SEEK)  //SEEK
+        {
+            //SEEK BEHAVIOUR: Un poco chustera pero bueno va que es lo importante aquí
+            targetPosition = target.position;
 
-        steering = desiredVelocity - currentVelocity;
-        currentVelocity = currentVelocity + steering * Time.deltaTime;
-        currentVelocity = Vector3.ClampMagnitude(currentVelocity, maxSpeed);
+            delta = targetPosition - transform.position;
+            delta.y = 0; // Ignorar la componente vertical para el movimiento en el plano horizontal
+            Vector3 desiredVelocity = delta.normalized * maxSpeed;
 
-        float brakingFactor = Mathf.Sqrt(Mathf.Clamp01(delta.magnitude / arriveDistance));
-        currentVelocity = currentVelocity * brakingFactor;
+            steering = desiredVelocity - currentVelocity;
+            currentVelocity = currentVelocity + steering * Time.deltaTime;
+            currentVelocity = Vector3.ClampMagnitude(currentVelocity, maxSpeed);
 
-        Quaternion rotacionDeseada = Quaternion.LookRotation(posicionObjetivo - transform.position);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
+            float brakingFactor = Mathf.Sqrt(Mathf.Clamp01(delta.magnitude / arriveDistance));
+            currentVelocity = currentVelocity * brakingFactor;
 
-        transform.position = transform.position + (Vector3)currentVelocity * Time.deltaTime;
+            Quaternion rotacionDeseada = Quaternion.LookRotation(target.position - transform.position);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
 
-        // Vector3 direccion = (posicionObjetivo - transform.position);
-        // direccion.y = 0;
+            transform.position = transform.position + (Vector3)currentVelocity * Time.deltaTime;
+        }
+        else if (currentState == EnemyState.PURSUIT)   //PURSUIT
+        {
+            Debug.Log("Pursuit");
+        }
+    }
 
-        // if (direccion != Vector3.zero)
-        // {
-        //     Quaternion rotacionDeseada = Quaternion.LookRotation(direccion);
-        //     transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
-        //     transform.position += transform.forward * velocidad * Time.deltaTime;
-        // }
+    void OnTriggerExit(Collider sphereCollider)
+    {
+        if (sphereCollider.gameObject.CompareTag("Player") && sphereCollider is CapsuleCollider)
+        {
+            currentState = EnemyState.PATROL;
+        }
     }
 
     void Patrullar()
