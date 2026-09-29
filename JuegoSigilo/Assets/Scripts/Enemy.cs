@@ -7,6 +7,9 @@ public class Enemy : MonoBehaviour
     public float velocidad = 3f;
     public float RotacionVel = 5f;
 
+    public float tiempoPrediccion = 3f;
+    public Vector3 velJugador;
+
     public float TiempoCambio = 4f;
     public float crono;
     public Vector3 direccionRandom;
@@ -54,8 +57,8 @@ public class Enemy : MonoBehaviour
         
         if (target != null)
         {
-            float distanceToTarget = Vector3.Distance(transform.position, target.position);
-            float radioSphereCollider = ObtenerRadioSphereCollider();
+            //float distanceToTarget = Vector3.Distance(transform.position, target.position);
+            //float radioSphereCollider = ObtenerRadioSphereCollider();
 
             if(currentState == EnemyState.PATROL) {
                 Patrullar();
@@ -119,7 +122,25 @@ public class Enemy : MonoBehaviour
         }
         else if (currentState == EnemyState.PURSUIT)   //PURSUIT
         {
-            Debug.Log("Pursuit");
+            velJugador = ObtenerVelocidadJugador();
+
+            Vector3 posPredicha = target.position + velJugador * tiempoPrediccion;
+
+            posPredicha.y = transform.position.y;
+
+            Vector3 direccion = posPredicha - transform.position;
+
+            Vector3 posDeseada = direccion.normalized * maxSpeed;
+
+            steering = posDeseada - currentVelocity;
+
+            currentVelocity += steering * Time.deltaTime;
+            currentVelocity = Vector3.ClampMagnitude(currentVelocity, maxSpeed);
+
+            Quaternion rotacionDeseada = Quaternion.LookRotation(direccion);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
+
+            transform.position = transform.position * Time.deltaTime;
         }
     }
 
@@ -150,5 +171,17 @@ public class Enemy : MonoBehaviour
     {
         float grado = Random.Range(0f, 360f);
         direccionRandom = Quaternion.Euler(0, grado, 0) * Vector3.forward;
+    }
+
+
+    Vector3 ObtenerVelocidadJugador()
+    {
+        Rigidbody rbJugador = target.GetComponent<Rigidbody>();
+
+        if (rbJugador != null)
+        {
+            return rbJugador.linearVelocity;
+        }
+        return Vector3.zero;
     }
 }
