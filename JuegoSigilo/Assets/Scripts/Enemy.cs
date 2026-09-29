@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        
+
         miSphereCollider = (SphereCollider)GetComponent(typeof(SphereCollider));
 
         if (target == null)
