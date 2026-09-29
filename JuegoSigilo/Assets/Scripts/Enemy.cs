@@ -140,7 +140,7 @@ public class Enemy : MonoBehaviour
             Quaternion rotacionDeseada = Quaternion.LookRotation(direccion);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
 
-            transform.position = transform.position * Time.deltaTime;
+            transform.position = transform.position + (Vector3)currentVelocity * Time.deltaTime;
         }
     }
 
