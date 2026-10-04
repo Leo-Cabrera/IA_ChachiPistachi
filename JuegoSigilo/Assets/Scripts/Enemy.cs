@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour
 {
@@ -24,6 +25,10 @@ public class Enemy : MonoBehaviour
     Vector3 steering;
     Vector3 currentVelocity;
 
+    private Parilla parilla;
+    private List<Nodo> camino;
+    private int indiceCamino;
+
     // private bool dentroAhora = false;
     // private bool dentroAntes = false;
 
@@ -40,6 +45,8 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
+        parilla = FindObjectOfType<Parilla>();
+
         currentState = EnemyState.PATROL;
         miSphereCollider = (SphereCollider)GetComponent(typeof(SphereCollider));
 
@@ -67,6 +74,34 @@ public class Enemy : MonoBehaviour
                 Atacar();
             }
         }
+
+        if(parilla != null && (currentState == EnemyState.SEEK || currentState == EnemyState.PURSUIT))
+        {
+            camino = parilla.ObtenerCamino();
+            SeguirCamino();
+        }
+    }
+
+    void SeguirCamino()
+    {
+        if (camino == null || camino.Count == 0)
+            return;
+
+        if (indiceCamino >= camino.Count)
+            return;
+
+        Vector3 destino = camino[indiceCamino].posicionMundo;
+
+        Vector3 direccion = destino - transform.position;
+        direccion.y = 0;
+
+        if (direccion.magnitude < 0.1f)
+        {
+            indiceCamino++;
+            return;
+        }
+
+        transform.position += direccion.normalized * velocidad * Time.deltaTime;
     }
 
     float ObtenerRadioSphereCollider()
