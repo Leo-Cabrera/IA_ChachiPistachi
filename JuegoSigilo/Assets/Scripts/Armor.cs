@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-public class Enemy : MonoBehaviour
+public class Armor : MonoBehaviour
 {
     public Transform target;
-    public float velocidad = 3f;
+    public float velocidad = 1f;
     public float RotacionVel = 5f;
 
     public float tiempoPrediccion = 3f;
@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
 
     private SphereCollider miSphereCollider;
 
-    [SerializeField] float maxSpeed = 6f;
+    [SerializeField] float maxSpeed = 1f;
     [SerializeField] float arriveDistance = .4f;
 
     Vector3 targetPosition;
@@ -24,15 +24,18 @@ public class Enemy : MonoBehaviour
     Vector3 steering;
     Vector3 currentVelocity;
 
+    float radioDeteccion = 10f; // Radio de detección para alertar a los espíritus
+
     // private bool dentroAhora = false;
     // private bool dentroAntes = false;
 
-    int roleAssigned = -1; // -1: no asignado, 0: SEEK, 1: PURSUIT
+    bool beenAlerted = false;
+
+    public AudioSource alertSoundSource; // AudioSource para reproducir el sonido de alerta
 
     enum EnemyState
     {
         SEEK,
-        PURSUIT,
         PATROL
     }
 
@@ -63,7 +66,7 @@ public class Enemy : MonoBehaviour
             if(currentState == EnemyState.PATROL) {
                 Patrullar();
             }
-            else if (currentState == EnemyState.SEEK || currentState == EnemyState.PURSUIT) {
+            else if (currentState == EnemyState.SEEK) {
                 Atacar();
             }
         }
@@ -84,13 +87,11 @@ public class Enemy : MonoBehaviour
     {
         if (sphereCollider.gameObject.CompareTag("Player") && sphereCollider is CapsuleCollider)
         {
-            roleAssigned = Random.Range(0, 2); // Genera un número aleatorio entre 0 y 1
-            //Debug.Log("Role assigned: " + roleAssigned);
-            if (roleAssigned == 0) {
-                currentState = EnemyState.SEEK;
-            }
-            else {
-                currentState = EnemyState.PURSUIT;
+            currentState = EnemyState.SEEK;
+            alertSoundSource.Play(); // Reproducir el sonido de alerta al entrar en contacto con el jugador
+            if (!beenAlerted) {
+                alertSpirits();
+                beenAlerted = true;
             }
         }
         else {
@@ -98,50 +99,47 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    void alertSpirits() {
+        Spirit[] potentialSpirits = FindObjectsOfType<Spirit>();
+        Spirit[] spiritsAlerted = new Spirit[potentialSpirits.Length];
+        int alertCount = 0;
+        Transform spiritTransform;
+
+        foreach (Spirit spirit in potentialSpirits) {
+            spiritTransform = spirit.GetComponent<Transform>();
+            float distancia = Vector3.Distance(transform.position, spiritTransform.position);
+            if (distancia <= radioDeteccion && spirit != null) {
+                spiritsAlerted[alertCount] = spirit;
+                alertCount++;
+            }
+        }
+
+        foreach (Spirit spirit in spiritsAlerted) {
+            if (spirit != null) {
+                spirit.OnAlerted();
+            }
+        }
+    }
+
     void Atacar() {
-        if (currentState == EnemyState.SEEK)  //SEEK
-        {
-            //SEEK BEHAVIOUR: Un poco chustera pero bueno va que es lo importante aquí
-            targetPosition = target.position;
+        //SEEK BEHAVIOUR: Un poco chustera pero bueno va que es lo importante aquí
+        targetPosition = target.position;
 
-            delta = targetPosition - transform.position;
-            delta.y = 0; // Ignorar la componente vertical para el movimiento en el plano horizontal
-            Vector3 desiredVelocity = delta.normalized * maxSpeed;
+        delta = targetPosition - transform.position;
+        delta.y = 0; // Ignorar la componente vertical para el movimiento en el plano horizontal
+        Vector3 desiredVelocity = delta.normalized * maxSpeed;
 
-            steering = desiredVelocity - currentVelocity;
-            currentVelocity = currentVelocity + steering * Time.deltaTime;
-            currentVelocity = Vector3.ClampMagnitude(currentVelocity, maxSpeed);
+        steering = desiredVelocity - currentVelocity;
+        currentVelocity = currentVelocity + steering * Time.deltaTime;
+        currentVelocity = Vector3.ClampMagnitude(currentVelocity, maxSpeed);
 
-            float brakingFactor = Mathf.Sqrt(Mathf.Clamp01(delta.magnitude / arriveDistance));
-            currentVelocity = currentVelocity * brakingFactor;
+        float brakingFactor = Mathf.Sqrt(Mathf.Clamp01(delta.magnitude / arriveDistance));
+        currentVelocity = currentVelocity * brakingFactor;
 
-            Quaternion rotacionDeseada = Quaternion.LookRotation(target.position - transform.position);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
+        Quaternion rotacionDeseada = Quaternion.LookRotation(target.position - transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
 
-            transform.position = transform.position + (Vector3)currentVelocity * Time.deltaTime;
-        }
-        else if (currentState == EnemyState.PURSUIT)   //PURSUIT
-        {
-            velJugador = ObtenerVelocidadJugador();
-
-            Vector3 posPredicha = target.position + velJugador * tiempoPrediccion;
-
-            posPredicha.y = transform.position.y;
-
-            Vector3 direccion = posPredicha - transform.position;
-
-            Vector3 posDeseada = direccion.normalized * maxSpeed;
-
-            steering = posDeseada - currentVelocity;
-
-            currentVelocity += steering * Time.deltaTime;
-            currentVelocity = Vector3.ClampMagnitude(currentVelocity, maxSpeed);
-
-            Quaternion rotacionDeseada = Quaternion.LookRotation(direccion);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
-
-            transform.position = transform.position + (Vector3)currentVelocity * Time.deltaTime;
-        }
+        transform.position = transform.position + (Vector3)currentVelocity * Time.deltaTime;
     }
 
     void OnTriggerExit(Collider sphereCollider)
@@ -149,6 +147,7 @@ public class Enemy : MonoBehaviour
         if (sphereCollider.gameObject.CompareTag("Player") && sphereCollider is CapsuleCollider)
         {
             currentState = EnemyState.PATROL;
+            beenAlerted = false; // Reset the alert status when the player exits the trigger
         }
     }
 
@@ -171,17 +170,5 @@ public class Enemy : MonoBehaviour
     {
         float grado = Random.Range(0f, 360f);
         direccionRandom = Quaternion.Euler(0, grado, 0) * Vector3.forward;
-    }
-
-
-    Vector3 ObtenerVelocidadJugador()
-    {
-        Rigidbody rbJugador = target.GetComponent<Rigidbody>();
-
-        if (rbJugador != null)
-        {
-            return rbJugador.linearVelocity;
-        }
-        return Vector3.zero;
     }
 }
