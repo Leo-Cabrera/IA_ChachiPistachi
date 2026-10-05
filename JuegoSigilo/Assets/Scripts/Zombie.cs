@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Enemy : MonoBehaviour
+public class Zombie : MonoBehaviour
 {
     public Transform target;
     public float velocidad = 3f;
@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
 
     private SphereCollider miSphereCollider;
 
-    [SerializeField] float maxSpeed = 6f;
+    [SerializeField] float maxSpeed = 3f;
     [SerializeField] float arriveDistance = .4f;
 
     Vector3 targetPosition;
@@ -175,7 +175,7 @@ public class Enemy : MonoBehaviour
             Quaternion rotacionDeseada = Quaternion.LookRotation(direccion);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
 
-            transform.position = transform.position * Time.deltaTime;
+            transform.position = transform.position + (Vector3)currentVelocity * Time.deltaTime;
         }
     }
 
