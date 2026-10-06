@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Armor : MonoBehaviour
 {
@@ -58,6 +59,7 @@ public class Armor : MonoBehaviour
             if (player != null)
                 target = player.transform;
         }
+
         EligirNuevaDireccion();
     }
 
@@ -166,15 +168,16 @@ public class Armor : MonoBehaviour
             ultimoNodoObjetivo = nodoObjetivo;
         }
 
-        steering = desiredVelocity - currentVelocity;
-        currentVelocity = currentVelocity + steering * Time.deltaTime;
-        currentVelocity = Vector3.ClampMagnitude(currentVelocity, maxSpeed);
+        MoverPorCamino();
+    }
 
-        float brakingFactor = Mathf.Sqrt(Mathf.Clamp01(delta.magnitude / arriveDistance));
-        currentVelocity = currentVelocity * brakingFactor;
+    void MoverPorCamino()
+    {
+        if (camino == null || camino.Count == 0)
+            return;
 
-        Quaternion rotacionDeseada = Quaternion.LookRotation(target.position - transform.position);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
+        if (indiceCamino >= camino.Count)
+            return;
 
         Vector3 destino =
             camino[indiceCamino].posicionMundo;

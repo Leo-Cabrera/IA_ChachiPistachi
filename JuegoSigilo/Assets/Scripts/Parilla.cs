@@ -21,7 +21,6 @@ public class Parilla : MonoBehaviour
             GameObject.FindGameObjectWithTag("Player");
 
         if (jugador != null && nodos != null)
-        if (jugador != null && nodos != null)
         {
             nodoJugador =
                 ObtenerNodoDesdePosicion(
