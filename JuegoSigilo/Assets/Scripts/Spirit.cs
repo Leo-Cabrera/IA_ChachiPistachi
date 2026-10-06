@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 public class Spirit : MonoBehaviour
 {
@@ -38,8 +37,6 @@ public class Spirit : MonoBehaviour
 
     void Start()
     {
-        parilla = FindObjectOfType<Parilla>();
-
         currentState = EnemyState.PATROL;
 
         miSphereCollider =
@@ -93,10 +90,6 @@ public class Spirit : MonoBehaviour
     public void OnAlerted()
     {
         currentState = EnemyState.SEEK;
-
-        camino = null;
-        indiceCamino = 0;
-        ultimoNodoObjetivo = null;
     }
 
     void Atacar()

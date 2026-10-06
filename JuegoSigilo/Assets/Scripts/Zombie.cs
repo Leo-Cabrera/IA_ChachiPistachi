@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Zombie : MonoBehaviour
 {
     public Transform target;
+
     public float velocidad = 3f;
     public float RotacionVel = 5f;
     public float tiempoPrediccion = 3f;
@@ -24,8 +25,10 @@ public class Zombie : MonoBehaviour
     Vector3 currentVelocity;
 
     private Parilla parilla;
+
     private List<Nodo> camino;
     private int indiceCamino;
+    private Nodo ultimoNodoObjetivo;
     private Nodo ultimoNodoObjetivo;
 
     int roleAssigned = -1;
@@ -35,9 +38,11 @@ public class Zombie : MonoBehaviour
         SEEK,
         PURSUIT,
         PATROL
+        PATROL
     }
 
     EnemyState currentState;
+
 
     void Start()
     {
@@ -48,13 +53,18 @@ public class Zombie : MonoBehaviour
         miSphereCollider =
             (SphereCollider)GetComponent(typeof(SphereCollider));
 
+        miSphereCollider =
+            (SphereCollider)GetComponent(typeof(SphereCollider));
+
         if (target == null)
         {
             GameObject player = GameObject.Find("Player");
 
+
             if (player != null)
                 target = player.transform;
         }
+
 
         EligirNuevaDireccion();
     }
@@ -73,15 +83,24 @@ public class Zombie : MonoBehaviour
             SeguirCamino(false);
         }
         else if (currentState == EnemyState.PURSUIT)
+        if (currentState == EnemyState.PATROL)
         {
+            Patrullar();
+        }
+        else if (currentState == EnemyState.SEEK)
+        {
+            SeguirCamino(false);
+        }
+        else if (currentState == EnemyState.PURSUIT)
+        {
+            SeguirCamino(true);
             SeguirCamino(true);
         }
     }
 
     void SeguirCamino(bool pursuit)
     {
-        if (parilla == null)
-            return;
+        if (parilla == null) return;
 
         Vector3 posicionObjetivo;
 
@@ -149,6 +168,10 @@ public class Zombie : MonoBehaviour
             return;
         }
 
+        Quaternion rotacionDeseada = Quaternion.LookRotation(direccion);
+
+        transform.rotation = Quaternion.Slerp( transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
+
         Quaternion rotacionDeseada =
             Quaternion.LookRotation(direccion);
 
@@ -178,6 +201,8 @@ public class Zombie : MonoBehaviour
             }
             else
             {
+            else
+            {
                 currentState = EnemyState.PURSUIT;
             }
 
@@ -192,6 +217,7 @@ public class Zombie : MonoBehaviour
             );
         }
     }
+
 
     void OnTriggerExit(Collider sphereCollider)
     {
@@ -213,9 +239,11 @@ public class Zombie : MonoBehaviour
         }
     }
 
+
     void Patrullar()
     {
         crono += Time.deltaTime;
+
 
         if (crono >= TiempoCambio)
         {
@@ -239,6 +267,7 @@ public class Zombie : MonoBehaviour
             Time.deltaTime;
     }
 
+
     void EligirNuevaDireccion()
     {
         float grado =
@@ -258,6 +287,7 @@ public class Zombie : MonoBehaviour
         {
             return rbJugador.linearVelocity;
         }
+
 
         return Vector3.zero;
     }
