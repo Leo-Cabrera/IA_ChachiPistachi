@@ -1,8 +1,17 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Armor : MonoBehaviour
 {
+
+
+    private Parilla parilla;
+    private List<Nodo> camino;
+    private int indiceCamino;
+    private Nodo ultimoNodoObjetivo;
+
+
     public Transform target;
     public float velocidad = 1f;
     public float RotacionVel = 5f;
@@ -43,6 +52,9 @@ public class Armor : MonoBehaviour
 
     void Start()
     {
+
+        parilla = FindObjectOfType<Parilla>();
+
         currentState = EnemyState.PATROL;
         miSphereCollider = (SphereCollider)GetComponent(typeof(SphereCollider));
 
@@ -52,7 +64,7 @@ public class Armor : MonoBehaviour
             if (player != null)
                 target = player.transform;
         }
-        EligirNuevaDireccion();
+        ElegirNuevaDireccion();
     }
 
     void Update() {
@@ -83,21 +95,7 @@ public class Armor : MonoBehaviour
         return 7f; // Radio por defecto si no se encuentra el SphereCollider
     }
 
-    void OnTriggerEnter(Collider sphereCollider)
-    {
-        if (sphereCollider.gameObject.CompareTag("Player") && sphereCollider is CapsuleCollider)
-        {
-            currentState = EnemyState.SEEK;
-            alertSoundSource.Play(); // Reproducir el sonido de alerta al entrar en contacto con el jugador
-            if (!beenAlerted) {
-                alertSpirits();
-                beenAlerted = true;
-            }
-        }
-        else {
-            return;
-        }
-    }
+    
 
     void alertSpirits() {
         Spirit[] potentialSpirits = FindObjectsOfType<Spirit>();
@@ -121,25 +119,71 @@ public class Armor : MonoBehaviour
         }
     }
 
-    void Atacar() {
-        //SEEK BEHAVIOUR: Un poco chustera pero bueno va que es lo importante aquí
-        targetPosition = target.position;
+    void Atacar()
+    {
+        if (parilla == null)
+            return;
+        
+        Nodo nodoArmor = parilla.ObtenerNodoDesdePosicion(transform.position);
+        Nodo nodoObjetivo = parilla.ObtenerNodoDesdePosicion(target.position);
 
-        delta = targetPosition - transform.position;
-        delta.y = 0; // Ignorar la componente vertical para el movimiento en el plano horizontal
-        Vector3 desiredVelocity = delta.normalized * maxSpeed;
+        if(camino == null || camino.Count == 0 || indiceCamino >= camino.Count || nodoObjetivo != ultimoNodoObjetivo)
+        {
+            camino = parilla.BuscarCamino(nodoArmor, nodoObjetivo);
+            indiceCamino = 0;
+            ultimoNodoObjetivo = nodoObjetivo;
+        }
 
-        steering = desiredVelocity - currentVelocity;
-        currentVelocity = currentVelocity + steering * Time.deltaTime;
-        currentVelocity = Vector3.ClampMagnitude(currentVelocity, maxSpeed);
+        MoverPorCamino();
+    }
 
-        float brakingFactor = Mathf.Sqrt(Mathf.Clamp01(delta.magnitude / arriveDistance));
-        currentVelocity = currentVelocity * brakingFactor;
+    void MoverPorCamino()
+    {
+        if (camino == null || camino.Count == 0)
+            return;
 
-        Quaternion rotacionDeseada = Quaternion.LookRotation(target.position - transform.position);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
+        if (indiceCamino >= camino.Count)
+            return;
 
-        transform.position = transform.position + (Vector3)currentVelocity * Time.deltaTime;
+        Vector3 destino = camino[indiceCamino].posicionMundo;
+
+        Vector3 direccion = destino - transform.position;
+
+        direccion.y = 0;
+
+        if (direccion.magnitude < 0.1f)
+        {
+            indiceCamino++;
+            return;
+        }
+
+        Quaternion rotacionDeseada = Quaternion.LookRotation(direccion);
+
+        transform.rotation = Quaternion.Slerp( transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
+
+        transform.position += direccion.normalized * velocidad * Time.deltaTime;
+    }
+
+    void OnTriggerEnter(Collider sphereCollider)
+    {
+        if (sphereCollider.gameObject.CompareTag("Player") && sphereCollider is CapsuleCollider)
+        {
+            currentState = EnemyState.SEEK;
+
+            camino = null;
+            indiceCamino = 0;
+            ultimoNodoObjetivo = null;
+
+            alertSoundSource.Play(); // Reproducir el sonido de alerta al entrar en contacto con el jugador
+
+            if (!beenAlerted) {
+                alertSpirits();
+                beenAlerted = true;
+            }
+        }
+        else {
+            return;
+        }
     }
 
     void OnTriggerExit(Collider sphereCollider)
@@ -147,7 +191,15 @@ public class Armor : MonoBehaviour
         if (sphereCollider.gameObject.CompareTag("Player") && sphereCollider is CapsuleCollider)
         {
             currentState = EnemyState.PATROL;
+
+            camino = null;
+            indiceCamino = 0;
+            ultimoNodoObjetivo = null;
+
             beenAlerted = false; // Reset the alert status when the player exits the trigger
+
+            crono = 0f;
+            ElegirNuevaDireccion();
         }
     }
 
@@ -156,7 +208,7 @@ public class Armor : MonoBehaviour
         crono += Time.deltaTime;
         if (crono >= TiempoCambio)
         {
-            EligirNuevaDireccion();
+            ElegirNuevaDireccion();
             crono = 0;
         }
 
@@ -166,9 +218,35 @@ public class Armor : MonoBehaviour
         transform.position += transform.forward * velocidad * Time.deltaTime;
     }
 
-    void EligirNuevaDireccion()
+    void ElegirNuevaDireccion()
     {
         float grado = Random.Range(0f, 360f);
         direccionRandom = Quaternion.Euler(0, grado, 0) * Vector3.forward;
+    }
+
+    void OnDrawGizmos()
+    {
+        if (camino == null)
+            return;
+
+        Gizmos.color = Color.blue;
+
+        for (int i = 0; i < camino.Count; i++)
+        {
+            Vector3 posicion = camino[i].posicionMundo + Vector3.up * 0.25f;
+
+            Gizmos.DrawCube(
+                posicion,
+                Vector3.one * 0.9f
+            );
+
+            if (i < camino.Count - 1)
+            {
+                Vector3 siguiente =
+                    camino[i + 1].posicionMundo + Vector3.up * 0.25f;
+
+                Gizmos.DrawLine(posicion, siguiente);
+            }
+        }
     }
 }

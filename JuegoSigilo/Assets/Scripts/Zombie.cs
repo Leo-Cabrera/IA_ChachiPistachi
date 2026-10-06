@@ -38,7 +38,8 @@ public class Zombie : MonoBehaviour
     {
         SEEK,
         PURSUIT,
-        PATROL
+        PATROL,
+
     }
 
     EnemyState currentState;
@@ -82,7 +83,51 @@ public class Zombie : MonoBehaviour
         }
     }
 
+<<<<<<< Updated upstream
     void SeguirCamino()
+=======
+
+    void SeguirCamino(bool pursuit)
+    {
+        if (parilla == null)
+            return;
+
+        Vector3 posicionObjetivo;
+
+        if (pursuit)
+        {
+            // PURSUIT
+            velJugador = ObtenerVelocidadJugador();
+
+            Vector3 posPredicha = target.position + velJugador * tiempoPrediccion;
+            posPredicha.y = transform.position.y;
+
+            posicionObjetivo = posPredicha;
+        }
+        else
+        {
+            // SEEK
+            posicionObjetivo = target.position;
+        }
+
+        posicionObjetivo.y = transform.position.y;
+
+        Nodo nodoZombie = parilla.ObtenerNodoDesdePosicion(transform.position);
+        Nodo nodoObjetivo = parilla.ObtenerNodoDesdePosicion(posicionObjetivo);
+
+        if (camino == null || camino.Count == 0 || indiceCamino >= camino.Count || nodoObjetivo != ultimoNodoObjetivo)
+        {
+            camino = parilla.BuscarCamino(nodoZombie, nodoObjetivo);
+            indiceCamino = 0;
+            ultimoNodoObjetivo = nodoObjetivo;
+        }
+
+        MoverPorCamino();
+    }
+
+
+    void MoverPorCamino()
+>>>>>>> Stashed changes
     {
         if (camino == null || camino.Count == 0)
             return;
@@ -184,6 +229,21 @@ public class Zombie : MonoBehaviour
         if (sphereCollider.gameObject.CompareTag("Player") && sphereCollider is CapsuleCollider)
         {
             currentState = EnemyState.PATROL;
+<<<<<<< Updated upstream
+=======
+
+            camino = null;
+            indiceCamino = 0;
+
+            ultimoNodoObjetivo = null;
+
+            velJugador = Vector3.zero;
+            currentVelocity = Vector3.zero;
+            crono = 0f;
+
+            EligirNuevaDireccion();
+
+>>>>>>> Stashed changes
         }
     }
 
