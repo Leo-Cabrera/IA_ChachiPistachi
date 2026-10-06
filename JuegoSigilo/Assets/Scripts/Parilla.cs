@@ -148,10 +148,14 @@ public class Parilla : MonoBehaviour
                 Gizmos.color = nodo.caminable ? Color.green : Color.red;
             }
 
+<<<<<<< Updated upstream
             Gizmos.DrawCube(
                 nodo.posicionMundo,
                 Vector3.one * (tamNodo * 0.9f)
             );
+=======
+            Gizmos.DrawCube( nodo.posicionMundo, Vector3.one * (tamNodo * 0.5f));
+>>>>>>> Stashed changes
         }
     }
 
@@ -235,8 +239,11 @@ public class Parilla : MonoBehaviour
         return camino;
     }
 
+<<<<<<< Updated upstream
     public List<Nodo> ObtenerCamino()
     {
         return camino;
     }
+=======
+>>>>>>> Stashed changes
 }

@@ -1,8 +1,15 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Spirit : MonoBehaviour
 {
+
+    private Parilla parilla;
+    private List<Nodo> camino;
+    private int indiceCamino;
+    private Nodo ultimoNodoObjetivo;
+
     public Transform target;
     public float velocidad = 5f;
     public float RotacionVel = 5f;
@@ -37,6 +44,8 @@ public class Spirit : MonoBehaviour
 
     void Start()
     {
+        parilla = FindObjectOfType<Parilla>();
+
         currentState = EnemyState.PATROL;
         miSphereCollider = (SphereCollider)GetComponent(typeof(SphereCollider));
 
@@ -79,27 +88,65 @@ public class Spirit : MonoBehaviour
 
     public void OnAlerted() {
         currentState = EnemyState.SEEK;
+
+        camino = null;
+        indiceCamino = 0;
+        ultimoNodoObjetivo = null;
     }
 
     void Atacar() {
-        //SEEK BEHAVIOUR: Un poco chustera pero bueno va que es lo importante aquí
-        targetPosition = target.position;
+        if (parilla == null)
+            return;
 
-        delta = targetPosition - transform.position;
-        delta.y = 0; // Ignorar la componente vertical para el movimiento en el plano horizontal
-        Vector3 desiredVelocity = delta.normalized * maxSpeed;
+        Nodo nodoSpirit = parilla.ObtenerNodoDesdePosicion(transform.position);
+        Nodo nodoObjetivo = parilla.ObtenerNodoDesdePosicion(target.position);
+
+        if (camino == null || camino.Count == 0 ||
+            indiceCamino >= camino.Count ||
+            nodoObjetivo != ultimoNodoObjetivo)
+        {
+            camino = parilla.BuscarCamino(nodoSpirit, nodoObjetivo);
+            indiceCamino = 0;
+            ultimoNodoObjetivo = nodoObjetivo;
+        }
+
+        MoverPorCamino();
+    }
+
+    void MoverPorCamino()
+    {
+        if (camino == null || camino.Count == 0 || indiceCamino >= camino.Count)
+            return;
+
+        Nodo nodoActual = camino[indiceCamino];
+        Vector3 posicionObjetivo = nodoActual.posicionMundo;
+        posicionObjetivo.y = transform.position.y;
+
+        delta = posicionObjetivo - transform.position;
+        float distancia = delta.magnitude;
+
+        if (distancia < arriveDistance)
+        {
+            indiceCamino++;
+            return;
+        }
+
+        Vector3 direccion = delta.normalized;
+        Vector3 desiredVelocity = direccion * maxSpeed;
 
         steering = desiredVelocity - currentVelocity;
-        currentVelocity = currentVelocity + steering * Time.deltaTime;
-        currentVelocity = Vector3.ClampMagnitude(currentVelocity, maxSpeed);
+        currentVelocity += steering * Time.deltaTime;
 
-        float brakingFactor = Mathf.Sqrt(Mathf.Clamp01(delta.magnitude / arriveDistance));
-        currentVelocity = currentVelocity * brakingFactor;
+        if (currentVelocity.magnitude > maxSpeed)
+            currentVelocity = currentVelocity.normalized * maxSpeed;
 
-        Quaternion rotacionDeseada = Quaternion.LookRotation(target.position - transform.position);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
+        transform.position += currentVelocity * Time.deltaTime;
 
-        transform.position = transform.position + (Vector3)currentVelocity * Time.deltaTime;
+        if (currentVelocity != Vector3.zero)
+        {
+            Quaternion rotacionDeseada = Quaternion.LookRotation(currentVelocity);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
+        }
     }
 
     void OnTriggerExit(Collider sphereCollider)
@@ -107,6 +154,13 @@ public class Spirit : MonoBehaviour
         if (sphereCollider.gameObject.CompareTag("Player") && sphereCollider is CapsuleCollider)
         {
             currentState = EnemyState.PATROL;
+
+            camino = null;
+            indiceCamino = 0;
+            ultimoNodoObjetivo = null;
+
+            EligirNuevaDireccion();
+            crono = 0;
         }
     }
 
@@ -130,4 +184,31 @@ public class Spirit : MonoBehaviour
         float grado = Random.Range(0f, 360f);
         direccionRandom = Quaternion.Euler(0, grado, 0) * Vector3.forward;
     }
+
+    void OnDrawGizmos()
+{
+    if (camino == null)
+        return;
+
+    Gizmos.color = Color.white;
+
+    for (int i = 0; i < camino.Count; i++)
+    {
+        Vector3 posicion =
+            camino[i].posicionMundo + Vector3.up * 0.25f;
+
+        Gizmos.DrawCube(
+            posicion,
+            Vector3.one * 0.9f
+        );
+
+        if (i < camino.Count - 1)
+        {
+            Vector3 siguiente =
+                camino[i + 1].posicionMundo + Vector3.up * 0.25f;
+
+            Gizmos.DrawLine(posicion, siguiente);
+        }
+    }
+}
 }
