@@ -15,8 +15,7 @@ public class Nodo
 
     public int CosteTotal
     {
-        get
-        {
+        get{
             return costeInicio + costeObjetivo;
         }
     }
@@ -27,8 +26,6 @@ public class Nodo
         this.posicionMundo = posicionMundo;
         this.posX = posX;
         this.posY = posY;
-        this.costeInicio = 0;
-        this.costeObjetivo = 0;
-        this.padre = null;
     }
+
 }
