@@ -10,15 +10,14 @@ public class Parilla : MonoBehaviour
 
     private Nodo[,] nodos;
     
-    // private Nodo nodoEnemigo;
+    private Nodo nodoEnemigo;
     private Nodo nodoJugador;
 
-    // private List<Nodo> vecinosEnemigo;
+    private List<Nodo> vecinosEnemigo;
 
-    //private List<Nodo> camino;
+    private List<Nodo> camino;
 
-    // private float tiempoRecalculo = 0.2f;
-    // private float contadorRecalculo;
+
 
 
     void Start()
@@ -28,11 +27,23 @@ public class Parilla : MonoBehaviour
 
     void Update()
     {
+        GameObject enemigo = GameObject.FindGameObjectWithTag("Enemy");
         GameObject jugador = GameObject.FindGameObjectWithTag("Player");
 
-        if (jugador != null && nodos != null)
+        if (enemigo != null && nodos != null)
+        {
+            nodoEnemigo = ObtenerNodoDesdePosicion(enemigo.transform.position);
+            vecinosEnemigo = ObtenerVecinos(nodoEnemigo);
+        }
+
+         if (jugador != null && nodos != null)
         {
             nodoJugador = ObtenerNodoDesdePosicion(jugador.transform.position);
+        }
+
+        if (nodoEnemigo != null && nodoJugador != null)
+        {
+            camino = BuscarCamino(nodoEnemigo, nodoJugador);
         }
     }
 
@@ -116,23 +127,42 @@ public class Parilla : MonoBehaviour
 
         foreach (Nodo nodo in nodos)
         {
-            if (nodo == nodoJugador)
+            if (nodo == nodoEnemigo)
+            {
+                Gizmos.color = Color.blue;
+            }
+            else if (vecinosEnemigo != null && vecinosEnemigo.Contains(nodo))
+            {
+                Gizmos.color = Color.cyan;
+            }
+            else if (nodo == nodoJugador)
             {
                 Gizmos.color = Color.yellow;
+            }
+            else if (camino != null && camino.Contains(nodo))
+            {
+                Gizmos.color = Color.magenta;
             }
             else
             {
                 Gizmos.color = nodo.caminable ? Color.green : Color.red;
             }
 
-            Gizmos.DrawCube( nodo.posicionMundo, Vector3.one * (tamNodo * 0.9f));
+<<<<<<< Updated upstream
+            Gizmos.DrawCube(
+                nodo.posicionMundo,
+                Vector3.one * (tamNodo * 0.9f)
+            );
+=======
+            Gizmos.DrawCube( nodo.posicionMundo, Vector3.one * (tamNodo * 0.5f));
+>>>>>>> Stashed changes
         }
     }
 
     public int CalcularDistancia(Nodo nodoA, Nodo nodoB)
     {
         int distX = Mathf.Abs(nodoA.posX - nodoB.posX);
-        int distY = Mathf.Abs(nodoA.posY - nodoB.posY);
+        int distY = Mathf.Abs(nodoA.posX - nodoB.posX);
 
         int distDiagonal = Mathf.Min(distX, distY);
         int distRecta = Mathf.Abs(distX - distY);
@@ -142,20 +172,8 @@ public class Parilla : MonoBehaviour
 
     public List<Nodo> BuscarCamino(Nodo inicio, Nodo objetivo)
     {
-        // Reiniciamos los datos de todos los nodos
-        // para que cada enemigo tenga su propio cálculo de A*
-        foreach (Nodo nodo in nodos)
-        {
-            nodo.costeInicio = int.MaxValue;
-            nodo.costeObjetivo = 0;
-            nodo.padre = null;
-        }
-
         List<Nodo> abiertos = new List<Nodo>();
         HashSet<Nodo> cerrados = new HashSet<Nodo>();
-
-        inicio.costeInicio = 0;
-        inicio.costeObjetivo = CalcularDistancia(inicio, objetivo);
 
         abiertos.Add(inicio);
 
@@ -221,8 +239,11 @@ public class Parilla : MonoBehaviour
         return camino;
     }
 
-    // public List<Nodo> ObtenerCamino()
-    // {
-    //     return camino;
-    // }
+<<<<<<< Updated upstream
+    public List<Nodo> ObtenerCamino()
+    {
+        return camino;
+    }
+=======
+>>>>>>> Stashed changes
 }

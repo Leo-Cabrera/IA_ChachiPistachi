@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class Zombie : MonoBehaviour
 {
     public Transform target;
-
     public float velocidad = 3f;
     public float RotacionVel = 5f;
 
@@ -27,71 +26,71 @@ public class Zombie : MonoBehaviour
     Vector3 currentVelocity;
 
     private Parilla parilla;
-
     private List<Nodo> camino;
     private int indiceCamino;
-    private Nodo ultimoNodoObjetivo;
 
+    // private bool dentroAhora = false;
+    // private bool dentroAntes = false;
 
-    // -1 = no asignado
-    //  0 = SEEK
-    //  1 = PURSUIT
-    int roleAssigned = -1;
+    int roleAssigned = -1; // -1: no asignado, 0: SEEK, 1: PURSUIT
 
     enum EnemyState
     {
         SEEK,
         PURSUIT,
-        PATROL
+        PATROL,
+
     }
 
     EnemyState currentState;
-
 
     void Start()
     {
         parilla = FindObjectOfType<Parilla>();
 
         currentState = EnemyState.PATROL;
-
-        miSphereCollider =
-            (SphereCollider)GetComponent(typeof(SphereCollider));
+        miSphereCollider = (SphereCollider)GetComponent(typeof(SphereCollider));
 
         if (target == null)
         {
             GameObject player = GameObject.Find("Player");
-
             if (player != null)
                 target = player.transform;
         }
-
         EligirNuevaDireccion();
     }
 
+    void Update() {
+        Debug.Log("Current state: " + currentState);
+        
+        if (target != null)
+        {
+            //float distanceToTarget = Vector3.Distance(transform.position, target.position);
+            //float radioSphereCollider = ObtenerRadioSphereCollider();
 
-    void Update()
-    {
-        if (target == null)
-            return;
+            if(currentState == EnemyState.PATROL) {
+                Patrullar();
+            }
+            else if (currentState == EnemyState.SEEK || currentState == EnemyState.PURSUIT) {
+                Atacar();
+            }
+        }
 
-        if (currentState == EnemyState.PATROL)
+        if(parilla != null && (currentState == EnemyState.SEEK || currentState == EnemyState.PURSUIT))
         {
-            Patrullar();
-        }
-        else if (currentState == EnemyState.SEEK)
-        {
-            SeguirCamino(false);
-        }
-        else if (currentState == EnemyState.PURSUIT)
-        {
-            SeguirCamino(true);
+            camino = parilla.ObtenerCamino();
+            SeguirCamino();
         }
     }
 
+<<<<<<< Updated upstream
+    void SeguirCamino()
+=======
 
     void SeguirCamino(bool pursuit)
     {
-        if (parilla == null) return;
+        if (parilla == null)
+            return;
 
         Vector3 posicionObjetivo;
 
@@ -99,7 +98,11 @@ public class Zombie : MonoBehaviour
         {
             // PURSUIT
             velJugador = ObtenerVelocidadJugador();
-            posicionObjetivo = target.position + velJugador * tiempoPrediccion;
+
+            Vector3 posPredicha = target.position + velJugador * tiempoPrediccion;
+            posPredicha.y = transform.position.y;
+
+            posicionObjetivo = posPredicha;
         }
         else
         {
@@ -124,6 +127,7 @@ public class Zombie : MonoBehaviour
 
 
     void MoverPorCamino()
+>>>>>>> Stashed changes
     {
         if (camino == null || camino.Count == 0)
             return;
@@ -134,7 +138,6 @@ public class Zombie : MonoBehaviour
         Vector3 destino = camino[indiceCamino].posicionMundo;
 
         Vector3 direccion = destino - transform.position;
-
         direccion.y = 0;
 
         if (direccion.magnitude < 0.1f)
@@ -143,60 +146,110 @@ public class Zombie : MonoBehaviour
             return;
         }
 
-        Quaternion rotacionDeseada = Quaternion.LookRotation(direccion);
-
-        transform.rotation = Quaternion.Slerp( transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
-
         transform.position += direccion.normalized * velocidad * Time.deltaTime;
     }
 
+    float ObtenerRadioSphereCollider()
+    {
+        if (miSphereCollider != null)
+        {
+            float escalaMaxima = Mathf.Max(transform.lossyScale.x, transform.lossyScale.y, transform.lossyScale.z);
+            return miSphereCollider.radius * escalaMaxima;
+        }
+
+        return 7f; // Radio por defecto si no se encuentra el SphereCollider
+    }
 
     void OnTriggerEnter(Collider sphereCollider)
     {
         if (sphereCollider.gameObject.CompareTag("Player") && sphereCollider is CapsuleCollider)
         {
-            // Elegimos aleatoriamente entre SEEK y PURSUIT
-
-            roleAssigned = Random.Range(0, 2);
-
-            if (roleAssigned == 0)
-            {
+            roleAssigned = Random.Range(0, 2); // Genera un número aleatorio entre 0 y 1
+            //Debug.Log("Role assigned: " + roleAssigned);
+            if (roleAssigned == 0) {
                 currentState = EnemyState.SEEK;
             }
-            else
-            {
+            else {
                 currentState = EnemyState.PURSUIT;
             }
-
-            // Reiniciamos el camino
-
-            camino = null;
-            indiceCamino = 0;
-            ultimoNodoObjetivo = null;
-            
-
-            Debug.Log(gameObject.name + " -> " + currentState);
+        }
+        else {
+            return;
         }
     }
 
+    void Atacar() {
+        if (currentState == EnemyState.SEEK)  //SEEK
+        {
+            //SEEK BEHAVIOUR: Un poco chustera pero bueno va que es lo importante aquí
+            targetPosition = target.position;
+
+            delta = targetPosition - transform.position;
+            delta.y = 0; // Ignorar la componente vertical para el movimiento en el plano horizontal
+            Vector3 desiredVelocity = delta.normalized * maxSpeed;
+
+            steering = desiredVelocity - currentVelocity;
+            currentVelocity = currentVelocity + steering * Time.deltaTime;
+            currentVelocity = Vector3.ClampMagnitude(currentVelocity, maxSpeed);
+
+            float brakingFactor = Mathf.Sqrt(Mathf.Clamp01(delta.magnitude / arriveDistance));
+            currentVelocity = currentVelocity * brakingFactor;
+
+            Quaternion rotacionDeseada = Quaternion.LookRotation(target.position - transform.position);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
+
+            transform.position = transform.position + (Vector3)currentVelocity * Time.deltaTime;
+        }
+        else if (currentState == EnemyState.PURSUIT)   //PURSUIT
+        {
+            velJugador = ObtenerVelocidadJugador();
+
+            Vector3 posPredicha = target.position + velJugador * tiempoPrediccion;
+
+            posPredicha.y = transform.position.y;
+
+            Vector3 direccion = posPredicha - transform.position;
+
+            Vector3 posDeseada = direccion.normalized * maxSpeed;
+
+            steering = posDeseada - currentVelocity;
+
+            currentVelocity += steering * Time.deltaTime;
+            currentVelocity = Vector3.ClampMagnitude(currentVelocity, maxSpeed);
+
+            Quaternion rotacionDeseada = Quaternion.LookRotation(direccion);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
+
+            transform.position = transform.position + (Vector3)currentVelocity * Time.deltaTime;
+        }
+    }
 
     void OnTriggerExit(Collider sphereCollider)
     {
         if (sphereCollider.gameObject.CompareTag("Player") && sphereCollider is CapsuleCollider)
         {
             currentState = EnemyState.PATROL;
+<<<<<<< Updated upstream
+=======
 
             camino = null;
             indiceCamino = 0;
-            
+
+            ultimoNodoObjetivo = null;
+
+            velJugador = Vector3.zero;
+            currentVelocity = Vector3.zero;
+            crono = 0f;
+
+            EligirNuevaDireccion();
+
+>>>>>>> Stashed changes
         }
     }
-
 
     void Patrullar()
     {
         crono += Time.deltaTime;
-
         if (crono >= TiempoCambio)
         {
             EligirNuevaDireccion();
@@ -204,17 +257,14 @@ public class Zombie : MonoBehaviour
         }
 
         Quaternion rotacionDeseada = Quaternion.LookRotation(direccionRandom);
-
-        transform.rotation = Quaternion.Slerp( transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, RotacionVel * Time.deltaTime);
 
         transform.position += transform.forward * velocidad * Time.deltaTime;
     }
 
-
     void EligirNuevaDireccion()
     {
         float grado = Random.Range(0f, 360f);
-
         direccionRandom = Quaternion.Euler(0, grado, 0) * Vector3.forward;
     }
 
@@ -227,45 +277,6 @@ public class Zombie : MonoBehaviour
         {
             return rbJugador.linearVelocity;
         }
-
         return Vector3.zero;
-    }
-
-
-    float ObtenerRadioSphereCollider()
-    {
-        if (miSphereCollider != null)
-        {
-            float escalaMaxima = Mathf.Max(transform.lossyScale.x, transform.lossyScale.y, transform.lossyScale.z);
-
-            return miSphereCollider.radius * escalaMaxima;
-        }
-
-        return 7f;
-    }
-
-
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.magenta;
-        Gizmos.DrawSphere(transform.position + Vector3.up * 2f, 0.5f);
-
-        if (camino == null)
-            return;
-
-        Gizmos.color = Color.cyan;
-
-        for (int i = 0; i < camino.Count; i++)
-        {
-            Vector3 posicion = camino[i].posicionMundo + Vector3.up * 0.25f;
-
-            Gizmos.DrawCube(posicion, Vector3.one * 0.9f);
-
-            if (i < camino.Count - 1)
-            {
-                Vector3 siguiente = camino[i + 1].posicionMundo + Vector3.up * 0.25f;
-                Gizmos.DrawLine(posicion, siguiente);
-            }
-        }
     }
 }
