@@ -104,7 +104,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: S_Idle
+  m_Name: N_Idle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -132,7 +132,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: S_Walk
+  m_Name: N_Walk
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
