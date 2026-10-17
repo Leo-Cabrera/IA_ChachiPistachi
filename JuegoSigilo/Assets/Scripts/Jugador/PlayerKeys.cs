@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class PlayerKeys : MonoBehaviour
@@ -7,8 +8,10 @@ public class PlayerKeys : MonoBehaviour
     [SerializeField] private int currentKeys = 0;
 
     [Tooltip("Límite máximo de llaves")]
+    //RECORDATORIO: el serializedfield es para que la variable privada pueda aparecernos en el inspector
     [SerializeField] private int maxKeys = 3;
     [SerializeField] private SpawnKey spawnKey; //para poder llamar al script de SpawnKeys
+    [SerializeField] private TextMeshProUGUI contadorLlavesTexto;
 
     private float ultimoGolpe = -999f; //para evitar perder todas las llaves a la vez, se inicia así para siempre superar ese tiempo
 
@@ -18,6 +21,7 @@ public class PlayerKeys : MonoBehaviour
         if (currentKeys < maxKeys) // si ahora mismo tengo menos del máximo de llaves
         {
             currentKeys++; // se puede añadir una más
+            ActualizarContadorLlaves();
             Debug.Log($"Llaves actuales: {currentKeys}"); // para ver en la consola cuántas llaves tenemos
             return true;
         }
@@ -44,6 +48,7 @@ public class PlayerKeys : MonoBehaviour
         if (currentKeys > 0) //si el jugador tiene al menos una llave
         {
             currentKeys--; //se resta una al total de las que tiene
+            ActualizarContadorLlaves();
             Debug.Log($"Has perdido 1 llave. Te quedan: {currentKeys}");
 
             if (spawnKey != null)
@@ -58,6 +63,14 @@ public class PlayerKeys : MonoBehaviour
     private void GameOver() //este será el método para perder
     {
         Debug.Log("Game Over"); //por ahora solo lo comprobamos en la consola
+    }
+
+    private void ActualizarContadorLlaves()
+    {
+        if (contadorLlavesTexto == null) return; //se asegura que tenemos un texto conectado, nuestro contador en el canvas
+
+        contadorLlavesTexto.text = $"\u00D7 {currentKeys}";  //nos actualiza el texto del canvas por x numero de llaves
+        //ponemos lo de \u00D7 porque al poner directamente × unity no lo detectaba bien así que ese es el codigo del simbolo
     }
 
 }
