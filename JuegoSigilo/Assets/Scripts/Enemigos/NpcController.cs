@@ -38,7 +38,23 @@ public abstract class NpcController : MonoBehaviour
         // Crear y registrar todos los estados comunes
         ConfigureStates();
 
-        
+        //codigo común
+        parilla = FindFirstObjectByType<Parilla>();
+
+        miSphereCollider =
+            (SphereCollider)GetComponent(typeof(SphereCollider));
+
+        if (target == null)
+        {
+            GameObject player = GameObject.Find("Player");
+
+            if (player != null)
+                target = player.transform;
+        }
+
+        EligirNuevaDireccion();
+
+
     }
 
     private void Update()
@@ -51,7 +67,15 @@ public abstract class NpcController : MonoBehaviour
 
 
     //Métodos comunes a todos los NPC
+    void EligirNuevaDireccion()
+    {
+        float grado =
+            Random.Range(0f, 360f);
 
+        direccionRandom =
+            Quaternion.Euler(0, grado, 0) *
+            Vector3.forward;
+    }
 
 }
 
