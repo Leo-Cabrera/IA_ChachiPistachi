@@ -73,6 +73,10 @@ PrefabInstance:
       value: KitchenHood
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4f46dc2cbc3c56b4995c09c3fd173825, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4f46dc2cbc3c56b4995c09c3fd173825, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}

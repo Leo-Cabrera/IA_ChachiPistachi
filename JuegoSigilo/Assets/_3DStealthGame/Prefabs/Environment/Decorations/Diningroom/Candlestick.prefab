@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4740932143925240}
   - component: {fileID: 33640611416656746}
   - component: {fileID: 23531020412078802}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Candlestick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 4610218751634658913}
   - component: {fileID: 271720669566431348}
   - component: {fileID: 2343316253533381572}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,6 +234,10 @@ PrefabInstance:
       value: CandleFlame (1)
       objectReference: {fileID: 0}
     - target: {fileID: 57808910232391884, guid: a24956b5a0e552047a522ea09e794d95, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 57808910232391884, guid: a24956b5a0e552047a522ea09e794d95, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -316,6 +320,10 @@ PrefabInstance:
       value: CandleFlame (2)
       objectReference: {fileID: 0}
     - target: {fileID: 57808910232391884, guid: a24956b5a0e552047a522ea09e794d95, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 57808910232391884, guid: a24956b5a0e552047a522ea09e794d95, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -396,6 +404,10 @@ PrefabInstance:
     - target: {fileID: 57808910232391884, guid: a24956b5a0e552047a522ea09e794d95, type: 3}
       propertyPath: m_Name
       value: CandleFlame
+      objectReference: {fileID: 0}
+    - target: {fileID: 57808910232391884, guid: a24956b5a0e552047a522ea09e794d95, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 57808910232391884, guid: a24956b5a0e552047a522ea09e794d95, type: 3}
       propertyPath: m_StaticEditorFlags
