@@ -13,6 +13,10 @@ PrefabInstance:
       value: PictureFrame_GhostMan
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: ff679918594d2cb44996e920ec16ca62, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: ff679918594d2cb44996e920ec16ca62, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}

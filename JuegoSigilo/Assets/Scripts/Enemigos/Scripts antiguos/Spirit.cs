@@ -58,19 +58,39 @@ public class Spirit : MonoBehaviour
     }
 
     void Update()
+{
+    if (target == null || parilla == null)
+        return;
+
+    // Calcular continuamente el camino hacia el jugador
+    Nodo nodoSpirit =
+        parilla.ObtenerNodoDesdePosicion(
+            transform.position
+        );
+
+    Nodo nodoObjetivo =
+        parilla.ObtenerNodoDesdePosicion(
+            target.position
+        );
+
+    camino = parilla.BuscarCamino(
+        nodoSpirit,
+        nodoObjetivo
+    );
+
+    indiceCamino = 0;
+    ultimoNodoObjetivo = nodoObjetivo;
+
+    // Mantener el comportamiento del espíritu
+    if (currentState == EnemyState.PATROL)
     {
-        if (target != null)
-        {
-            if (currentState == EnemyState.PATROL)
-            {
-                Patrullar();
-            }
-            else if (currentState == EnemyState.SEEK)
-            {
-                Atacar();
-            }
-        }
+        Patrullar();
     }
+    else if (currentState == EnemyState.SEEK)
+    {
+        MoverPorCamino();
+    }
+}
 
     float ObtenerRadioSphereCollider()
     {
