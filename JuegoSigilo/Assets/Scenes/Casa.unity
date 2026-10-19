@@ -8283,7 +8283,7 @@ Transform:
   m_GameObject: {fileID: 713804116}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.12, y: 1.64, z: 11.58}
+  m_LocalPosition: {x: -0.12, y: 14.9, z: 11.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10676,7 +10676,7 @@ Transform:
   m_GameObject: {fileID: 902026252}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -27.3, y: 1.64, z: -17.88}
+  m_LocalPosition: {x: -27.3, y: 9, z: -17.88}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12218,6 +12218,10 @@ PrefabInstance:
       value: Zombie (1)
       objectReference: {fileID: 0}
     - target: {fileID: 2307822155626266091, guid: 4a2b9e080f6339b46aac0f8e41a378ab, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2307822155626266091, guid: 4a2b9e080f6339b46aac0f8e41a378ab, type: 3}
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
@@ -12231,7 +12235,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5454955383094182989, guid: 4a2b9e080f6339b46aac0f8e41a378ab, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.53
+      value: 11.83
       objectReference: {fileID: 0}
     - target: {fileID: 5454955383094182989, guid: 4a2b9e080f6339b46aac0f8e41a378ab, type: 3}
       propertyPath: m_LocalPosition.z
@@ -17892,7 +17896,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3189789354129569083, guid: f7a73127b6e504b45abf4b5f08e4de40, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -24.62
+      value: -24.4
       objectReference: {fileID: 0}
     - target: {fileID: 3189789354129569083, guid: f7a73127b6e504b45abf4b5f08e4de40, type: 3}
       propertyPath: m_LocalPosition.y
@@ -17900,7 +17904,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3189789354129569083, guid: f7a73127b6e504b45abf4b5f08e4de40, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -44.98
+      value: -44
       objectReference: {fileID: 0}
     - target: {fileID: 3189789354129569083, guid: f7a73127b6e504b45abf4b5f08e4de40, type: 3}
       propertyPath: m_LocalRotation.w
@@ -21823,6 +21827,10 @@ PrefabInstance:
       value: Zombie
       objectReference: {fileID: 0}
     - target: {fileID: 2307822155626266091, guid: 4a2b9e080f6339b46aac0f8e41a378ab, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2307822155626266091, guid: 4a2b9e080f6339b46aac0f8e41a378ab, type: 3}
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
@@ -21836,7 +21844,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5454955383094182989, guid: 4a2b9e080f6339b46aac0f8e41a378ab, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.2
+      value: 11.5
       objectReference: {fileID: 0}
     - target: {fileID: 5454955383094182989, guid: 4a2b9e080f6339b46aac0f8e41a378ab, type: 3}
       propertyPath: m_LocalPosition.z
