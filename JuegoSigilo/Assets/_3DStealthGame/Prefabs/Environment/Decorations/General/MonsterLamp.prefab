@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1196992791}
   - component: {fileID: 3209189778340339971}
   - component: {fileID: 2235273807362997302}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MonsterLamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,6 +100,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1196992791}
     m_Modifications:
     - target: {fileID: 84187701224449313, guid: 7d9dddbfcd0c9c0468dfbc7d25bd2d79, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 84187701224449313, guid: 7d9dddbfcd0c9c0468dfbc7d25bd2d79, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -154,6 +158,10 @@ PrefabInstance:
     - target: {fileID: 84187702296708497, guid: 7d9dddbfcd0c9c0468dfbc7d25bd2d79, type: 3}
       propertyPath: m_Name
       value: FlickeringLight (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 84187702296708497, guid: 7d9dddbfcd0c9c0468dfbc7d25bd2d79, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 84187702296708497, guid: 7d9dddbfcd0c9c0468dfbc7d25bd2d79, type: 3}
       propertyPath: m_IsActive

@@ -13,6 +13,10 @@ PrefabInstance:
       value: Radiator
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 19e3879d616ebf74bbfa7790d48acfad, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 19e3879d616ebf74bbfa7790d48acfad, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
