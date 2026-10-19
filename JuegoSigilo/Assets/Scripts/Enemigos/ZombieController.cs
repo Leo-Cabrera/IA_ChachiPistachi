@@ -11,6 +11,15 @@ public class ZombieController : NpcController
     {
         //FSM.RegisterState(new PatrolState(this, patrolDetectionRange)
 
-        //FSM.SetState(typeof(PatrolState));
+        //registramos en la fsm el estado de patrulla teniendo en cuenta los nuevos parametros del constructor
+        FSM.RegisterState(new PatrolState(this, velocidad, RotacionVel));
+
+        //registramos ahora el estado de persecucion
+        FSM.RegisterState(new ChaseState(this, velocidad, RotacionVel));
+
+        //comienza con el estado de patrulla
+        FSM.SetState(typeof(PatrolState));
+
+
     }
 }
