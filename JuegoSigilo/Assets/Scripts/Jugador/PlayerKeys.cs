@@ -34,6 +34,15 @@ public class PlayerKeys : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy")) //si el jugador choca con un enemigo
         {
+            //comprobamos si el enemigo tocado es un fantasma, así si es otro tipo de enemigo dará null
+            SpiritController spirit = collision.gameObject.GetComponent<SpiritController>();
+
+            //si spirit no es null (es un fantasma) y el fantasma no está en modo perseguir
+            if (spirit != null && !(spirit.FSM.CurrentState is ChaseState))
+            {
+                return;  //entonces salimos, porque solo queremos que nos quite llaves el fantasma si está en modo chase
+            }
+
             if (Time.time >= ultimoGolpe + 1.5f) //la primera vez siempre entra porque está en -999f
                                                  //deben haber pasado al menos 1,5 segundos para volver a recibir un golpe  (inmunidad)
             {

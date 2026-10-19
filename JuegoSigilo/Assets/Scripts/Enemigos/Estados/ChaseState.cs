@@ -40,6 +40,6 @@ public class ChaseState : NpcState
     public override void Exit()
     {
         npc.ReiniciarCamino(); //cuando salga de chase descartamos la ruta de persecución
-        Debug.Log("NPC: dejo de perseguir.");
+        Debug.Log(npc.gameObject.name + ": dejo de perseguir.");
     }
 }

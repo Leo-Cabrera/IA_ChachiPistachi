@@ -40,6 +40,7 @@ public class SpiritController : NpcController
     {
         PosicionAlerta = posicionGrito;
         FSM.TriggerEvent("AlertReceived");  //asi la fsm recibe el cambio de evento para que pueda pasar a otro estado
+        Debug.Log("Fantasma avisado. Estado: " + FSM.CurrentState.GetType().Name);
     }
 
     //OnTriggerStay método que Unity llama repetidamente mientras otro collider permanece dentro de la zona trigger del fantasma
@@ -56,6 +57,10 @@ public class SpiritController : NpcController
 
     private void OnTriggerExit(Collider otroCollider) //lo llama Unity cuando un collider sale de la zona trigger
     {
+        Debug.Log("Spirit: sale del trigger " + otroCollider.name
+        + " (" + otroCollider.GetType().Name + "), estado: "
+        + FSM.CurrentState.GetType().Name); 
+
         //hay maquina de estados, estamos en el estado de persecucion y a quien perseguimos era a la capsula del jugador (quien sale)
         if (FSM != null && FSM.CurrentState is ChaseState && otroCollider.gameObject.CompareTag("Player") &&
             otroCollider is CapsuleCollider)

@@ -24,6 +24,7 @@ public class GoToAlertState : NpcState
     {
         if (spirit.EstaEnNodoDe(spirit.PosicionAlerta))  //comrprueba en cada fotograma si ya esta en el nodo del grito
         {
+            Debug.Log("Fantasma: he llegado al nodo del grito");
             spirit.FSM.TriggerEvent("AlertArrived");  //cuando ya se entre al if, se cambiara su estado para poder hacer la transicion
             return;
         }

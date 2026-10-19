@@ -2464,7 +2464,7 @@ MonoBehaviour:
   tiempoPrediccion: 3
   maxSpeed: 1
   arriveDistance: 0.4
-  radioDeteccion: 35
+  radioDeteccion: 50
   alertSoundSource: {fileID: 1650912445}
 --- !u!1 &1663826095
 GameObject:
