@@ -2454,7 +2454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 116c5062a968a7c4ebd91ec9f00145a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArmorController
-  target: {fileID: 0}
+  target: {fileID: 1663826100}
   velJugador: {x: 0, y: 0, z: 0}
   TiempoCambio: 4
   crono: 0
