@@ -48,4 +48,11 @@ public class PlayerData : MonoBehaviour
         player.SetActive(true);
     }
 
+    public void Reset()
+    {
+        hiding = false;
+        onBox = false;
+        player.SetActive(true);
+    }
+
 }
