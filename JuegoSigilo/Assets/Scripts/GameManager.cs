@@ -10,8 +10,11 @@ public class GameManager : MonoBehaviour
 
     public CanvasGroup gameOverPanel;
     public CanvasGroup gameOverImage;
-    //public CanvasGroup gameVictoryImage;
+    public CanvasGroup gameWinImage;
 
+    public float fadeDuration = 0.5f;
+
+    [SerializeField] private GameObject winPanel;
 
     //public float fadeDuration = 0.5f;
 
@@ -34,7 +37,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         if (gameOverPanel != null) gameOverPanel.alpha = 0f;
-        //gameVictoryImage.alpha = 0f;
+        if (winPanel != null)
+        {
+            winPanel.SetActive(false);
+        }
         gameOverImage.alpha = 0f;
         gameOverPanel.interactable = false;
         gameOverPanel.blocksRaycasts = false;
@@ -60,12 +66,17 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
     }
 
-    //public void GameVictory()
-    //{
-    //    if (gameOverActive) return;
-    //    gameOverActive = true; StartCoroutine(FadeIn(gameVictoryImage, "Win"));
+    public void GameVictory()
+    {
+        if (gameOverActive) return;
 
-    //}
+        gameOverActive = true;
+
+        winPanel.SetActive(true);
+
+        Time.timeScale = 0f;
+    }
+
     //private IEnumerator FadeIn(CanvasGroup image, string music)
     //{
     //    if (AudioManager.instance != null) AudioManager.instance.PlaySFX(music);
