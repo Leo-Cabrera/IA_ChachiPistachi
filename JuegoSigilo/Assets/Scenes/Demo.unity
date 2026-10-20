@@ -616,6 +616,10 @@ PrefabInstance:
       value: Zombie (1)
       objectReference: {fileID: 0}
     - target: {fileID: 2307822155626266091, guid: 4a2b9e080f6339b46aac0f8e41a378ab, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2307822155626266091, guid: 4a2b9e080f6339b46aac0f8e41a378ab, type: 3}
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
@@ -1853,6 +1857,33 @@ MonoBehaviour:
   capaObstaculos:
     serializedVersion: 2
     m_Bits: 128
+--- !u!1 &1570135107 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2307822155626266091, guid: 4a2b9e080f6339b46aac0f8e41a378ab, type: 3}
+  m_PrefabInstance: {fileID: 2028653936831667506}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1570135108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1570135107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6173041d5350274b9b2d6e694d3cbef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZombieController
+  target: {fileID: 1663826100}
+  velJugador: {x: 0, y: 0, z: 0}
+  TiempoCambio: 4
+  crono: 0
+  direccionRandom: {x: 0, y: 0, z: 0}
+  velocidad: 3
+  RotacionVel: 5
+  tiempoPrediccion: 0.5
+  maxSpeed: 3
+  arriveDistance: 0.4
 --- !u!1001 &1571073814
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3300,6 +3331,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 1663826100}
+    - target: {fileID: 4553075927565556557, guid: 4a2b9e080f6339b46aac0f8e41a378ab, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5454955383094182989, guid: 4a2b9e080f6339b46aac0f8e41a378ab, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.13
@@ -3340,10 +3375,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4553075927565556557, guid: 4a2b9e080f6339b46aac0f8e41a378ab, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2307822155626266091, guid: 4a2b9e080f6339b46aac0f8e41a378ab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1570135108}
   m_SourcePrefab: {fileID: 100100000, guid: 4a2b9e080f6339b46aac0f8e41a378ab, type: 3}
 --- !u!136 &2357947773769672806
 CapsuleCollider:
