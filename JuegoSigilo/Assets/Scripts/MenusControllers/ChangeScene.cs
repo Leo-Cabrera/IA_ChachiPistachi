@@ -6,21 +6,25 @@ using UnityEngine.SceneManagement;
 public class ChangeScene : MonoBehaviour
 {
     public Animator transition;
-    public float transitionTime = 1f;
+    public float transitionTime = 0.1f;
     public MenusController MenusController;
 
     IEnumerator FadeAndLoad(string sceneName)
     {
         transition.SetTrigger("Start");
 
-        yield return new WaitForSeconds(transitionTime);
+        yield return new WaitForSecondsRealtime(transitionTime);
 
         SceneManager.LoadScene(sceneName);
     }
     public void LoadGame()
     {
-        if (AudioManager.instance != null) AudioManager.instance.PlayMusic("GameMusic");
-        //StartCoroutine(FadeAndLoad("MainGame"));
+    Time.timeScale = 1f;
+
+    if (AudioManager.instance != null)
+        AudioManager.instance.PlayMusic("GameMusic");
+
+    StartCoroutine(FadeAndLoad("Casa"));
     }
 
     public void ChangeMenu()
@@ -31,7 +35,7 @@ public class ChangeScene : MonoBehaviour
     {
         transition.SetTrigger("Start");
 
-        yield return new WaitForSeconds(transitionTime);
+        yield return new WaitForSecondsRealtime(transitionTime);
 
         transition.SetTrigger("End");
 

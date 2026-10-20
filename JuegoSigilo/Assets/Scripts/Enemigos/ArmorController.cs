@@ -29,7 +29,7 @@ public class ArmorController : NpcController
         FSM.SetState(typeof(PatrolState));
     }
 
-    //se llama si algo entra en la zona de trigger de la armadura, otroCollider será lo que haya entrado
+    //se llama si algo entra en la zona de trigger de la armadura, otroCollider serï¿½ lo que haya entrado
     private void OnTriggerEnter(Collider otroCollider)
     {
         if (otroCollider.gameObject.CompareTag("Player") && otroCollider is CapsuleCollider) //si es el jugador el que triggerea
@@ -45,12 +45,12 @@ public class ArmorController : NpcController
         }
     }
 
-    //se llama si algo sale de la zona de trigger de la armadura, otroCollider será lo que haya salido
+    //se llama si algo sale de la zona de trigger de la armadura, otroCollider serï¿½ lo que haya salido
     private void OnTriggerExit(Collider otroCollider)
     {
         if (otroCollider.gameObject.CompareTag("Player") && otroCollider is CapsuleCollider)  //el jugador ha salido de la zona trigger
         {
-            FSM.TriggerEvent("PlayerLost");  //el evento ahora es que ya no ve al jugador, la maquina de estados hará transicion a patrol
+            FSM.TriggerEvent("PlayerLost");  //el evento ahora es que ya no ve al jugador, la maquina de estados harï¿½ transicion a patrol
         }
     }
 
@@ -68,6 +68,22 @@ public class ArmorController : NpcController
             {
                 fantasma.OnAlerted(transform.position); //envia a los fantasmas a la posicion del grito de la armadura
             }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (Camino == null || Camino.Count == 0)
+            return;
+
+        Gizmos.color = Color.yellow;
+
+        for (int i = 0; i < Camino.Count - 1; i++)
+        {
+            Gizmos.DrawLine(
+                Camino[i].posicionMundo,
+                Camino[i + 1].posicionMundo
+            );
         }
     }
 }

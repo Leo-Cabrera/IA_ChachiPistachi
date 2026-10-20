@@ -18,6 +18,7 @@ public class GoMenu : MonoBehaviour
         SceneManager.LoadScene("MainTitle");
         if (AudioManager.instance != null) AudioManager.instance.PlayMusic("TitleMusic");
         PlayerData.instance.Reset();
+
     }
     public void Show()
     {
