@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
 
     public void GoMenu()
     {
-        //SceneManager.LoadScene("MainTitle");
+        SceneManager.LoadScene("MainMenu");
         //if (AudioManager.instance != null) AudioManager.instance.PlayMusic("TitleMusic");
     }
 
