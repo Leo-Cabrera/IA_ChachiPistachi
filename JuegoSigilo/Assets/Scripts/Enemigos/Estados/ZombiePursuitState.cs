@@ -22,12 +22,12 @@ public class ZombiePursuitState : NpcState
 
         Rigidbody rbJugador = zombie.target.GetComponent<Rigidbody>();  //comprueba si existe el componente Rigidbody
 
-        Vector3 velocidadJugador = Vector3.zero;  //asumimos de momento que está quieto el jugador y ponemos que tiene 0 en cada vector
+        Vector3 velocidadJugador = Vector3.zero;  //asumimos de momento que esta quieto el jugador y ponemos que tiene 0 en cada vector
 
         if (rbJugador != null)  //si hemos encontrado su velocidad
             velocidadJugador = rbJugador.linearVelocity;  //la guardamos en el vector adecuado
 
-        //esto estimará el dónde se encontrará el jugador
+        //esto estimara el donde se encontrara el jugador
         Vector3 posicionPredicha = zombie.target.position + velocidadJugador * zombie.tiempoPrediccion;
 
         //posicionPredicha.y = zombie.transform.position.y;

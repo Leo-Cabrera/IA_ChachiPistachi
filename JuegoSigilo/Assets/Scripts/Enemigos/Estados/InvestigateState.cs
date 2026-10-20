@@ -3,7 +3,7 @@ using UnityEngine;
 public class InvestigateState : NpcState
 {
     private float tiempoTranscurrido;  //guarda cuantos segundos lleva de investigacion
-    private SpiritController spirit;  //para guardar la referencia del fantasma que estará usando este estado
+    private SpiritController spirit;  //para guardar la referencia del fantasma que estara usando este estado
 
     public InvestigateState(SpiritController spirit) : base(spirit)
     {
@@ -35,7 +35,7 @@ public class InvestigateState : NpcState
 
 
         //vamos a usar el mismo tipo de movimiento que tiene patrulla, para que pueda moverse, sin embargo aqui el fantasma
-        //si que podrá entrar en chase si ve al jugador
+        //si que podra entrar en chase si ve al jugador
 
         spirit.crono += Time.deltaTime;  //cuenta cuanto lleva caminando en la direccion actual
 

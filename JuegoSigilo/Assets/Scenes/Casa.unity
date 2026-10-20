@@ -12623,8 +12623,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   gameOverPanel: {fileID: 2011151114}
-  gameOverImage: {fileID: 0}
-  gameWinImage: {fileID: 0}
+  gameOverImage: {fileID: 2011151114}
+  gameWinImage: {fileID: 626908482}
   fadeDuration: 0.5
   winPanel: {fileID: 626908481}
 --- !u!4 &964255159
