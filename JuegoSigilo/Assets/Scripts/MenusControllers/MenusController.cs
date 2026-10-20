@@ -19,6 +19,8 @@ public class MenusController : MonoBehaviour
 
     public void ShowMenu()
     {
+        Debug.Log("He llegado a showmenu!!!!!!");
+        Debug.Log("menuNum: " + menuNum);
         for (int i = 0; i < menus.Count; i++)
         {
             if (i == menuNum)
@@ -36,6 +38,8 @@ public class MenusController : MonoBehaviour
     }
 
     public void HideMenus(){
+        Debug.Log("He llegado a hidemenus!!!!!!");
+        Debug.Log("menuNum: " + menuNum);
         for (int i = 0; i < menus.Count; i++)
         {
             menus[i].alpha = 0f;
@@ -47,7 +51,10 @@ public class MenusController : MonoBehaviour
  
 
     public void ChangeMenuNum (int newNum){
+        Debug.Log("He llegado a changemenunum!!!!!!");
+        Debug.Log("menuNum: " + menuNum);
         menuNum = newNum;
+        Debug.Log("newNum: " + menuNum);
     }
 
     public void ExitGame()

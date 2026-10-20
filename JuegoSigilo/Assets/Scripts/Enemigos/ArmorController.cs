@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class ArmorController : NpcController
@@ -9,6 +10,17 @@ public class ArmorController : NpcController
     [SerializeField] float arriveDistance = .4f;
     [SerializeField] private float radioDeteccion = 10f;
     public AudioSource alertSoundSource; //sonido del grito
+
+    // NUEVO: aplicar el volumen de efectos guardado
+    private void Start()
+    {
+        if (alertSoundSource != null)
+        {
+            alertSoundSource.volume =
+                PlayerPrefs.GetFloat("SFXVolume", 0.3f);
+        }
+    }
+
     protected override void ConfigureStates()
     {
         //FSM.RegisterState(new PatrolState(this, patrolDetectionRange)
@@ -29,28 +41,32 @@ public class ArmorController : NpcController
         FSM.SetState(typeof(PatrolState));
     }
 
-    //se llama si algo entra en la zona de trigger de la armadura, otroCollider será lo que haya entrado
+    //se llama si algo entra en la zona de trigger de la armadura
     private void OnTriggerEnter(Collider otroCollider)
     {
-        if (otroCollider.gameObject.CompareTag("Player") && otroCollider is CapsuleCollider) //si es el jugador el que triggerea
+        if (otroCollider.gameObject.CompareTag("Player") && otroCollider is CapsuleCollider)
         {
-            FSM.TriggerEvent("PlayerDetected"); //ha ocurrido el evento que hace que armor pase de patrol a chase
+            FSM.TriggerEvent("PlayerDetected");
 
-            if (alertSoundSource != null) //si tenemos un sonido puesto, para evitar errores por si no hubiera
+            if (alertSoundSource != null)
             {
-                alertSoundSource.Play(); //entonces que se reproduzca
+                // NUEVO: actualizar el volumen antes de reproducir
+                alertSoundSource.volume =
+                    PlayerPrefs.GetFloat("SFXVolume", 0.3f);
+
+                alertSoundSource.Play();
             }
 
-            AlertarFantasmasCercanos(); //llamamos al metodo que avisa a los fantasmas
+            AlertarFantasmasCercanos();
         }
     }
 
-    //se llama si algo sale de la zona de trigger de la armadura, otroCollider será lo que haya salido
+    //se llama si algo sale de la zona de trigger de la armadura
     private void OnTriggerExit(Collider otroCollider)
     {
-        if (otroCollider.gameObject.CompareTag("Player") && otroCollider is CapsuleCollider)  //el jugador ha salido de la zona trigger
+        if (otroCollider.gameObject.CompareTag("Player") && otroCollider is CapsuleCollider)
         {
-            FSM.TriggerEvent("PlayerLost");  //el evento ahora es que ya no ve al jugador, la maquina de estados hará transicion a patrol
+            FSM.TriggerEvent("PlayerLost");
         }
     }
 
@@ -59,14 +75,14 @@ public class ArmorController : NpcController
         //almacena los fantasmas activos
         SpiritController[] fantasmas = FindObjectsByType<SpiritController>(FindObjectsSortMode.None);
 
-        foreach (SpiritController fantasma in fantasmas) //va seleccionando los fantasmas que tenemos almacenados
+        foreach (SpiritController fantasma in fantasmas)
         {
-            //mira la distancia de la armadura al fantasma 
-            float distancia = Vector3.Distance(transform.position, fantasma.transform.position); 
+            //mira la distancia de la armadura al fantasma
+            float distancia = Vector3.Distance(transform.position, fantasma.transform.position);
 
-            if (distancia <= radioDeteccion) //si el fantasma se encuentra dentro del radio que cubre la armadura
+            if (distancia <= radioDeteccion)
             {
-                fantasma.OnAlerted(transform.position); //envia a los fantasmas a la posicion del grito de la armadura
+                fantasma.OnAlerted(transform.position);
             }
         }
     }

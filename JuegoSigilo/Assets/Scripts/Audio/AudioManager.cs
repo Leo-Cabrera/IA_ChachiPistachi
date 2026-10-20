@@ -1,13 +1,14 @@
+
 using UnityEngine;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
+
     public Sound[] musicSounds, sfxSounds;
     public AudioSource musicSource, sfxSource, stepsSource;
+
     public string initialMusic;
     public bool playingSteps = false;
     public float initialVolume = 0.3f;
@@ -17,53 +18,62 @@ public class AudioManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
+            return;
         }
-        musicSource.volume = initialVolume;
-        sfxSource.volume = initialVolume;
+
+        // Recuperar los volúmenes guardados
+        musicSource.volume =
+            PlayerPrefs.GetFloat("MusicVolume", initialVolume);
+
+        sfxSource.volume =
+            PlayerPrefs.GetFloat("SFXVolume", initialVolume);
+
+        stepsSource.volume =
+            PlayerPrefs.GetFloat("SFXVolume", initialVolume);
     }
 
     private void Start()
     {
-        
         PlayMusic(initialMusic);
     }
+
     public void PlayMusic(string name)
     {
-        Sound s = Array.Find(musicSounds, x=> x.audioName == name);
-        if (s != null) { 
-            if(name == "Steps")
+        Sound s = Array.Find(musicSounds, x => x.audioName == name);
+
+        if (s != null)
+        {
+            if (name == "Steps")
             {
                 playingSteps = true;
                 stepsSource.clip = s.clip;
                 stepsSource.Play();
             }
-            else{
+            else
+            {
                 musicSource.clip = s.clip;
                 musicSource.Play();
             }
-            
-            
         }
     }
+
     public void StopMusic(string name)
     {
         Sound s = Array.Find(musicSounds, x => x.audioName == name);
+
         if (s != null)
         {
             if (name == "Steps")
             {
                 playingSteps = false;
-                stepsSource.clip = s.clip;
                 stepsSource.Stop();
             }
             else
             {
-                musicSource.clip = s.clip;
                 musicSource.Stop();
             }
         }
@@ -72,22 +82,23 @@ public class AudioManager : MonoBehaviour
     public void PlaySFX(string name)
     {
         Sound s = Array.Find(sfxSounds, x => x.audioName == name);
+
         if (s != null)
         {
-            
             sfxSource.PlayOneShot(s.clip);
         }
     }
 
-
     public void MusicVolume(float volume)
     {
-        musicSource.volume = volume;    
+        musicSource.volume = volume;
     }
+
     public void SFXVolume(float volume)
     {
         sfxSource.volume = volume;
     }
+
     public void StepsVolume(float volume)
     {
         stepsSource.volume = volume;

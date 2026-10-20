@@ -13,14 +13,15 @@ public class ChangeScene : MonoBehaviour
     {
         transition.SetTrigger("Start");
 
-        yield return new WaitForSeconds(transitionTime);
+        yield return new WaitForSecondsRealtime(transitionTime);
 
         SceneManager.LoadScene(sceneName);
     }
     public void LoadGame()
     {
+        Time.timeScale = 1f;
         if (AudioManager.instance != null) AudioManager.instance.PlayMusic("GameMusic");
-        //StartCoroutine(FadeAndLoad("MainGame"));
+        StartCoroutine(FadeAndLoad("Casa"));
     }
 
     public void ChangeMenu()
@@ -29,9 +30,10 @@ public class ChangeScene : MonoBehaviour
     }
     IEnumerator Fade()
     {
+        Debug.Log("He llegado a fade!!!!!!");
         transition.SetTrigger("Start");
 
-        yield return new WaitForSeconds(transitionTime);
+        yield return new WaitForSecondsRealtime(transitionTime);
 
         transition.SetTrigger("End");
 
