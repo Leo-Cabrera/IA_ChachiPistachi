@@ -17,7 +17,7 @@ public class GoToAlertState : NpcState
 
     public override void Enter()  //se ejecuta una vez al comenzamiento
     {
-        spirit.ReiniciarCamino();  //aquí simplemnete llama para empezar a tener ya una ruta
+        spirit.ReiniciarCamino();  //aqui simplemnete llama para empezar a tener ya una ruta
     }
 
     public override void Execute()
@@ -29,7 +29,7 @@ public class GoToAlertState : NpcState
             return;
         }
 
-        //si no entra al if, se irán ejecutando estas lineas
+        //si no entra al if, se iran ejecutando estas lineas
         spirit.ActualizarCamino(spirit.PosicionAlerta);  //actualiza la ruta para llegar hasta la posicion del sonido
         spirit.MoverPorCamino(velocidad, rotacionVel);  //mueve al fantasma por la ruta
     }

@@ -13,7 +13,7 @@ public class ZombieController : NpcController
 
         //guardamos el estado de patrulla para luego poder tener en cuentas sus dos reglas antes de registrarlo a la fsm
         PatrolState patrullaZombie = new PatrolState(this, velocidad, RotacionVel);
-        patrullaZombie.ConfigurarTransicion("SeekChosen", typeof(ChaseState));  //añadimos el comportamiento del estado
+        patrullaZombie.ConfigurarTransicion("SeekChosen", typeof(ChaseState));  //anadimos el comportamiento del estado
         patrullaZombie.ConfigurarTransicion("PursuitChosen", typeof(ZombiePursuitState));
         FSM.RegisterState(patrullaZombie);  //ya la registramos teniendo sus posibles transiciones
 
@@ -36,11 +36,11 @@ public class ZombieController : NpcController
             int eleccion = Random.Range(0, 2);  //para obtener un 0 o un 1
 
             if (eleccion == 0)
-                FSM.TriggerEvent("SeekChosen");  //si es 0 entonces seek, hará chase
+                FSM.TriggerEvent("SeekChosen");  //si es 0 entonces seek, hara chase
             else
                 FSM.TriggerEvent("PursuitChosen");  //si es 1 entonces pursuit
 
-            Debug.Log(gameObject.name + " -> " + FSM.CurrentState.GetType().Name);  //para ver en la consola qué ha tocado
+            Debug.Log(gameObject.name + " -> " + FSM.CurrentState.GetType().Name);  //para ver en la consola que ha tocado
         }
     }
 
@@ -49,7 +49,25 @@ public class ZombieController : NpcController
         //si la capsula del jugador salen del rango del zombie
         if (otroCollider.CompareTag("Player") && otroCollider is CapsuleCollider)
         {
-            FSM.TriggerEvent("PlayerLost");  //cambiamos de etiqueta que hará que se pueda cambiar de estado
+            FSM.TriggerEvent("PlayerLost");  //cambiamos de etiqueta que hara que se pueda cambiar de estado
         }
     }
+
+    
+    private void OnDrawGizmos()
+    {
+        if (Camino == null || Camino.Count == 0)
+            return;
+
+        Gizmos.color = Color.cyan;
+
+        foreach (Nodo nodo in Camino)
+        {
+            Gizmos.DrawCube(
+                nodo.posicionMundo,
+                new Vector3(0.8f, 0.8f, 0.8f)
+            );
+        }
+    }
+
 }

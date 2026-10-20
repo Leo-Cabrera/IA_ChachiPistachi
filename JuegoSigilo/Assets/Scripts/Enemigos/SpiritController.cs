@@ -16,7 +16,7 @@ public class SpiritController : NpcController
         //creamos el estado de patrulla del espiritu
         PatrolState patrullaSpirit = new PatrolState(this, velocidad, RotacionVel);  //para que adopte su velocidad inicial
 
-        //esta será la regla de transición de patrulla a hacia el lugar del grito
+        //esta sera la regla de transicion de patrulla a hacia el lugar del grito
         patrullaSpirit.ConfigurarTransicion("AlertReceived", typeof(GoToAlertState));  
 
         //registramos en la maquina de estados este estado teniendo en cuenta su transicion
@@ -35,16 +35,16 @@ public class SpiritController : NpcController
         FSM.SetState(typeof(PatrolState));
     }
 
-    //metodo que usará armor cuando sea necesario
-    public void OnAlerted(Vector3 posicionGrito) //se le pasará la posición de la armadura que haya pegado el grito
+    //metodo que usara armor cuando sea necesario
+    public void OnAlerted(Vector3 posicionGrito) //se le pasara la posicion de la armadura que haya pegado el grito
     {
         PosicionAlerta = posicionGrito;
         FSM.TriggerEvent("AlertReceived");  //asi la fsm recibe el cambio de evento para que pueda pasar a otro estado
         Debug.Log("Fantasma avisado. Estado: " + FSM.CurrentState.GetType().Name);
     }
 
-    //OnTriggerStay método que Unity llama repetidamente mientras otro collider permanece dentro de la zona trigger del fantasma
-    //usamos este porque el jugador podría estar ya dentro de la zona cuando el fantasma empieza a investigar
+    //OnTriggerStay metodo que Unity llama repetidamente mientras otro collider permanece dentro de la zona trigger del fantasma
+    //usamos este porque el jugador podria estar ya dentro de la zona cuando el fantasma empieza a investigar
     private void OnTriggerStay(Collider otroCollider)
     {
         //mientras haya maquina de estados, este en el estado investigar y el collider sea el de la capsula del jugador
@@ -68,4 +68,22 @@ public class SpiritController : NpcController
             FSM.TriggerEvent("PlayerLost");  //entonces el jugador ha salido de la zona del fantasma, cambiamos el evento para cambiar estado
         }
     }
+
+    
+    private void OnDrawGizmos()
+    {
+        if (Camino == null || Camino.Count == 0)
+            return;
+
+        Gizmos.color = Color.white;
+
+        foreach (Nodo nodo in Camino)
+        {
+            Gizmos.DrawCube(
+                nodo.posicionMundo,
+                new Vector3(0.8f, 0.8f, 0.8f)
+            );
+        }
+    }
+
 }

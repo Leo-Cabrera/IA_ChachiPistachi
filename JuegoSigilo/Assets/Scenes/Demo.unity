@@ -1578,7 +1578,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1517037457}
   - component: {fileID: 1517037456}
-  - component: {fileID: 1517037455}
   - component: {fileID: 1517037454}
   m_Layer: 0
   m_Name: AmbienceManager
@@ -1684,18 +1683,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1517037455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1517037453}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2694589805dde7e4d98d310662abd9ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayAmbience
 --- !u!82 &1517037456
 AudioSource:
   m_ObjectHideFlags: 0

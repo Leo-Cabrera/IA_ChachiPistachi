@@ -18,10 +18,10 @@ public class StateMachine
         states[state.GetType()] = state; 
     }
 
-    //Método para cambiar de estado
+    //Metodo para cambiar de estado
     public void SetState(Type stateType)
     {
-        // Revisamos que el estado esté registrado
+        // Revisamos que el estado esta registrado
         if (!states.TryGetValue(stateType, out NpcState newState))
         {
             throw new Exception(
@@ -45,7 +45,7 @@ public class StateMachine
         CurrentState?.Execute();
     }
 
-    // Método para procesar un evento y cambiar al estado que toque
+    // Metodo para procesar un evento y cambiar al estado que toque
     public void TriggerEvent(string eventName)
     {
         if (CurrentState == null)
