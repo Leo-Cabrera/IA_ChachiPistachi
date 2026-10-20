@@ -57,9 +57,9 @@ public class SpiritController : NpcController
 
     private void OnTriggerExit(Collider otroCollider) //lo llama Unity cuando un collider sale de la zona trigger
     {
-        Debug.Log("Spirit: sale del trigger " + otroCollider.name
-        + " (" + otroCollider.GetType().Name + "), estado: "
-        + FSM.CurrentState.GetType().Name); 
+        //Debug.Log("Spirit: sale del trigger " + otroCollider.name
+        //+ " (" + otroCollider.GetType().Name + "), estado: "
+        //+ FSM.CurrentState.GetType().Name); 
 
         //hay maquina de estados, estamos en el estado de persecucion y a quien perseguimos era a la capsula del jugador (quien sale)
         if (FSM != null && FSM.CurrentState is ChaseState && otroCollider.gameObject.CompareTag("Player") &&
