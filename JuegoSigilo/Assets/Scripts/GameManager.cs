@@ -8,14 +8,14 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    //public CanvasGroup gameOverPanel;
-    //public CanvasGroup gameOverImage;
+    public CanvasGroup gameOverPanel;
+    public CanvasGroup gameOverImage;
     //public CanvasGroup gameVictoryImage;
 
 
     //public float fadeDuration = 0.5f;
 
-    //private bool gameOverActive = false;
+    private bool gameOverActive = false;
 
     
     private AudioSource audioSource;
@@ -33,19 +33,32 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        //if (gameOverPanel != null) gameOverPanel.alpha = 0f;
+        if (gameOverPanel != null) gameOverPanel.alpha = 0f;
         //gameVictoryImage.alpha = 0f;
-        //gameOverImage.alpha = 0f;
-        //gameOverPanel.interactable = false;
-        //gameOverPanel.blocksRaycasts = false;
+        gameOverImage.alpha = 0f;
+        gameOverPanel.interactable = false;
+        gameOverPanel.blocksRaycasts = false;
 
     }
-    //public void GameOver()
-    //{
-    //    if (gameOverActive) return;
-    //    gameOverActive = true;
-    //    StartCoroutine(FadeIn(gameOverImage, "Lose"));
-    //}
+    public void GameOver()
+    {
+        Debug.Log("GameManager: se ha llamado a GameOver");
+
+        if (gameOverActive) return;
+
+        gameOverActive = true;
+
+        gameOverPanel.alpha = 1f;
+        gameOverPanel.interactable = true;
+        gameOverPanel.blocksRaycasts = true;
+
+        if (gameOverImage != null)
+        {
+            gameOverImage.alpha = 1f;
+        }
+
+        Time.timeScale = 0f;
+    }
 
     //public void GameVictory()
     //{
@@ -81,11 +94,16 @@ public class GameManager : MonoBehaviour
     //    if (AudioManager.instance != null) AudioManager.instance.PlayMusic("GameMusic");
 
     //}
-    //public void GoMenu()
-    //{
-    //    if (AudioManager.instance != null) AudioManager.instance.PlaySFX("Button");
-    //    Time.timeScale = 1.0f;
-    //    SceneManager.LoadScene("MainTitle");
-    //    if (AudioManager.instance != null) AudioManager.instance.PlayMusic("TitleMusic");
-    //}
+
+    public void GoMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+        //if (AudioManager.instance != null) AudioManager.instance.PlayMusic("TitleMusic");
+    }
+
+    public void QuitGame()
+    {
+        Debug.Log("QUIT");
+        Application.Quit();
+    }
 }

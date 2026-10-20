@@ -69,9 +69,18 @@ public class PlayerKeys : MonoBehaviour
         }
     }
 
-    private void GameOver() //este será el método para perder
+    private void GameOver()
     {
-        Debug.Log("Game Over"); //por ahora solo lo comprobamos en la consola
+        Debug.Log("PlayerKeys: se ha llamado a GameOver");
+
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.GameOver();
+        }
+        else
+        {
+            Debug.LogError("No se encuentra el GameManager");
+        }
     }
 
     private void ActualizarContadorLlaves()
