@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class ChangeScene : MonoBehaviour
 {
     public Animator transition;
-    public float transitionTime = 1f;
+    public float transitionTime = 0.1f;
     public MenusController MenusController;
 
     IEnumerator FadeAndLoad(string sceneName)
@@ -20,7 +20,10 @@ public class ChangeScene : MonoBehaviour
     public void LoadGame()
     {
         Time.timeScale = 1f;
-        if (AudioManager.instance != null) AudioManager.instance.PlayMusic("GameMusic");
+
+        if (AudioManager.instance != null)
+            AudioManager.instance.PlayMusic("GameMusic");
+
         StartCoroutine(FadeAndLoad("Casa"));
     }
 

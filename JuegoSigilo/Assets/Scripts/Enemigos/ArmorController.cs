@@ -86,4 +86,20 @@ public class ArmorController : NpcController
             }
         }
     }
+
+    private void OnDrawGizmos()
+    {
+        if (Camino == null || Camino.Count == 0)
+            return;
+
+        Gizmos.color = Color.yellow;
+
+        for (int i = 0; i < Camino.Count - 1; i++)
+        {
+            Gizmos.DrawLine(
+                Camino[i].posicionMundo,
+                Camino[i + 1].posicionMundo
+            );
+        }
+    }
 }
