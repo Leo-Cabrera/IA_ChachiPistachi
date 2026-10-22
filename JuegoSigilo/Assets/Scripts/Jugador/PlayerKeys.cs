@@ -3,26 +3,29 @@ using UnityEngine;
 
 public class PlayerKeys : MonoBehaviour
 {
-    [Header("Configuración de Llaves")]
+    [Header("Configuracion de Llaves")]
     [Tooltip("Cantidad actual de llaves del jugador (0 a 3)")]
     [SerializeField] private int currentKeys = 0;
 
-    [Tooltip("Límite máximo de llaves")]
+    [Tooltip("Limite maximo de llaves")]
     //RECORDATORIO: el serializedfield es para que la variable privada pueda aparecernos en el inspector
     [SerializeField] private int maxKeys = 3;
+
+    public int CurrentKeys => currentKeys;
+
     [SerializeField] private SpawnKey spawnKey; //para poder llamar al script de SpawnKeys
     [SerializeField] private TextMeshProUGUI contadorLlavesTexto;
 
-    private float ultimoGolpe = -999f; //para evitar perder todas las llaves a la vez, se inicia así para siempre superar ese tiempo
+    private float ultimoGolpe = -999f; //para evitar perder todas las llaves a la vez, se inicia asi para siempre superar ese tiempo
 
-    // Método para recoger una llave del mapa
+    // Metodo para recoger una llave del mapa
     public bool AddKey()
     {
-        if (currentKeys < maxKeys) // si ahora mismo tengo menos del máximo de llaves
+        if (currentKeys < maxKeys) // si ahora mismo tengo menos del maximo de llaves
         {
-            currentKeys++; // se puede añadir una más
+            currentKeys++; // se puede anadir una mas
             ActualizarContadorLlaves();
-            Debug.Log($"Llaves actuales: {currentKeys}"); // para ver en la consola cuántas llaves tenemos
+            Debug.Log($"Llaves actuales: {currentKeys}"); // para ver en la consola cuantas llaves tenemos
             return true;
         }
 
@@ -34,19 +37,19 @@ public class PlayerKeys : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy")) //si el jugador choca con un enemigo
         {
-            //comprobamos si el enemigo tocado es un fantasma, así si es otro tipo de enemigo dará null
+            //comprobamos si el enemigo tocado es un fantasma, asi si es otro tipo de enemigo dara null
             SpiritController spirit = collision.gameObject.GetComponent<SpiritController>();
 
-            //si spirit no es null (es un fantasma) y el fantasma no está en modo perseguir
+            //si spirit no es null (es un fantasma) y el fantasma no esta en modo perseguir
             if (spirit != null && !(spirit.FSM.CurrentState is ChaseState))
             {
-                return;  //entonces salimos, porque solo queremos que nos quite llaves el fantasma si está en modo chase
+                return;  //entonces salimos, porque solo queremos que nos quite llaves el fantasma si esta en modo chase
             }
 
-            if (Time.time >= ultimoGolpe + 1.5f) //la primera vez siempre entra porque está en -999f
+            if (Time.time >= ultimoGolpe + 1.5f) //la primera vez siempre entra porque esta en -999f
                                                  //deben haber pasado al menos 1,5 segundos para volver a recibir un golpe  (inmunidad)
             {
-                ultimoGolpe = Time.time; //guardamos cuándo ocurrió este golpe
+                ultimoGolpe = Time.time; //guardamos cuando ocurrio este golpe
                 LoseKeyOrGameOver(); //restamos una llave o mostramos Game Over
             }
         }
@@ -88,7 +91,7 @@ public class PlayerKeys : MonoBehaviour
         if (contadorLlavesTexto == null) return; //se asegura que tenemos un texto conectado, nuestro contador en el canvas
 
         contadorLlavesTexto.text = $"\u00D7 {currentKeys}";  //nos actualiza el texto del canvas por x numero de llaves
-        //ponemos lo de \u00D7 porque al poner directamente × unity no lo detectaba bien así que ese es el codigo del simbolo
+        //ponemos lo de \u00D7 porque al poner directamente unity no lo detectaba bien asi que ese es el codigo del simbolo
     }
 
 }

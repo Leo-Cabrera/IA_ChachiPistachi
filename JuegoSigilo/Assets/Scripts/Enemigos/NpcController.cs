@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class NpcController : MonoBehaviour
 {
-    //esta clase es tambi�n una plantilla para los controladores de los npc
+    //esta clase es tambien una plantilla para los controladores de los npc
 
     //datos comunes a todos los npc
     private Parilla parilla;
@@ -32,15 +32,15 @@ public abstract class NpcController : MonoBehaviour
 
     public StateMachine FSM { get; private set; }
 
-    private void Awake()  //Awake se ejecuta antes que Start, as� la m�quina de estados se crea antes de que un npc pueda detectar algo
+    private void Awake()  //Awake se ejecuta antes que Start, asi la maquina de estados se crea antes de que un npc pueda detectar algo
     {
-        // Crear la m�quina de estados
+        // Crear la maquina de estados
         FSM = new StateMachine();
 
         // Crear y registrar todos los estados comunes
         ConfigureStates();
 
-        //codigo com�n
+        //codigo comun
         parilla = FindFirstObjectByType<Parilla>();
 
         miSphereCollider =
@@ -61,14 +61,14 @@ public abstract class NpcController : MonoBehaviour
 
     private void Update()
     {
-       //Solo hay que llamar a la m�quina de estado porque ella dirigir�
+       //Solo hay que llamar a la maquina de estado porque ella dirigir
        // a las funciones que toquen
         FSM?.Update();
     }
     protected abstract void ConfigureStates();
 
 
-    //M�todos comunes a todos los NPC
+    //Metodos comunes a todos los NPC
     public void EligirNuevaDireccion()
     {
         float grado =
@@ -79,7 +79,7 @@ public abstract class NpcController : MonoBehaviour
             Vector3.forward;
     }
 
-    //lo llamaremos tanto cuando el npc est� en patrol o chase, tendr� que cambiar su ruta ya sea persiguiendo o dejando de perseguir
+    //lo llamaremos tanto cuando el npc esta en patrol o chase, tendra que cambiar su ruta ya sea persiguiendo o dejando de perseguir
     public void ReiniciarCamino()
     {
         camino = null;  //para desechar la ruta que ya tenia guardada
@@ -87,7 +87,7 @@ public abstract class NpcController : MonoBehaviour
         ultimoNodoObjetivo = null;  //para olvidar el destino anterior 
     }
 
-    //los 3 enemigos usar�n esto, sus estados decidir�n cu�ndo 
+    //los 3 enemigos usaran esto, sus estados decidiran cuando 
     public void ActualizarCamino(Vector3 posicionObjetivo)  //pasamos un punto en el mundo 3d
     {
         if (parilla == null) //necesitamos el mundo dividido en nodos sino salimos del metodo para evitar errores
@@ -95,25 +95,25 @@ public abstract class NpcController : MonoBehaviour
 
         Nodo nodoNpc = parilla.ObtenerNodoDesdePosicion(transform.position);  //guardamos el nodo en el que se encuentra npc
 
-        Nodo nodoObjetivo = parilla.ObtenerNodoDesdePosicion(posicionObjetivo);  //guardamos el nodo donde est� el jugador
+        Nodo nodoObjetivo = parilla.ObtenerNodoDesdePosicion(posicionObjetivo);  //guardamos el nodo donde esta el jugador
 
         //sirve para ver si necesitamos calcular una nueva ruta y reemplazar la guardada, si ocurre algo entonces entra y se encarga
         if (camino == null || camino.Count == 0 || indiceCamino >= camino.Count || nodoObjetivo != ultimoNodoObjetivo)
-        //acaba de entrar en chase y no hay ruta todav�a, hemos llegado al final de la ruta, la lista tiene menos nodos
+        //acaba de entrar en chase y no hay ruta todavia, hemos llegado al final de la ruta, la lista tiene menos nodos
         //de los necesitamos (hemos terminado la ruta), si el jugador se mueve a otra casilla de la que teniamos calcula ha cambiado ruta
         {
             camino = parilla.BuscarCamino(nodoNpc, nodoObjetivo);  //usamos buscar para obtener una lista de nodos
             indiceCamino = 0;  //empezamos por el primer nodo
-            ultimoNodoObjetivo = nodoObjetivo;  //nodo de la posici�n recibida, que puede ser la del jugador o una posici�n predicha
+            ultimoNodoObjetivo = nodoObjetivo;  //nodo de la posicion recibida, que puede ser la del jugador o una posicion predicha
         }
     }
 
     public void MoverPorCamino(float velocidad, float rotacionVel) //parametros que usaremos para avanzar y girar
     {
-        if (camino == null || camino.Count == 0)  //por si la ruta est� vac�a o no existe
+        if (camino == null || camino.Count == 0)  //por si la ruta esta vacia o no existe
             return;
 
-        if (indiceCamino >= camino.Count)  //evita acceder a otro nodo si se ha terminado la ruta (se tendr� que calcular una nueva)
+        if (indiceCamino >= camino.Count)  //evita acceder a otro nodo si se ha terminado la ruta (se tendra que calcular una nueva)
             return;
 
         Vector3 destino = camino[indiceCamino].posicionMundo;  //selecciona al nodo que toca ir 
@@ -126,10 +126,10 @@ public abstract class NpcController : MonoBehaviour
             return;
         }
 
-        //calcula c�mo debe girarse el enemigo para mirar al nodo actual de la ruta
+        //calcula como debe girarse el enemigo para mirar al nodo actual de la ruta
         Quaternion rotacionDeseada = Quaternion.LookRotation(direccion);
 
-        //igual que en patrol, es para que gire gradualmente en fotogramas desde su posici�n hacia la nueva de donde mira
+        //igual que en patrol, es para que gire gradualmente en fotogramas desde su posicion hacia la nueva de donde mira
         transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, rotacionVel * Time.deltaTime);
 
         //aqui no avanza con transform.forward como en patrulla porque queremos que vaya hacia un nodo (direccion.normalized)
@@ -143,7 +143,7 @@ public abstract class NpcController : MonoBehaviour
         Nodo nodoActual = parilla.ObtenerNodoDesdePosicion(transform.position);  //guarda nodo donde esta el fantasma
         Nodo nodoObjetivo = parilla.ObtenerNodoDesdePosicion(posicionObjetivo);  //guarda el nodo del objetivo (la armadura)
 
-        return nodoActual == nodoObjetivo; //cuando esto devuelva true ser� que ha llegado hasta el nodo objetivo
+        return nodoActual == nodoObjetivo; //cuando esto devuelva true sera que ha llegado hasta el nodo objetivo
     }
 
 }

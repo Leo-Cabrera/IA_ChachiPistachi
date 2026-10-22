@@ -5,8 +5,8 @@ using UnityEngine;
 
 public abstract class NpcState
 {
-    // esta clase está hecha para sentar una especie de base de lo que utilizad
-    // cada transición y stado. Después cada npc deberá implementar lo que necesite
+    // esta clase esta hecha para sentar una especie de base de lo que utilizad
+    // cada transicion y stado. Despues cada npc debera implementar lo que necesite
     // a partir de esta, es como una especie de plantilla para los estado
     
     protected NpcController npc; //controlador del npc
@@ -17,9 +17,9 @@ public abstract class NpcState
     {
         this.npc = npc;
     }
-    public virtual void Enter() { } //método para empezar estado
-    public abstract void Execute(); //método para el update
-    public virtual void Exit() { } // método para bsalir del estado
+    public virtual void Enter() { } //metodo para empezar estado
+    public abstract void Execute(); //metodo para el update
+    public virtual void Exit() { } // metodos para salir del estado
     protected void AddTransition(string eventName, Type nextState)
     {
         transitions[eventName] = nextState;
@@ -31,7 +31,7 @@ public abstract class NpcState
         {
             return nextState;
         }
-        //busca la transición
+        //busca la transicion
         return null;
     }
 }
