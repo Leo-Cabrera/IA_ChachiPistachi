@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class AreaVision : MonoBehaviour
 {
-    public float viewDistance = 2f;
+    public float viewDistance = 10f;
     [SerializeField, Range(1f, 360f)] private float viewAngle = 360f;
     [SerializeField, Range(10, 200)] private int rayCount = 100;
     public float eyeHeight = 0.01f;
