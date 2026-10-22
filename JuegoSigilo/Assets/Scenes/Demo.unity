@@ -497,6 +497,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 906416205}
     m_Modifications:
+    - target: {fileID: 785618478351587684, guid: 275d97fd4bef5e346b8dbf0cd6868e08, type: 3}
+      propertyPath: active
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3501915272606996906, guid: 275d97fd4bef5e346b8dbf0cd6868e08, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.6443567
@@ -554,6 +558,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 906416205}
     m_Modifications:
+    - target: {fileID: 785618478351587684, guid: 275d97fd4bef5e346b8dbf0cd6868e08, type: 3}
+      propertyPath: active
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3501915272606996906, guid: 275d97fd4bef5e346b8dbf0cd6868e08, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.20133
@@ -1176,8 +1184,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraMovement
   target: {fileID: 1663826100}
-  offset: {x: 0, y: 8, z: -8}
-  smoothSpeed: 5
+  derechaMax: 0
+  izquierdaMax: 0
+  arribaMax: 0
+  abajoMax: 0
+  cameraHeight: 20
+  planeRenderer: {fileID: 0}
 --- !u!114 &874374357 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 785618478351587684, guid: 275d97fd4bef5e346b8dbf0cd6868e08, type: 3}
@@ -1881,7 +1893,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 785618478351587684, guid: 275d97fd4bef5e346b8dbf0cd6868e08, type: 3}
       propertyPath: active
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3501915272606996906, guid: 275d97fd4bef5e346b8dbf0cd6868e08, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2245,6 +2257,7 @@ MonoBehaviour:
   coneVisibility: 0
   areaVisibility: 0
   targetRenderer: {fileID: 1650912441}
+  visualModel: {fileID: 0}
 --- !u!136 &1650912440
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3298,6 +3311,7 @@ MonoBehaviour:
   coneVisibility: 0
   areaVisibility: 0
   targetRenderer: {fileID: 4886020253144124590}
+  visualModel: {fileID: 0}
 --- !u!1001 &2028653936831667506
 PrefabInstance:
   m_ObjectHideFlags: 0
