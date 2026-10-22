@@ -3,17 +3,48 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     public Transform target;
-    public Vector3 offset = new Vector3(0f, 8f, -8f);
-    public float smoothSpeed = 5f;
+
+    public float derechaMax;
+    public float izquierdaMax;
+    public float arribaMax;
+    public float abajoMax;
+
+    public float cameraHeight = 20f;
+
+    private Camera cam;
+
+    public Renderer planeRenderer;
+
+    private void Awake() {
+        cam = GetComponent<Camera>();
+        if (cam == null || target == null || planeRenderer == null)
+        {
+            Debug.LogError("Asigna el Target y el Plane Renderer en el Inspector.");
+            enabled = false;
+            return;
+        }
+
+        transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+
+        Vector3 pos = transform.position;
+        pos.y = cameraHeight;
+        transform.position = pos;
+
+        float halfHeight = cam.orthographicSize;
+        float halfWidth = halfHeight * cam.aspect;
+
+        derechaMax = planeRenderer.bounds.max.x - halfWidth;
+        izquierdaMax = planeRenderer.bounds.min.x + halfWidth;
+        arribaMax = planeRenderer.bounds.max.z - halfHeight - 1.8f;
+        abajoMax = planeRenderer.bounds.min.z + halfHeight - 2f;
+    }
 
     private void LateUpdate() {
         if (target == null) return;
 
-        Vector3 desiredPosition = target.position + offset;
+        float x = Mathf.Clamp(target.position.x, izquierdaMax, derechaMax);
+        float z = Mathf.Clamp(target.position.z, abajoMax, arribaMax);
 
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed + Time.deltaTime);
-
-        transform.position = smoothedPosition;
-        transform.LookAt(target); 
+        transform.position = new Vector3(x, cameraHeight, z);
     }
 }
