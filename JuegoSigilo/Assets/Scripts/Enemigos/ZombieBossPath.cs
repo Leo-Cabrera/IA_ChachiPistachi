@@ -18,47 +18,69 @@ public class ZombieBossPath : MonoBehaviour
 
     private void Start()
     {
+        // Busca en la escena un objeto que tenga el componente Parilla
         parilla = FindFirstObjectByType<Parilla>();
 
+        // Muestra un error si no se encuentra la parrilla en la escena
         if (parilla == null)
             Debug.LogError("No se encuentra Parilla en la escena.");
     }
 
     private void Update()
     {
+
+        // Comprueba que exista la parilla y que si hay puntos
+        // Si falta alguno de estos elementos, no continúa el movimiento
         if (parilla == null || puntosRuta == null || puntosRuta.Length == 0)
             return;
 
+        // Comprueba que el waypoint actual esta asignado
         if (puntosRuta[indicePuntoActual] == null)
             return;
 
+        // Si no hay un camino, calcula uno
+        // desde la posición del jefe hasta el waypoint actual
         if (camino == null || camino.Count == 0)
         {
             CalcularCaminoAlPunto();
             return;
         }
 
+        // Comprueba si se han recorrido todos los nodos del camino
         if (indiceCamino >= camino.Count)
         {
+
+            // Pasa al siguiente waypoint de la ruta
+            // Si llega al ultimo, vuelve al primero
             indicePuntoActual = (indicePuntoActual + 1) % puntosRuta.Length;
+
+            // Elimina el camino anterior para calcular uno nuevo
             camino = null;
+
+            // Reinicia el indice del camino
             indiceCamino = 0;
             return;
         }
 
+        // Obtiene la posicion del siguiente nodo del camino
         Vector3 destino = camino[indiceCamino].posicionMundo;
+        // Calcula la dirección hacia ese nodo
         Vector3 direccion = destino - transform.position;
+        //pa no moverse en el eje vertical, lo ponemos a 0
         direccion.y = 0f;
 
+        // Comprueba si el jefe ya está suficientemente cerca del nodo
         if (direccion.magnitude <= distanciaPunto)
         {
+            // Si ha llegado, pasa al siguiente nodo del camino
             indiceCamino++;
             return;
         }
 
+        // Gira al jefe hacia el nodo
         Quaternion rotacionDeseada = Quaternion.LookRotation(direccion);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, rotacionVel * Time.deltaTime);
-
+        // Mueve al jefe hacia el nodo
         transform.position += direccion.normalized * velocidad * Time.deltaTime;
     }
 
