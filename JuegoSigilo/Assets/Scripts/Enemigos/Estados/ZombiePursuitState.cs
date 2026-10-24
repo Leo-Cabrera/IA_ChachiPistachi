@@ -7,7 +7,8 @@ public class ZombiePursuitState : NpcState
     public ZombiePursuitState(ZombieController zombie) : base(zombie)  //pillamos la base npc del padre npcstate
     {
         this.zombie = zombie;
-        AddTransition("PlayerLost", typeof(PatrolState));  //cuando el jugador salga del rango volvera a patrullar
+        // Si pierde al jugador, vuelve a seguir al jefe.
+        AddTransition("PlayerLost", typeof(LeaderFollowingState));
     }
 
     public override void Enter()  

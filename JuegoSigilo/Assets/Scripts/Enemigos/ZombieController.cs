@@ -7,31 +7,28 @@ public class ZombieController : NpcController
     public float tiempoPrediccion = 0.5f;
     [SerializeField] float maxSpeed = 3f;
     [SerializeField] float arriveDistance = .4f;
+
+    [Header("Seguimiento del jefe")]
+    public Transform jefe;
+
     protected override void ConfigureStates()
     {
-        //FSM.RegisterState(new PatrolState(this, patrolDetectionRange)
+         // Estado inicial: seguir al jefe.
+        FSM.RegisterState(new LeaderFollowingState(this));
 
-        //guardamos el estado de patrulla para luego poder tener en cuentas sus dos reglas antes de registrarlo a la fsm
-        PatrolState patrullaZombie = new PatrolState(this, velocidad, RotacionVel);
-        patrullaZombie.ConfigurarTransicion("SeekChosen", typeof(ChaseState));  //anadimos el comportamiento del estado
-        patrullaZombie.ConfigurarTransicion("PursuitChosen", typeof(ZombiePursuitState));
-        FSM.RegisterState(patrullaZombie);  //ya la registramos teniendo sus posibles transiciones
-
-        //registramos ahora el estado de persecucion
+        // Estados de persecución cuando aparece el jugador.
         FSM.RegisterState(new ChaseState(this, velocidad, RotacionVel));
-
-        //registramos el estado de pursuit
         FSM.RegisterState(new ZombiePursuitState(this));
 
-        //comienza con el estado de patrulla
-        FSM.SetState(typeof(PatrolState));
+        // Empezamos siguiendo al jefe, no patrullando.
+        FSM.SetState(typeof(LeaderFollowingState));
 
     }
 
     private void OnTriggerEnter(Collider otroCollider)
     {
         //que el zombie patrulle y que quien haya entrado sea la capsula del jugador
-        if (FSM.CurrentState is PatrolState && otroCollider.CompareTag("Player") && otroCollider is CapsuleCollider)
+        if (FSM.CurrentState is LeaderFollowingState  && otroCollider.CompareTag("Player") && otroCollider is CapsuleCollider)
         {
             int eleccion = Random.Range(0, 2);  //para obtener un 0 o un 1
 

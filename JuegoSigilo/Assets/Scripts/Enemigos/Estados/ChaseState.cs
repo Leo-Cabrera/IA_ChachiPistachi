@@ -12,8 +12,16 @@ public class ChaseState : NpcState
         this.velocidad = velocidad;
         this.rotacionVel = rotacionVel;
 
-        //si ocurre el evento de que se ha perdidio el jugador, pasaremos al estado de patrulla
-        AddTransition("PlayerLost", typeof(PatrolState));
+        // Si es un zombi normal, al perder al jugador sigue al jefe.
+        // Los demás enemigos vuelven a patrullar como antes.
+        if (npc is ZombieController)
+        {
+            AddTransition("PlayerLost", typeof(LeaderFollowingState));
+        }
+        else
+        {
+            AddTransition("PlayerLost", typeof(PatrolState));
+        }
     }
 
     //se ejecuta cada vez que el npc entra en el estado de persecucion
