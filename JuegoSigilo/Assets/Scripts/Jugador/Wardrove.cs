@@ -6,7 +6,8 @@ using static UnityEngine.EventSystems.EventTrigger;
 public class Wardrove : MonoBehaviour
 {
     public Transform wardrove;
-    public Transform camTransform;
+    private Transform camTransform;
+    private CameraManager cameraManager;
     public GameObject hideButton;
     public GameObject exitButton;
     public float ButtonVel = 180f;
@@ -23,11 +24,24 @@ public class Wardrove : MonoBehaviour
         exitButton.SetActive(false);
         hideButton.SetActive(false);
         timer = hideTime;
-        
+        cameraManager = FindFirstObjectByType<CameraManager>();
+
     }
 
     private void Update()
     {
+        if (cameraManager == null) return;
+
+
+
+        if (cameraManager.camaraCenital.activeSelf)
+        {
+            camTransform = cameraManager.camaraCenital.transform;
+        }
+        else
+        {
+            camTransform = cameraManager.camaraInclinada.transform;
+        }
         if (hiding)
         {
             timer -= Time.deltaTime;
@@ -125,6 +139,8 @@ public class Wardrove : MonoBehaviour
         hiding = true;
         PlayerData.instance.Hide();
         exitButton.SetActive(true);
+        exitButton.transform.position = hideButton.transform.position;
+        exitButton.transform.rotation = hideButton.transform.rotation;
     }
 
     public void StopHiding()
@@ -133,6 +149,8 @@ public class Wardrove : MonoBehaviour
         timer = hideTime;
         PlayerData.instance.StopHiding();
         exitButton.SetActive(false);
+        hideButton.transform.position = exitButton.transform.position;
+        hideButton.transform.rotation = exitButton.transform.rotation;
 
     }
 }

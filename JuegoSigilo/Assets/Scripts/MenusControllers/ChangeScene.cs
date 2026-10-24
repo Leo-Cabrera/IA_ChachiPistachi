@@ -17,14 +17,14 @@ public class ChangeScene : MonoBehaviour
 
         SceneManager.LoadScene(sceneName);
     }
-    public void LoadGame()
+    public void LoadGame(string sceneName)
     {
         Time.timeScale = 1f;
 
         if (AudioManager.instance != null)
             AudioManager.instance.PlayMusic("GameMusic");
 
-        StartCoroutine(FadeAndLoad("Casa"));
+        StartCoroutine(FadeAndLoad(sceneName));
     }
 
     public void ChangeMenu()
@@ -33,14 +33,14 @@ public class ChangeScene : MonoBehaviour
     }
     IEnumerator Fade()
     {
-        Debug.Log("He llegado a fade!!!!!!");
+        
         transition.SetTrigger("Start");
 
         yield return new WaitForSecondsRealtime(transitionTime);
 
         transition.SetTrigger("End");
 
-        MenusController.HideMenus();
-        MenusController.ShowMenu();
+        if(MenusController != null)MenusController.HideMenus();
+        if (MenusController != null) MenusController.ShowMenu();
     }
 }

@@ -1,277 +1,277 @@
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+//using UnityEngine;
+//using System.Collections;
+//using System.Collections.Generic;
 
-public class Spirit : MonoBehaviour
-{
-    private Parilla parilla;
-    private List<Nodo> camino;
-    private int indiceCamino;
-    private Nodo ultimoNodoObjetivo;
+//public class Spirit : MonoBehaviour
+//{
+//    private Parilla parilla;
+//    private List<Nodo> camino;
+//    private int indiceCamino;
+//    private Nodo ultimoNodoObjetivo;
 
-    public Transform target;
-    public float velocidad = 5f;
-    public float RotacionVel = 5f;
-    public float tiempoPrediccion = 3f;
-    public Vector3 velJugador;
-    public float TiempoCambio = 4f;
-    public float crono;
-    public Vector3 direccionRandom;
+//    public Transform target;
+//    public float velocidad = 5f;
+//    public float RotacionVel = 5f;
+//    public float tiempoPrediccion = 3f;
+//    public Vector3 velJugador;
+//    public float TiempoCambio = 4f;
+//    public float crono;
+//    public Vector3 direccionRandom;
 
-    private SphereCollider miSphereCollider;
+//    private SphereCollider miSphereCollider;
 
-    [SerializeField] float maxSpeed = 5f;
-    [SerializeField] float arriveDistance = .4f;
+//    [SerializeField] float maxSpeed = 5f;
+//    [SerializeField] float arriveDistance = .4f;
 
-    Vector3 targetPosition;
-    Vector3 delta;
-    Vector3 steering;
-    Vector3 currentVelocity;
+//    Vector3 targetPosition;
+//    Vector3 delta;
+//    Vector3 steering;
+//    Vector3 currentVelocity;
 
-    enum EnemyState
-    {
-        PATROL,
-        SEEK
-    }
+//    enum EnemyState
+//    {
+//        PATROL,
+//        SEEK
+//    }
 
-    EnemyState currentState;
+//    EnemyState currentState;
 
-    void Start()
-    {
-        parilla = FindObjectOfType<Parilla>();
+//    void Start()
+//    {
+//        parilla = FindObjectOfType<Parilla>();
 
-        currentState = EnemyState.PATROL;
+//        currentState = EnemyState.PATROL;
 
-        miSphereCollider =
-            (SphereCollider)GetComponent(typeof(SphereCollider));
+//        miSphereCollider =
+//            (SphereCollider)GetComponent(typeof(SphereCollider));
 
-        if (target == null)
-        {
-            GameObject player =
-                GameObject.Find("Player");
+//        if (target == null)
+//        {
+//            GameObject player =
+//                GameObject.Find("Player");
 
-            if (player != null)
-                target = player.transform;
-        }
+//            if (player != null)
+//                target = player.transform;
+//        }
 
-        EligirNuevaDireccion();
-    }
+//        EligirNuevaDireccion();
+//    }
 
-    void Update()
-{
-    if (target == null || parilla == null)
-        return;
+//    void Update()
+//{
+//    if (target == null || parilla == null)
+//        return;
 
-    // Calcular continuamente el camino hacia el jugador
-    Nodo nodoSpirit =
-        parilla.ObtenerNodoDesdePosicion(
-            transform.position
-        );
+//    // Calcular continuamente el camino hacia el jugador
+//    Nodo nodoSpirit =
+//        parilla.ObtenerNodoDesdePosicion(
+//            transform.position
+//        );
 
-    Nodo nodoObjetivo =
-        parilla.ObtenerNodoDesdePosicion(
-            target.position
-        );
+//    Nodo nodoObjetivo =
+//        parilla.ObtenerNodoDesdePosicion(
+//            target.position
+//        );
 
-    camino = parilla.BuscarCamino(
-        nodoSpirit,
-        nodoObjetivo
-    );
+//    camino = parilla.BuscarCamino(
+//        nodoSpirit,
+//        nodoObjetivo
+//    );
 
-    indiceCamino = 0;
-    ultimoNodoObjetivo = nodoObjetivo;
+//    indiceCamino = 0;
+//    ultimoNodoObjetivo = nodoObjetivo;
 
-    // Mantener el comportamiento del espíritu
-    if (currentState == EnemyState.PATROL)
-    {
-        Patrullar();
-    }
-    else if (currentState == EnemyState.SEEK)
-    {
-        MoverPorCamino();
-    }
-}
+//    // Mantener el comportamiento del espíritu
+//    if (currentState == EnemyState.PATROL)
+//    {
+//        Patrullar();
+//    }
+//    else if (currentState == EnemyState.SEEK)
+//    {
+//        MoverPorCamino();
+//    }
+//}
 
-    float ObtenerRadioSphereCollider()
-    {
-        if (miSphereCollider != null)
-        {
-            float escalaMaxima =
-                Mathf.Max(
-                    transform.lossyScale.x,
-                    transform.lossyScale.y,
-                    transform.lossyScale.z
-                );
+//    float ObtenerRadioSphereCollider()
+//    {
+//        if (miSphereCollider != null)
+//        {
+//            float escalaMaxima =
+//                Mathf.Max(
+//                    transform.lossyScale.x,
+//                    transform.lossyScale.y,
+//                    transform.lossyScale.z
+//                );
 
-            return miSphereCollider.radius *
-                   escalaMaxima;
-        }
+//            return miSphereCollider.radius *
+//                   escalaMaxima;
+//        }
 
-        return 7f;
-    }
+//        return 7f;
+//    }
 
-    public void OnAlerted()
-    {
-        currentState = EnemyState.SEEK;
+//    public void OnAlerted()
+//    {
+//        currentState = EnemyState.SEEK;
 
-        camino = null;
-        indiceCamino = 0;
-        ultimoNodoObjetivo = null;
-    }
+//        camino = null;
+//        indiceCamino = 0;
+//        ultimoNodoObjetivo = null;
+//    }
 
-    void Atacar()
-    {
-        if (parilla == null)
-            return;
+//    void Atacar()
+//    {
+//        if (parilla == null)
+//            return;
 
-        Nodo nodoSpirit =
-            parilla.ObtenerNodoDesdePosicion(
-                transform.position
-            );
+//        Nodo nodoSpirit =
+//            parilla.ObtenerNodoDesdePosicion(
+//                transform.position
+//            );
 
-        Nodo nodoObjetivo =
-            parilla.ObtenerNodoDesdePosicion(
-                target.position
-            );
+//        Nodo nodoObjetivo =
+//            parilla.ObtenerNodoDesdePosicion(
+//                target.position
+//            );
 
-        if (camino == null ||
-            camino.Count == 0 ||
-            indiceCamino >= camino.Count ||
-            nodoObjetivo != ultimoNodoObjetivo)
-        {
-            camino =
-                parilla.BuscarCamino(
-                    nodoSpirit,
-                    nodoObjetivo
-                );
+//        if (camino == null ||
+//            camino.Count == 0 ||
+//            indiceCamino >= camino.Count ||
+//            nodoObjetivo != ultimoNodoObjetivo)
+//        {
+//            camino =
+//                parilla.BuscarCamino(
+//                    nodoSpirit,
+//                    nodoObjetivo
+//                );
 
-            indiceCamino = 0;
-            ultimoNodoObjetivo = nodoObjetivo;
-        }
+//            indiceCamino = 0;
+//            ultimoNodoObjetivo = nodoObjetivo;
+//        }
 
-        MoverPorCamino();
-    }
+//        MoverPorCamino();
+//    }
 
-    void MoverPorCamino()
-    {
-        if (camino == null || camino.Count == 0)
-            return;
+//    void MoverPorCamino()
+//    {
+//        if (camino == null || camino.Count == 0)
+//            return;
 
-        if (indiceCamino >= camino.Count)
-            return;
+//        if (indiceCamino >= camino.Count)
+//            return;
 
-        Vector3 destino =
-            camino[indiceCamino].posicionMundo;
+//        Vector3 destino =
+//            camino[indiceCamino].posicionMundo;
 
-        Vector3 direccion =
-            destino - transform.position;
+//        Vector3 direccion =
+//            destino - transform.position;
 
-        direccion.y = 0;
+//        direccion.y = 0;
 
-        if (direccion.magnitude < 0.1f)
-        {
-            indiceCamino++;
-            return;
-        }
+//        if (direccion.magnitude < 0.1f)
+//        {
+//            indiceCamino++;
+//            return;
+//        }
 
-        Quaternion rotacionDeseada =
-            Quaternion.LookRotation(direccion);
+//        Quaternion rotacionDeseada =
+//            Quaternion.LookRotation(direccion);
 
-        transform.rotation =
-            Quaternion.Slerp(
-                transform.rotation,
-                rotacionDeseada,
-                RotacionVel * Time.deltaTime
-            );
+//        transform.rotation =
+//            Quaternion.Slerp(
+//                transform.rotation,
+//                rotacionDeseada,
+//                RotacionVel * Time.deltaTime
+//            );
 
-        transform.position +=
-            direccion.normalized *
-            velocidad *
-            Time.deltaTime;
-    }
+//        transform.position +=
+//            direccion.normalized *
+//            velocidad *
+//            Time.deltaTime;
+//    }
 
-    void OnTriggerExit(Collider sphereCollider)
-    {
-        if (sphereCollider.gameObject.CompareTag("Player") &&
-            sphereCollider is CapsuleCollider)
-        {
-            currentState = EnemyState.PATROL;
+//    void OnTriggerExit(Collider sphereCollider)
+//    {
+//        if (sphereCollider.gameObject.CompareTag("Player") &&
+//            sphereCollider is CapsuleCollider)
+//        {
+//            currentState = EnemyState.PATROL;
 
-            camino = null;
-            indiceCamino = 0;
-            ultimoNodoObjetivo = null;
+//            camino = null;
+//            indiceCamino = 0;
+//            ultimoNodoObjetivo = null;
 
-            crono = 0f;
+//            crono = 0f;
 
-            EligirNuevaDireccion();
-        }
-    }
+//            EligirNuevaDireccion();
+//        }
+//    }
 
-    void Patrullar()
-    {
-        crono += Time.deltaTime;
+//    void Patrullar()
+//    {
+//        crono += Time.deltaTime;
 
-        if (crono >= TiempoCambio)
-        {
-            EligirNuevaDireccion();
-            crono = 0;
-        }
+//        if (crono >= TiempoCambio)
+//        {
+//            EligirNuevaDireccion();
+//            crono = 0;
+//        }
 
-        Quaternion rotacionDeseada =
-            Quaternion.LookRotation(direccionRandom);
+//        Quaternion rotacionDeseada =
+//            Quaternion.LookRotation(direccionRandom);
 
-        transform.rotation =
-            Quaternion.Slerp(
-                transform.rotation,
-                rotacionDeseada,
-                RotacionVel * Time.deltaTime
-            );
+//        transform.rotation =
+//            Quaternion.Slerp(
+//                transform.rotation,
+//                rotacionDeseada,
+//                RotacionVel * Time.deltaTime
+//            );
 
-        transform.position +=
-            transform.forward *
-            velocidad *
-            Time.deltaTime;
-    }
+//        transform.position +=
+//            transform.forward *
+//            velocidad *
+//            Time.deltaTime;
+//    }
 
-    void EligirNuevaDireccion()
-    {
-        float grado =
-            Random.Range(0f, 360f);
+//    void EligirNuevaDireccion()
+//    {
+//        float grado =
+//            Random.Range(0f, 360f);
 
-        direccionRandom =
-            Quaternion.Euler(0, grado, 0) *
-            Vector3.forward;
-    }
+//        direccionRandom =
+//            Quaternion.Euler(0, grado, 0) *
+//            Vector3.forward;
+//    }
 
-    void OnDrawGizmos()
-    {
-        if (camino == null)
-            return;
+//    void OnDrawGizmos()
+//    {
+//        if (camino == null)
+//            return;
 
-        Gizmos.color = Color.white;
+//        Gizmos.color = Color.white;
 
-        for (int i = 0; i < camino.Count; i++)
-        {
-            Vector3 posicion =
-                camino[i].posicionMundo +
-                Vector3.up * 0.25f;
+//        for (int i = 0; i < camino.Count; i++)
+//        {
+//            Vector3 posicion =
+//                camino[i].posicionMundo +
+//                Vector3.up * 0.25f;
 
-            Gizmos.DrawCube(
-                posicion,
-                Vector3.one * 0.9f
-            );
+//            Gizmos.DrawCube(
+//                posicion,
+//                Vector3.one * 0.9f
+//            );
 
-            if (i < camino.Count - 1)
-            {
-                Vector3 siguiente =
-                    camino[i + 1].posicionMundo +
-                    Vector3.up * 0.25f;
+//            if (i < camino.Count - 1)
+//            {
+//                Vector3 siguiente =
+//                    camino[i + 1].posicionMundo +
+//                    Vector3.up * 0.25f;
 
-                Gizmos.DrawLine(
-                    posicion,
-                    siguiente
-                );
-            }
-        }
-    }
-}
+//                Gizmos.DrawLine(
+//                    posicion,
+//                    siguiente
+//                );
+//            }
+//        }
+//    }
+//}
