@@ -30,6 +30,14 @@ public abstract class NpcController : MonoBehaviour
     Vector3 currentVelocity;
 
 
+    [Header("Obstacle Avoidance")]
+    [SerializeField] private float distanciaDeteccion = 2f;
+    [SerializeField] private float radioEvasion = 0.4f;
+    [SerializeField] private float fuerzaEvasion = 2f;
+    [SerializeField] private LayerMask capaObstaculos;
+    [SerializeField] private LayerMask capaEnemigos;
+
+
     public StateMachine FSM { get; private set; }
 
     private void Awake()  //Awake se ejecuta antes que Start, asi la maquina de estados se crea antes de que un npc pueda detectar algo
@@ -144,6 +152,43 @@ public abstract class NpcController : MonoBehaviour
         Nodo nodoObjetivo = parilla.ObtenerNodoDesdePosicion(posicionObjetivo);  //guarda el nodo del objetivo (la armadura)
 
         return nodoActual == nodoObjetivo; //cuando esto devuelva true sera que ha llegado hasta el nodo objetivo
+    }
+
+
+    public void MoverPatrullando(float velocidad, float rotacionVel)
+    {
+        // Guarda la dirección aleatoria que ha elegido el NPC para patrullar
+        Vector3 direccion = direccionRandom;
+        // Eliminamos el movimiento vertical para que se mueva por el suelo
+        direccion.y = 0f;
+
+          // Si la dirección es prácticamente cero, no hacemos nada y salimos del método
+        if (direccion.sqrMagnitude < 0.001f)
+            return;
+
+        // Pongo el origen de la detección medio metro por encima del suelo
+        Vector3 origen = transform.position + Vector3.up * 0.5f;
+
+        // Comprobamos si hay un obstáculo delante del NPC
+        // SphereCast lanza una esfera imaginaria para detectar paredes o objetos
+        // 0.4f es el radio de la esfera y 1.5f la distancia de detección
+        // capaObstaculos indica qué capas pueden considerarse obstáculos
+        if (Physics.SphereCast(origen, 0.4f, direccion.normalized, out RaycastHit impacto, 1.5f, capaObstaculos, QueryTriggerInteraction.Ignore))
+        {
+            // Si encuentra un obstáculo, utilizamos su normal para calcular una nueva dirección que permita cambiar el rumbo del NPC ProjectOnPlane elimina la componente vertical de esa dirección
+            direccionRandom = Vector3.ProjectOnPlane(impacto.normal, Vector3.up).normalized;
+
+            // Detenemos el movimiento de este fotograma para evitar avanzar directamente hacia el obstáculo.
+            return;
+        }
+
+
+        // Calculamos la rotación deseada para que el NPC mire hacia la dirección aleatoria
+        Quaternion rotacionDeseada = Quaternion.LookRotation(direccion);
+        //Giramos progresivamente desde la orientación actual hasta la que quermos, usando Slerp para suavizar el giro
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, rotacionVel * Time.deltaTime);
+        //Avanzamos hacia delante según la orientación del NPC
+        transform.position += transform.forward * velocidad * Time.deltaTime;
     }
 
 }

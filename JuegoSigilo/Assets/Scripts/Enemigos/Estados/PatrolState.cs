@@ -47,16 +47,7 @@ public class PatrolState : NpcState
         Quaternion rotacionDeseada = Quaternion.LookRotation(npc.direccionRandom);
         //guardamos en la varibale la orientacion de la nueva direccion (lookrotation ha convertido la direccion random, hacia donde mira)
 
-        //esto cambiara la rotacion del enemigo gracias a lo que ya hemos guardado antes
-        npc.transform.rotation = Quaternion.Slerp(npc.transform.rotation, rotacionDeseada, rotacionVel * Time.deltaTime);
-        //Slerp calcula una orientacion intermedia entre la actual y la deseada, por eso vamos dondole datos, la rotacion que tiene ahora
-        //el npc, la que queremos que tenga, y con el calculo de la velocidad haremos cuanto queremos que gire por cada fotograma, 
-        //de esta manera no tendra un giro brusco sino uno mas progresivo entre fotogramas
-
-        //Sumamos desde su posicion actual el desplazamiento que va a tener
-        npc.transform.position += npc.transform.forward * velocidad * Time.deltaTime;
-        //ira hacia delante segun su nueva posicion al girarse, y con la velocidad y delta se calcula la distancia que recorre por
-        //cada fotograma, asi va progresivamente. Se suma a su posicion actual para que pueda esta cambiar
+        npc.MoverPatrullando(velocidad, rotacionVel);
     }
 
     public override void Exit()
