@@ -10,6 +10,8 @@ public class SpiritController : NpcController
     [SerializeField] float arriveDistance = .4f;
     public Vector3 PosicionAlerta { get; private set; }
     [SerializeField] private MiniGhostController miniGhostPrefab;
+    [SerializeField] private Animator animadorSpirit;
+    private Transform cabezaSpirit;
 
     protected override void ConfigureStates()
     {
@@ -38,6 +40,42 @@ public class SpiritController : NpcController
 
         //comienza con el estado de patrulla
         FSM.SetState(typeof(PatrolState));
+    }
+
+    private void LateUpdate()
+    {
+        if (animadorSpirit == null || FSM == null)
+            return;
+
+        bool caminando =
+            FSM.CurrentState is PatrolState ||
+            FSM.CurrentState is GoToAlertState ||
+            FSM.CurrentState is InvestigateState ||
+            FSM.CurrentState is ChaseState;
+
+        animadorSpirit.SetBool("Walk", caminando);
+
+        if (FSM.CurrentState is ChaseState)
+            animadorSpirit.speed = 1.5f;
+        else if (FSM.CurrentState is InvestigateState)
+            animadorSpirit.speed = 0.5f;
+        else
+            animadorSpirit.speed = 1f;
+
+        if (FSM.CurrentState is InvestigateState && cabezaSpirit != null && animadorSpirit.isActiveAndEnabled)
+        {
+            float angulo = Mathf.Sin(Time.time * 2f) * 55f;
+            cabezaSpirit.rotation =
+                Quaternion.AngleAxis(angulo, transform.up) * cabezaSpirit.rotation;
+        }
+    }
+
+    public void ReproducirInvocacion()
+    {
+        if (animadorSpirit == null)
+            return;
+
+        animadorSpirit.SetTrigger("Yell");
     }
 
     public void InvocarMinifantasmas()
@@ -130,6 +168,12 @@ public class SpiritController : NpcController
                 new Vector3(0.8f, 0.8f, 0.8f)
             );
         }
+    }
+
+    private void Start()
+    {
+        if (animadorSpirit != null && animadorSpirit.avatar != null && animadorSpirit.avatar.isHuman)
+            cabezaSpirit = animadorSpirit.GetBoneTransform(HumanBodyBones.Head);
     }
 
 }

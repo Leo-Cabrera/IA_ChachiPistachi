@@ -75,6 +75,7 @@ MonoBehaviour:
   maxSpeed: 5
   arriveDistance: 0.4
   miniGhostPrefab: {fileID: 1916413797125809068, guid: c3cb963809cfa77448bc57c8f6cb33bc, type: 3}
+  animadorSpirit: {fileID: 1266972278791612119}
 --- !u!33 &4123026802486059849
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -151,10 +152,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.8457513
-  m_Height: 2.6241393
+  m_Radius: 0.55273676
+  m_Height: 2.3650432
   m_Direction: 1
-  m_Center: {x: 0.0000019073486, y: 0.25041175, z: 0.4113927}
+  m_Center: {x: 0.11245775, y: 0.37995982, z: 0.33222818}
 --- !u!114 &740595890065216053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,7 +301,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 5.8811746
+  m_Radius: 4
   m_Center: {x: -0.040401936, y: 0, z: 0.37529898}
 --- !u!82 &3771400646347706089
 AudioSource:
@@ -504,6 +505,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 994419826816971337, guid: 4227b707f36c8bf488d348f56d956ce7, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1108375794602730638, guid: 4227b707f36c8bf488d348f56d956ce7, type: 3}
       propertyPath: m_Name
       value: SuenoPrefab
@@ -513,6 +518,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4227b707f36c8bf488d348f56d956ce7, type: 3}
+--- !u!95 &1266972278791612119 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 994419826816971337, guid: 4227b707f36c8bf488d348f56d956ce7, type: 3}
+  m_PrefabInstance: {fileID: 2042895917952259230}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1384978840279592976 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1108375794602730638, guid: 4227b707f36c8bf488d348f56d956ce7, type: 3}

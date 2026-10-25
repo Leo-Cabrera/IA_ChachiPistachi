@@ -6595,7 +6595,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &484567217
 Transform:
   m_ObjectHideFlags: 0
@@ -13800,6 +13800,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Jefe
       objectReference: {fileID: 0}
+    - target: {fileID: 6889157682238898761, guid: eaf09cd5ad1e195458a25737da42d2e3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20378,7 +20382,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6889157682238898761, guid: 2f5017d72578a0a468985ffaf1a30caa, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -26671,7 +26675,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6889157682238898761, guid: 2f5017d72578a0a468985ffaf1a30caa, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -27023,6 +27027,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3849988264769632936, guid: 7ca6665e0cdbcad47ab9179a3efa4763, type: 3}
+      propertyPath: velocidad
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3849988264769632936, guid: 7ca6665e0cdbcad47ab9179a3efa4763, type: 3}
       propertyPath: capaEnemigos.m_Bits
       value: 64
       objectReference: {fileID: 0}
@@ -27038,9 +27046,13 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4947052109663379371, guid: 7ca6665e0cdbcad47ab9179a3efa4763, type: 3}
+      propertyPath: m_Radius
+      value: 3.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7588565684161198288, guid: 7ca6665e0cdbcad47ab9179a3efa4763, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -12.09
+      value: -10.76
       objectReference: {fileID: 0}
     - target: {fileID: 7588565684161198288, guid: 7ca6665e0cdbcad47ab9179a3efa4763, type: 3}
       propertyPath: m_LocalPosition.y
@@ -27048,7 +27060,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7588565684161198288, guid: 7ca6665e0cdbcad47ab9179a3efa4763, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.45
+      value: 2.29
       objectReference: {fileID: 0}
     - target: {fileID: 7588565684161198288, guid: 7ca6665e0cdbcad47ab9179a3efa4763, type: 3}
       propertyPath: m_LocalRotation.w
@@ -27134,6 +27146,10 @@ PrefabInstance:
     - target: {fileID: 2279362703114148509, guid: f3a4c905c70bb3f4c9101fe31a00875f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2738529153354460148, guid: f3a4c905c70bb3f4c9101fe31a00875f, type: 3}
+      propertyPath: m_Radius
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8006472368740465471, guid: f3a4c905c70bb3f4c9101fe31a00875f, type: 3}
       propertyPath: capaEnemigos.m_Bits
