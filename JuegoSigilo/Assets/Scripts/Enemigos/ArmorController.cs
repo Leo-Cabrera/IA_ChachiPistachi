@@ -26,6 +26,19 @@ public class ArmorController : NpcController
         }
     }
 
+    private void LateUpdate()
+    {
+        if (armorAnimator == null || FSM == null)
+            return;
+
+        if (FSM.CurrentState is DefenseState)
+            return;
+
+        bool caminando = FSM.CurrentState is PatrolState || FSM.CurrentState is ChaseState;
+
+        armorAnimator.SetBool("Walk", caminando);
+    }
+
     protected override void ConfigureStates()
     {
         //FSM.RegisterState(new PatrolState(this, patrolDetectionRange)
@@ -56,7 +69,7 @@ public class ArmorController : NpcController
     //se llama si algo entra en la zona de trigger de la armadura
     private void OnTriggerEnter(Collider otroCollider)
     {
-        if (otroCollider.gameObject.CompareTag("Player") && otroCollider is CapsuleCollider)
+        if (FSM.CurrentState is PatrolState &&  otroCollider.gameObject.CompareTag("Player") && otroCollider is CapsuleCollider)
         {
             FSM.TriggerEvent("PlayerDetected");
 
@@ -71,6 +84,11 @@ public class ArmorController : NpcController
 
             AlertarFantasmasCercanos();
         }
+    }
+
+    private void OnTriggerStay(Collider otroCollider)
+    {
+        OnTriggerEnter(otroCollider);
     }
 
     //se llama si algo sale de la zona de trigger de la armadura

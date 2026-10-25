@@ -47,7 +47,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 0d36df9626b49ca449da071650fc6756, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -804,15 +804,14 @@ MonoBehaviour:
     m_Bits: 0
   velocidad: 3
   RotacionVel: 5
-  minMovement: 0.01
   tiempoPrediccion: 3
   defenseTime: 10
   defenseCrono: 0
+  maxSpeed: 1
   arriveDistance: 0.4
   radioDeteccion: 50
   alertSoundSource: {fileID: 4296171144878846047}
   withYaiko: 0
-  armorMesh: {fileID: 98710531125466395}
   yaikoPos: {fileID: 0}
   armorAnimator: {fileID: 7732379478732375124}
 --- !u!33 &4345535372671866117
