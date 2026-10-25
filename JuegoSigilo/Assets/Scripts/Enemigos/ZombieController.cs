@@ -7,6 +7,9 @@ public class ZombieController : NpcController
     public float tiempoPrediccion = 0.5f;
     [SerializeField] float maxSpeed = 3f;
     [SerializeField] float arriveDistance = .4f;
+    [SerializeField] private Animator animadorZombie;
+    private Transform brazoIzquierdo;
+    private Transform brazoDerecho;
 
     [Header("Seguimiento del jefe")]
     public Transform jefe;
@@ -28,6 +31,38 @@ public class ZombieController : NpcController
         // Empezamos siguiendo al jefe
         FSM.SetState(typeof(LeaderFollowingState));
 
+    }
+
+    private void LateUpdate()
+    {
+        if (animadorZombie == null || FSM == null)
+            return;
+
+        bool caminando = FSM.CurrentState is LeaderFollowingState || FSM.CurrentState is PatrolState || 
+            FSM.CurrentState is ChaseState || FSM.CurrentState is ZombiePursuitState;
+
+        animadorZombie.SetBool("Walk", caminando);
+
+        bool persiguiendo = FSM.CurrentState is ChaseState || FSM.CurrentState is ZombiePursuitState;
+
+        if (persiguiendo && brazoIzquierdo != null && brazoDerecho != null && animadorZombie.isActiveAndEnabled)
+        {
+            Quaternion giroBrazos = Quaternion.AngleAxis(-80f, transform.right);
+            Quaternion izquierdoHaciaCentro = Quaternion.AngleAxis(20f, transform.up);
+            Quaternion derechoHaciaCentro = Quaternion.AngleAxis(-20f, transform.up);
+
+            brazoIzquierdo.rotation = izquierdoHaciaCentro * giroBrazos * brazoIzquierdo.rotation;
+            brazoDerecho.rotation = derechoHaciaCentro * giroBrazos * brazoDerecho.rotation;
+        }
+    }
+
+    private void Start()
+    {
+        if (animadorZombie == null || animadorZombie.avatar == null || !animadorZombie.avatar.isHuman)
+            return;
+
+        brazoIzquierdo = animadorZombie.GetBoneTransform(HumanBodyBones.LeftUpperArm);
+        brazoDerecho = animadorZombie.GetBoneTransform(HumanBodyBones.RightUpperArm);
     }
 
     private void OnTriggerEnter(Collider otroCollider)

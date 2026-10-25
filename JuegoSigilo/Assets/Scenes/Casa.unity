@@ -13802,7 +13802,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6889157682238898761, guid: eaf09cd5ad1e195458a25737da42d2e3, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20382,7 +20382,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6889157682238898761, guid: 2f5017d72578a0a468985ffaf1a30caa, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -26675,7 +26675,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6889157682238898761, guid: 2f5017d72578a0a468985ffaf1a30caa, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -27044,7 +27044,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3978418115872237707, guid: 7ca6665e0cdbcad47ab9179a3efa4763, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4947052109663379371, guid: 7ca6665e0cdbcad47ab9179a3efa4763, type: 3}
       propertyPath: m_Radius
@@ -27106,6 +27106,10 @@ PrefabInstance:
     - target: {fileID: 67043170530714175, guid: f3a4c905c70bb3f4c9101fe31a00875f, type: 3}
       propertyPath: m_Name
       value: Spirit
+      objectReference: {fileID: 0}
+    - target: {fileID: 67043170530714175, guid: f3a4c905c70bb3f4c9101fe31a00875f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2279362703114148509, guid: f3a4c905c70bb3f4c9101fe31a00875f, type: 3}
       propertyPath: m_LocalPosition.x
