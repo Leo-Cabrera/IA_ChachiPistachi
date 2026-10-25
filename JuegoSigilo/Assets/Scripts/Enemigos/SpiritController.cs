@@ -28,6 +28,9 @@ public class SpiritController : NpcController
         //registramos ahora el estado de investigar si esta el jugador una vez que ha llegado donde el chillido
         FSM.RegisterState(new InvestigateState(this));
 
+        //creamos y registramos el estado para que la fsm lo conozca
+        FSM.RegisterState(new SummonState(this));
+
         //registramos ahora el estado de persecucion
         FSM.RegisterState(new ChaseState(this, velocidad, RotacionVel));
 

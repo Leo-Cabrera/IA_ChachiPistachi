@@ -1878,11 +1878,21 @@ MonoBehaviour:
   TiempoCambio: 4
   crono: 0
   direccionRandom: {x: 0, y: 0, z: 0}
+  distanciaDeteccion: 2
+  radioEvasion: 0.4
+  fuerzaEvasion: 2
+  capaObstaculos:
+    serializedVersion: 2
+    m_Bits: 0
+  capaEnemigos:
+    serializedVersion: 2
+    m_Bits: 0
   velocidad: 3
   RotacionVel: 5
   tiempoPrediccion: 0.5
   maxSpeed: 3
   arriveDistance: 0.4
+  jefe: {fileID: 0}
 --- !u!1001 &1571073814
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2490,6 +2500,15 @@ MonoBehaviour:
   TiempoCambio: 4
   crono: 0
   direccionRandom: {x: 0, y: 0, z: 0}
+  distanciaDeteccion: 2
+  radioEvasion: 0.4
+  fuerzaEvasion: 2
+  capaObstaculos:
+    serializedVersion: 2
+    m_Bits: 0
+  capaEnemigos:
+    serializedVersion: 2
+    m_Bits: 0
   velocidad: 3
   RotacionVel: 5
   tiempoPrediccion: 3
@@ -3408,6 +3427,63 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1001 &2866555190003519819
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6583001768995183197, guid: c3cb963809cfa77448bc57c8f6cb33bc, type: 3}
+      propertyPath: m_Name
+      value: MiniGhost
+      objectReference: {fileID: 0}
+    - target: {fileID: 7741812069435689251, guid: c3cb963809cfa77448bc57c8f6cb33bc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.22289
+      objectReference: {fileID: 0}
+    - target: {fileID: 7741812069435689251, guid: c3cb963809cfa77448bc57c8f6cb33bc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7741812069435689251, guid: c3cb963809cfa77448bc57c8f6cb33bc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.97869
+      objectReference: {fileID: 0}
+    - target: {fileID: 7741812069435689251, guid: c3cb963809cfa77448bc57c8f6cb33bc, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7741812069435689251, guid: c3cb963809cfa77448bc57c8f6cb33bc, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7741812069435689251, guid: c3cb963809cfa77448bc57c8f6cb33bc, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7741812069435689251, guid: c3cb963809cfa77448bc57c8f6cb33bc, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7741812069435689251, guid: c3cb963809cfa77448bc57c8f6cb33bc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7741812069435689251, guid: c3cb963809cfa77448bc57c8f6cb33bc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7741812069435689251, guid: c3cb963809cfa77448bc57c8f6cb33bc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c3cb963809cfa77448bc57c8f6cb33bc, type: 3}
 --- !u!54 &3458270420695885453
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3816,6 +3892,15 @@ MonoBehaviour:
   TiempoCambio: 4
   crono: 0
   direccionRandom: {x: 0, y: 0, z: 0}
+  distanciaDeteccion: 2
+  radioEvasion: 0.4
+  fuerzaEvasion: 2
+  capaObstaculos:
+    serializedVersion: 2
+    m_Bits: 0
+  capaEnemigos:
+    serializedVersion: 2
+    m_Bits: 0
   velocidad: 3
   RotacionVel: 5
   tiempoPrediccion: 3
@@ -3839,3 +3924,4 @@ SceneRoots:
   - {fileID: 906416205}
   - {fileID: 1254482192}
   - {fileID: 1031786467}
+  - {fileID: 2866555190003519819}
