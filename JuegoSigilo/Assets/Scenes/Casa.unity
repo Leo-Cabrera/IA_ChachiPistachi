@@ -12351,6 +12351,7 @@ MonoBehaviour:
   gameOverPanel: {fileID: 2011151114}
   gameOverImage: {fileID: 2011151114}
   gameWinImage: {fileID: 626908482}
+  menuButtons: {fileID: 2119299615}
   fadeDuration: 0.5
   winPanel: {fileID: 626908481}
 --- !u!4 &964255159
@@ -22337,7 +22338,7 @@ RectTransform:
   m_Children:
   - {fileID: 777595832}
   - {fileID: 485445545}
-  m_Father: {fileID: 357223583692745603}
+  m_Father: {fileID: 2119299614}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -26568,6 +26569,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2117451250}
   m_CullTransparentMesh: 1
+--- !u!1 &2119299613
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2119299614}
+  - component: {fileID: 2119299615}
+  m_Layer: 5
+  m_Name: buttons
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2119299614
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119299613}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1562745547397115955}
+  - {fileID: 1840235379}
+  m_Father: {fileID: 357223583692745603}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &2119299615
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119299613}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &2133455046
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26808,6 +26859,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GoMenu
   menuPanel: {fileID: 1105673607}
+  buttonsPanel: {fileID: 2119299615}
 --- !u!222 &325610606820485057
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -26829,8 +26881,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1105673606}
-  - {fileID: 1562745547397115955}
-  - {fileID: 1840235379}
+  - {fileID: 2119299614}
   m_Father: {fileID: 8050066371833864714}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -27078,14 +27129,14 @@ RectTransform:
   m_GameObject: {fileID: 6697356507586799596}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.32520923, y: 0.32520923, z: 0.32520923}
+  m_LocalScale: {x: 0.3252092, y: 0.3252092, z: 0.3252092}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 357223583692745603}
+  m_Father: {fileID: 2119299614}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -106.068214, y: -48.03085}
+  m_AnchoredPosition: {x: 804.54987, y: 441.9244}
   m_SizeDelta: {x: 570.421, y: 224.75201}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &1617984777987800638

@@ -17,7 +17,9 @@ public class Box : MonoBehaviour
 
     public float hideTime = 10f;
     private float timer;
+    private float coolDown = 5f;
     private bool onBox = false;
+    private bool coolDownActive = false;
 
     private bool inBoxZone = false;
 
@@ -57,7 +59,18 @@ public class Box : MonoBehaviour
                 DownBox();
             }
         }
-        
+
+        if (coolDownActive)
+        {
+            coolDown -= Time.deltaTime;
+            if (coolDown < 0)
+            {
+                coolDownActive = false;
+                coolDown = 5f;
+            }
+        }
+
+
 
     }
 
@@ -142,13 +155,23 @@ public class Box : MonoBehaviour
 
     public void OnBox()
     {
-        onBox = true;
-        PlayerData.instance.OnBox();
-        downButton.SetActive(true);
-        fakePlayer.SetActive(true);
-        textSeconds.SetActive(true);
-        downButton.transform.position = jumpButton.transform.position;
-        downButton.transform.rotation = jumpButton.transform.rotation;
+        if (coolDownActive)
+        {
+            Debug.Log("Cooldown activo, no se puede esconder");
+            return;
+
+        }
+        else
+        {
+            onBox = true;
+            PlayerData.instance.OnBox();
+            downButton.SetActive(true);
+            fakePlayer.SetActive(true);
+            textSeconds.SetActive(true);
+            downButton.transform.position = jumpButton.transform.position;
+            downButton.transform.rotation = jumpButton.transform.rotation;
+        }
+        
     }
 
     public void DownBox()
@@ -161,6 +184,7 @@ public class Box : MonoBehaviour
         textSeconds.SetActive(false);
         jumpButton.transform.position = downButton.transform.position;
         jumpButton.transform.rotation = downButton.transform.rotation;
+        coolDownActive = true;
 
     }
 }

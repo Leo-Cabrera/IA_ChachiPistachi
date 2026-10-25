@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public CanvasGroup gameOverPanel;
     public CanvasGroup gameOverImage;
     public CanvasGroup gameWinImage;
+    public CanvasGroup menuButtons;
 
     public float fadeDuration = 0.5f;
 
@@ -58,6 +59,10 @@ public class GameManager : MonoBehaviour
         gameOverPanel.interactable = true;
         gameOverPanel.blocksRaycasts = true;
 
+        menuButtons.alpha = 0f;
+        menuButtons.interactable = false;
+        menuButtons.blocksRaycasts = false;
+
         if (gameOverImage != null)
         {
             gameOverImage.alpha = 1f;
@@ -73,6 +78,9 @@ public class GameManager : MonoBehaviour
         gameOverActive = true;
 
         winPanel.SetActive(true);
+        menuButtons.alpha = 0f;
+        menuButtons.interactable = false;
+        menuButtons.blocksRaycasts = false;
 
         Time.timeScale = 0f;
     }
