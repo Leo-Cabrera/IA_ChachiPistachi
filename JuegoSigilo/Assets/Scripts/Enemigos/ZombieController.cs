@@ -46,7 +46,7 @@ public class ZombieController : NpcController
         }
 
         //Si es el jefe mientras patrulla, pasamos a seguirlo
-        if (FSM.CurrentState is PatrolState && otroCollider.CompareTag("Boss"))
+        if (FSM.CurrentState is PatrolState && otroCollider.transform == jefe)
         {
             FSM.TriggerEvent("FollowBoss");
             Debug.Log(gameObject.name + ": vuelve a seguir al jefe.");
