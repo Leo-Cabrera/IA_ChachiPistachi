@@ -804,14 +804,15 @@ MonoBehaviour:
     m_Bits: 0
   velocidad: 3
   RotacionVel: 5
+  minMovement: 0.01
   tiempoPrediccion: 3
   defenseTime: 10
   defenseCrono: 0
-  maxSpeed: 1
   arriveDistance: 0.4
   radioDeteccion: 50
   alertSoundSource: {fileID: 4296171144878846047}
   withYaiko: 0
+  armorMesh: {fileID: 98710531125466395}
   yaikoPos: {fileID: 0}
   armorAnimator: {fileID: 7732379478732375124}
 --- !u!33 &4345535372671866117
