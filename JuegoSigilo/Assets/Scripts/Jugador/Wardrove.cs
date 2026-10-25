@@ -10,12 +10,15 @@ public class Wardrove : MonoBehaviour
     private CameraManager cameraManager;
     public GameObject hideButton;
     public GameObject exitButton;
+    public GameObject textSeconds;
     public float ButtonVel = 180f;
     public TextMeshProUGUI timerText;
 
     public float hideTime = 10f;
     private float timer;
+    private float coolDown = 5f;
     private bool hiding = false;
+    private bool coolDownActive = false;
 
     private bool inWardroveZone = false;
 
@@ -23,6 +26,7 @@ public class Wardrove : MonoBehaviour
     {
         exitButton.SetActive(false);
         hideButton.SetActive(false);
+        textSeconds.SetActive(false);
         timer = hideTime;
         cameraManager = FindFirstObjectByType<CameraManager>();
 
@@ -52,7 +56,15 @@ public class Wardrove : MonoBehaviour
                 StopHiding();
             }
         }
-        
+        if (coolDownActive)
+        {
+            coolDown -= Time.deltaTime;
+            if (coolDown < 0)
+            {
+                coolDownActive = false;
+                coolDown = 5f;
+            }
+        }
     }
 
     void LateUpdate()
@@ -136,11 +148,21 @@ public class Wardrove : MonoBehaviour
 
     public void Hide()
     {
-        hiding = true;
-        PlayerData.instance.Hide();
-        exitButton.SetActive(true);
-        exitButton.transform.position = hideButton.transform.position;
-        exitButton.transform.rotation = hideButton.transform.rotation;
+        if (coolDownActive)
+        {
+            Debug.Log("Cooldown activo, no se puede esconder");
+            
+        }
+        else
+        {
+            hiding = true;
+            PlayerData.instance.Hide();
+            exitButton.SetActive(true);
+            textSeconds.SetActive(true);
+            exitButton.transform.position = hideButton.transform.position;
+            exitButton.transform.rotation = hideButton.transform.rotation;
+        }
+        
     }
 
     public void StopHiding()
@@ -149,8 +171,10 @@ public class Wardrove : MonoBehaviour
         timer = hideTime;
         PlayerData.instance.StopHiding();
         exitButton.SetActive(false);
+        textSeconds.SetActive(false);
         hideButton.transform.position = exitButton.transform.position;
         hideButton.transform.rotation = exitButton.transform.rotation;
+        coolDownActive = true;
 
     }
 }

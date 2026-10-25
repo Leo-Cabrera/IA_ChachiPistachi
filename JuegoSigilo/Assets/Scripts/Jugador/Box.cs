@@ -10,13 +10,16 @@ public class Box : MonoBehaviour
     private CameraManager cameraManager;
     public GameObject jumpButton;
     public GameObject downButton;
+    public GameObject textSeconds;
     public float ButtonVel = 180f;
     public TextMeshProUGUI timerText;
     public GameObject fakePlayer;
 
     public float hideTime = 10f;
     private float timer;
+    private float coolDown = 5f;
     private bool onBox = false;
+    private bool coolDownActive = false;
 
     private bool inBoxZone = false;
 
@@ -24,6 +27,7 @@ public class Box : MonoBehaviour
     {
         downButton.SetActive(false);
         jumpButton.SetActive(false);
+        textSeconds.SetActive(false);
         timer = hideTime;
         fakePlayer.SetActive(false);
         cameraManager = FindFirstObjectByType<CameraManager>();
@@ -55,7 +59,18 @@ public class Box : MonoBehaviour
                 DownBox();
             }
         }
-        
+
+        if (coolDownActive)
+        {
+            coolDown -= Time.deltaTime;
+            if (coolDown < 0)
+            {
+                coolDownActive = false;
+                coolDown = 5f;
+            }
+        }
+
+
 
     }
 
@@ -81,10 +96,10 @@ public class Box : MonoBehaviour
         if (distancia == 0f)
             return;
 
-        // Dirección deseada: del box hacia la cámara
+        // Direcciï¿½n deseada: del box hacia la cï¿½mara
         Vector3 direccionObjetivo = camTransform.position - box.position;
 
-        // Órbita alrededor del eje Y del box
+        // ï¿½rbita alrededor del eje Y del box
         direccionObjetivo = Vector3.ProjectOnPlane(
             direccionObjetivo, box.up
         );
@@ -140,12 +155,32 @@ public class Box : MonoBehaviour
 
     public void OnBox()
     {
-        onBox = true;
-        PlayerData.instance.OnBox();
-        downButton.SetActive(true);
-        fakePlayer.SetActive(true);
-        downButton.transform.position = jumpButton.transform.position;
-        downButton.transform.rotation = jumpButton.transform.rotation;
+
+        if (coolDownActive)
+        {
+            Debug.Log("Cooldown activo, no se puede esconder");
+            return;
+
+        }
+        else
+        {
+            onBox = true;
+            downButton.SetActive(true);
+            fakePlayer.SetActive(true);
+            textSeconds.SetActive(true);
+            downButton.transform.position = jumpButton.transform.position;
+            downButton.transform.rotation = jumpButton.transform.rotation;
+
+            ZombieController[] zombis = FindObjectsByType<ZombieController>(FindObjectsSortMode.None);
+
+            foreach (ZombieController zombie in zombis)
+            {
+                zombie.AvisarEscondite(box.position);
+            }
+
+            PlayerData.instance.OnBox();
+        }
+
     }
 
     public void DownBox()
@@ -155,8 +190,10 @@ public class Box : MonoBehaviour
         PlayerData.instance.DownBox();
         downButton.SetActive(false);
         fakePlayer.SetActive(false);
+        textSeconds.SetActive(false);
         jumpButton.transform.position = downButton.transform.position;
         jumpButton.transform.rotation = downButton.transform.rotation;
+        coolDownActive = true;
 
     }
 }

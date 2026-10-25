@@ -8,7 +8,7 @@ public class ZombiePursuitState : NpcState
     {
         this.zombie = zombie;
         // Si pierde al jugador, vuelve a seguir al jefe.
-        AddTransition("PlayerLost", typeof(LeaderFollowingState));
+        AddTransition("PlayerLost", typeof(PatrolState));
     }
 
     public override void Enter()  

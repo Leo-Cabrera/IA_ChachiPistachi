@@ -4,11 +4,17 @@ using UnityEngine.SceneManagement;
 public class GoMenu : MonoBehaviour
 {
     public CanvasGroup menuPanel;
+    public CanvasGroup buttonsPanel;
+
     void Start()
     {
         menuPanel.alpha = 0;
         menuPanel.blocksRaycasts = false;
         menuPanel.interactable = false;
+
+        buttonsPanel.alpha = 1;
+        buttonsPanel.blocksRaycasts = true;
+        buttonsPanel.interactable = true;
     }
 
     public void GoMainMenu()
@@ -27,6 +33,10 @@ public class GoMenu : MonoBehaviour
         menuPanel.alpha = 1;
         menuPanel.blocksRaycasts = true;
         menuPanel.interactable = true;
+
+        buttonsPanel.alpha = 0;
+        buttonsPanel.blocksRaycasts = false;
+        buttonsPanel.interactable = false;
     }
 
     public void Hide()
@@ -36,6 +46,9 @@ public class GoMenu : MonoBehaviour
         menuPanel.blocksRaycasts = false;
         menuPanel.interactable = false;
 
+        buttonsPanel.alpha = 1;
+        buttonsPanel.blocksRaycasts = true;
+        buttonsPanel.interactable = true;
     }
 
 }
