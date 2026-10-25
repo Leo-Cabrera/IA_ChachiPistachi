@@ -21,6 +21,8 @@ public class PatrolState : NpcState
         if (npc is ZombieController)
         {
             AddTransition("FollowBoss", typeof(LeaderFollowingState));
+            AddTransition("SeekChosen", typeof(ChaseState));
+            AddTransition("PursuitChosen", typeof(ZombiePursuitState));
         }
     }
 
@@ -48,6 +50,7 @@ public class PatrolState : NpcState
             npc.EligirNuevaDireccion();  //elegimos nueva direccion
             npc.crono = 0f;  //reiniciamos el tiempo para que haya otro cambio
         }
+
 
 
         //Unity usa el Quaternion para guardar los giros 3D por eso lo necesitamos

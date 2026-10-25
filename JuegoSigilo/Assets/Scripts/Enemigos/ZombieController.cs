@@ -14,6 +14,10 @@ public class ZombieController : NpcController
     [Header("Seguimiento del jefe")]
     public Transform jefe;
 
+    private Vector3 posicionCajaEscondite;
+
+    public Vector3 PosicionCajaEscondite => posicionCajaEscondite;
+
     protected override void ConfigureStates()
     {
         // Estado inicial: seguir al jefe
@@ -28,8 +32,12 @@ public class ZombieController : NpcController
         // Estado de patrulla
         FSM.RegisterState(new PatrolState(this, velocidad, RotacionVel));
 
+        FSM.RegisterState(new ZombieFleeFromBoxState(this));
+        
         // Empezamos siguiendo al jefe
         FSM.SetState(typeof(LeaderFollowingState));
+
+        
 
     }
 
@@ -38,8 +46,7 @@ public class ZombieController : NpcController
         if (animadorZombie == null || FSM == null)
             return;
 
-        bool caminando = FSM.CurrentState is LeaderFollowingState || FSM.CurrentState is PatrolState || 
-            FSM.CurrentState is ChaseState || FSM.CurrentState is ZombiePursuitState;
+        bool caminando = FSM.CurrentState is LeaderFollowingState || FSM.CurrentState is PatrolState || FSM.CurrentState is ChaseState || FSM.CurrentState is ZombiePursuitState || FSM.CurrentState is ZombieFleeFromBoxState;
 
         animadorZombie.SetBool("Walk", caminando);
 
@@ -68,7 +75,7 @@ public class ZombieController : NpcController
     private void OnTriggerEnter(Collider otroCollider)
     {
         //Si entra el jugador mientras seguimos al jefe
-        if (FSM.CurrentState is LeaderFollowingState  && otroCollider.CompareTag("Player") && otroCollider is CapsuleCollider)
+        if ((FSM.CurrentState is LeaderFollowingState || FSM.CurrentState is PatrolState)&& otroCollider.CompareTag("Player")&& otroCollider is CapsuleCollider)
         {
             int eleccion = Random.Range(0, 2);  //para obtener un 0 o un 1
 
@@ -98,6 +105,28 @@ public class ZombieController : NpcController
         }
     }
 
+    private void OnTriggerStay(Collider otroCollider)
+    {
+        if (FSM.CurrentState is PatrolState
+            && jefe != null
+            && otroCollider.transform.root == jefe.root)
+        {
+            FSM.TriggerEvent("FollowBoss");
+            Debug.Log(gameObject.name + ": vuelve a seguir al jefe.");
+        }
+    }
+
+
+    public void AvisarEscondite(Vector3 posicionCaja)
+    {
+        posicionCajaEscondite = posicionCaja;
+
+        if (FSM.CurrentState is ChaseState|| FSM.CurrentState is ZombiePursuitState)
+        {
+            FSM.SetState(typeof(ZombieFleeFromBoxState));
+            Debug.Log(gameObject.name + ": se aleja de la caja.");
+        }
+    }
     
     private void OnDrawGizmos()
     {

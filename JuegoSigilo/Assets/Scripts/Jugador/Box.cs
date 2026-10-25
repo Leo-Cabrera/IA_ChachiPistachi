@@ -96,10 +96,10 @@ public class Box : MonoBehaviour
         if (distancia == 0f)
             return;
 
-        // Dirección deseada: del box hacia la cámara
+        // Direcciï¿½n deseada: del box hacia la cï¿½mara
         Vector3 direccionObjetivo = camTransform.position - box.position;
 
-        // Órbita alrededor del eje Y del box
+        // ï¿½rbita alrededor del eje Y del box
         direccionObjetivo = Vector3.ProjectOnPlane(
             direccionObjetivo, box.up
         );
@@ -155,6 +155,7 @@ public class Box : MonoBehaviour
 
     public void OnBox()
     {
+
         if (coolDownActive)
         {
             Debug.Log("Cooldown activo, no se puede esconder");
@@ -164,14 +165,22 @@ public class Box : MonoBehaviour
         else
         {
             onBox = true;
-            PlayerData.instance.OnBox();
             downButton.SetActive(true);
             fakePlayer.SetActive(true);
             textSeconds.SetActive(true);
             downButton.transform.position = jumpButton.transform.position;
             downButton.transform.rotation = jumpButton.transform.rotation;
+
+            ZombieController[] zombis = FindObjectsByType<ZombieController>(FindObjectsSortMode.None);
+
+            foreach (ZombieController zombie in zombis)
+            {
+                zombie.AvisarEscondite(box.position);
+            }
+
+            PlayerData.instance.OnBox();
         }
-        
+
     }
 
     public void DownBox()
