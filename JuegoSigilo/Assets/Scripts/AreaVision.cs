@@ -89,14 +89,14 @@ public class AreaVision : MonoBehaviour
     {
         // Primero quitamos la visibilidad del area
         // a todos los enemigos que estaban dentro anteriormente.
-        foreach (RefEnemy enemy in previousTargets)
+        /*foreach (RefEnemy enemy in previousTargets)
         {
             if (enemy == null)
                 continue;
 
             enemy.areaVisibility = false;
             enemy.changeVisibility();
-        }
+        }*/
 
         // Buscamos quien esta dentro del area AHORA.
         Collider[] targets = Physics.OverlapSphere(
@@ -127,6 +127,15 @@ public class AreaVision : MonoBehaviour
                     currentTargets.Add(refEnemy);
                 }
             }
+        }
+
+        foreach (RefEnemy enemy in previousTargets)
+        {
+            if (enemy == null || currentTargets.Contains(enemy))
+                continue;
+
+            enemy.areaVisibility = false;
+            enemy.changeVisibility();
         }
 
         // Guardamos quien esta dentro para el siguiente frame.

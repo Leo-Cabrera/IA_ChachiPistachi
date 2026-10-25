@@ -740,7 +740,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7588565684161198288}
-  - component: {fileID: 2406142351234236015}
   - component: {fileID: 3849988264769632936}
   - component: {fileID: 4345535372671866117}
   - component: {fileID: 939161631148419316}
@@ -776,29 +775,6 @@ Transform:
   - {fileID: 4326255160476120691}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2406142351234236015
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3978418115872237707}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49ee48fee6931d048bfc00651f0182a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Armor
-  target: {fileID: 0}
-  velocidad: 3
-  RotacionVel: 5
-  tiempoPrediccion: 3
-  velJugador: {x: 0, y: 0, z: 0}
-  TiempoCambio: 4
-  crono: 0
-  direccionRandom: {x: 0, y: 0, z: 0}
-  maxSpeed: 6
-  arriveDistance: 0.4
-  alertSoundSource: {fileID: 4290698777903837594}
 --- !u!114 &3849988264769632936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -816,6 +792,15 @@ MonoBehaviour:
   TiempoCambio: 4
   crono: 0
   direccionRandom: {x: 0, y: 0, z: 0}
+  distanciaDeteccion: 2
+  radioEvasion: 0.4
+  fuerzaEvasion: 2
+  capaObstaculos:
+    serializedVersion: 2
+    m_Bits: 0
+  capaEnemigos:
+    serializedVersion: 2
+    m_Bits: 0
   velocidad: 3
   RotacionVel: 5
   tiempoPrediccion: 3
@@ -1048,7 +1033,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 5.8811746
+  m_Radius: 3.5
   m_Center: {x: -0.040401936, y: 0, z: 0.37529898}
 --- !u!82 &488528069544693011
 AudioSource:
