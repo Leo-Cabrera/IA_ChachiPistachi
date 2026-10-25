@@ -15,6 +15,13 @@ public class PatrolState : NpcState
 
         this.velocidad = velocidad;
         this.rotacionVel = rotacionVel;
+
+
+        //Si un zombi detecta al jefe mientras patrulla, pasa a seguirlo
+        if (npc is ZombieController)
+        {
+            AddTransition("FollowBoss", typeof(LeaderFollowingState));
+        }
     }
 
     //recibe el evento que ocurrira y el estado al que pasara

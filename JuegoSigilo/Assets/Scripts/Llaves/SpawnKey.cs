@@ -7,36 +7,32 @@ public class SpawnKey : MonoBehaviour
 {
     public List<Key> keysSpots; //la lista de llaves que tenemos en el mapa (activas o inactivas)
 
-    /* ya no necesitamos esto porque solo se actualiza al inicio con las 3 llaves que tendremos disponibles
-    si luego cogieramos una llave no se actualizaria y seguiria siendo que hay 3 disponibles
-    private int availableKeys = 0;
-    void Start()
+    private void Start()
     {
-        foreach (Key key in keysSpots)
-        {
-            if (key != null && key.active)
-            {
-                availableKeys++;
-            }
-        }
-    }*/
+        List<Key> disponibles = new List<Key>();  //para guarda las posiciones que tengamos en el mapa de las que podra elegir
 
-    // Update is called once per frame
+        foreach (Key llave in keysSpots)  //recorreo 
+        {
+            if (llave == null)  //para evitar que haya alguna referencia vacia 
+                continue;
+
+            llave.DisableKey();  //desactiva la llave para que no aparezca su modelo 
+            disponibles.Add(llave);  //gaurda ese hueco en la lista como que está disponible
+        }
+
+        for (int i = 0; i < 3 && disponibles.Count > 0; i++)  //hacemos un for que vaya 3 veces para activar 3 llaves
+        {
+            int indice = Random.Range(0, disponibles.Count); //elegimos un numero al azar de la cantidad que tengamos disponibles
+            disponibles[indice].EnableKey();  //el numero que haya tocado sera el hueco que activaremos la llave
+            disponibles.RemoveAt(indice);  //la quitamos de la lista temporal que hemos usado para que ya no cuente como disponible
+        }
+    }
+
     void Update()
     {
-        /* ya no se necesita se ha comprobado que funciona
-        if (Keyboard.current.sKey.wasPressedThisFrame)
-        {
-            Debug.Log("S presionada");
-            SpawnRandomKey();
-        }
 
-        if (Keyboard.current.nKey.wasPressedThisFrame)
-        {
-            Debug.Log("N presionada");
-            DeSpawnKey();
-        }*/
     }
+
     public void SpawnRandomKey()
     {
         List<Key> inactiveKeys = new List<Key>();  //lista de llaves sin activar
@@ -55,29 +51,6 @@ public class SpawnKey : MonoBehaviour
 
         inactiveKeys[indice].EnableKey();  //activaremos la llave que esté inactiva y haya salido aleatoriamente
     }
-
-    /*void DeSpawnKey()
-    {
-        if (availableKeys <= 0) return;
-
-
-        List<Key> activeKeys = new List<Key>();
-
-        // Buscar llaves activas
-        foreach (Key key in keysSpots)
-        {
-            if (key != null && key.active)
-            {
-                activeKeys.Add(key);
-            }
-        }
-        int indice = Random.Range(0, activeKeys.Count);
-
-        activeKeys[indice].DisableKey();
-
-        availableKeys--;
-
-    }*/
 
 
 }

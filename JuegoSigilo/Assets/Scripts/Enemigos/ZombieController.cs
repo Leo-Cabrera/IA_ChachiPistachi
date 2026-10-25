@@ -13,21 +13,26 @@ public class ZombieController : NpcController
 
     protected override void ConfigureStates()
     {
-         // Estado inicial: seguir al jefe.
+        // Estado inicial: seguir al jefe
         FSM.RegisterState(new LeaderFollowingState(this));
 
-        // Estados de persecución cuando aparece el jugador.
+        // Estado de persecución normal
         FSM.RegisterState(new ChaseState(this, velocidad, RotacionVel));
+
+        // Estado de persecución predictiva
         FSM.RegisterState(new ZombiePursuitState(this));
 
-        // Empezamos siguiendo al jefe, no patrullando.
+        // Estado de patrulla
+        FSM.RegisterState(new PatrolState(this, velocidad, RotacionVel));
+
+        // Empezamos siguiendo al jefe
         FSM.SetState(typeof(LeaderFollowingState));
 
     }
 
     private void OnTriggerEnter(Collider otroCollider)
     {
-        //que el zombie patrulle y que quien haya entrado sea la capsula del jugador
+        //Si entra el jugador mientras seguimos al jefe
         if (FSM.CurrentState is LeaderFollowingState  && otroCollider.CompareTag("Player") && otroCollider is CapsuleCollider)
         {
             int eleccion = Random.Range(0, 2);  //para obtener un 0 o un 1
@@ -39,14 +44,22 @@ public class ZombieController : NpcController
 
             Debug.Log(gameObject.name + " -> " + FSM.CurrentState.GetType().Name);  //para ver en la consola que ha tocado
         }
+
+        //Si es el jefe mientras patrulla, pasamos a seguirlo
+        if (FSM.CurrentState is PatrolState && otroCollider.transform == jefe)
+        {
+            FSM.TriggerEvent("FollowBoss");
+            Debug.Log(gameObject.name + ": vuelve a seguir al jefe.");
+        }
     }
 
     private void OnTriggerExit(Collider otroCollider)
     {
         //si la capsula del jugador salen del rango del zombie
-        if (otroCollider.CompareTag("Player") && otroCollider is CapsuleCollider)
+        if (otroCollider.CompareTag("Player") && otroCollider is CapsuleCollider && (FSM.CurrentState is ChaseState || FSM.CurrentState is ZombiePursuitState))
         {
             FSM.TriggerEvent("PlayerLost");  //cambiamos de etiqueta que hara que se pueda cambiar de estado
+            Debug.Log(gameObject.name + ": vuelve a patrullar.");
         }
     }
 

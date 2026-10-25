@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2279362703114148509}
-  - component: {fileID: 4035341500812356627}
   - component: {fileID: 8006472368740465471}
   - component: {fileID: 4123026802486059849}
   - component: {fileID: 3724254127899719852}
@@ -44,28 +43,6 @@ Transform:
   - {fileID: 1761961088414149290}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4035341500812356627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 67043170530714175}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adaacf6a3aa8e1542879f61bf4a20da7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Spirit
-  target: {fileID: 0}
-  velocidad: 3
-  RotacionVel: 5
-  tiempoPrediccion: 3
-  velJugador: {x: 0, y: 0, z: 0}
-  TiempoCambio: 4
-  crono: 0
-  direccionRandom: {x: 0, y: 0, z: 0}
-  maxSpeed: 6
-  arriveDistance: 0.4
 --- !u!114 &8006472368740465471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,11 +60,21 @@ MonoBehaviour:
   TiempoCambio: 4
   crono: 0
   direccionRandom: {x: 0, y: 0, z: 0}
+  distanciaDeteccion: 2
+  radioEvasion: 0.4
+  fuerzaEvasion: 2
+  capaObstaculos:
+    serializedVersion: 2
+    m_Bits: 0
+  capaEnemigos:
+    serializedVersion: 2
+    m_Bits: 0
   velocidad: 3
   RotacionVel: 5
   tiempoPrediccion: 3
   maxSpeed: 5
   arriveDistance: 0.4
+  miniGhostPrefab: {fileID: 1916413797125809068, guid: c3cb963809cfa77448bc57c8f6cb33bc, type: 3}
 --- !u!33 &4123026802486059849
 MeshFilter:
   m_ObjectHideFlags: 0

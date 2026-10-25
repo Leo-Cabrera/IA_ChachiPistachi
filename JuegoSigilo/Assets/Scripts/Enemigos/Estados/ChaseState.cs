@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 //estado de perseguir que tiene que heredar la estructura comun de los estados npc 
 public class ChaseState : NpcState
@@ -12,16 +13,15 @@ public class ChaseState : NpcState
         this.velocidad = velocidad;
         this.rotacionVel = rotacionVel;
 
-        // Si es un zombi normal, al perder al jugador sigue al jefe.
-        // Los demás enemigos vuelven a patrullar como antes.
-        if (npc is ZombieController)
-        {
-            AddTransition("PlayerLost", typeof(LeaderFollowingState));
-        }
-        else
+        if (!(npc is MiniGhostController))
         {
             AddTransition("PlayerLost", typeof(PatrolState));
         }
+    }
+
+    public void ConfigurarTransicion(string evento, Type siguienteEstado)
+    {
+        AddTransition(evento, siguienteEstado);
     }
 
     //se ejecuta cada vez que el npc entra en el estado de persecucion
