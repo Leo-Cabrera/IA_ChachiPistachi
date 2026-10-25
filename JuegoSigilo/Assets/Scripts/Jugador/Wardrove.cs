@@ -10,6 +10,7 @@ public class Wardrove : MonoBehaviour
     private CameraManager cameraManager;
     public GameObject hideButton;
     public GameObject exitButton;
+    public GameObject textSeconds;
     public float ButtonVel = 180f;
     public TextMeshProUGUI timerText;
 
@@ -23,6 +24,7 @@ public class Wardrove : MonoBehaviour
     {
         exitButton.SetActive(false);
         hideButton.SetActive(false);
+        textSeconds.SetActive(false);
         timer = hideTime;
         cameraManager = FindFirstObjectByType<CameraManager>();
 
@@ -139,6 +141,7 @@ public class Wardrove : MonoBehaviour
         hiding = true;
         PlayerData.instance.Hide();
         exitButton.SetActive(true);
+        textSeconds.SetActive(true);
         exitButton.transform.position = hideButton.transform.position;
         exitButton.transform.rotation = hideButton.transform.rotation;
     }
@@ -149,6 +152,7 @@ public class Wardrove : MonoBehaviour
         timer = hideTime;
         PlayerData.instance.StopHiding();
         exitButton.SetActive(false);
+        textSeconds.SetActive(false);
         hideButton.transform.position = exitButton.transform.position;
         hideButton.transform.rotation = exitButton.transform.rotation;
 
