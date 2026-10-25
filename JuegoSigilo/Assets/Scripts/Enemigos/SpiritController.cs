@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class SpiritController : NpcController
 {
@@ -8,6 +9,7 @@ public class SpiritController : NpcController
     [SerializeField] float maxSpeed = 5f;
     [SerializeField] float arriveDistance = .4f;
     public Vector3 PosicionAlerta { get; private set; }
+    [SerializeField] private MiniGhostController miniGhostPrefab;
 
     protected override void ConfigureStates()
     {
@@ -28,11 +30,55 @@ public class SpiritController : NpcController
         //registramos ahora el estado de investigar si esta el jugador una vez que ha llegado donde el chillido
         FSM.RegisterState(new InvestigateState(this));
 
+        //creamos y registramos el estado para que la fsm lo conozca
+        FSM.RegisterState(new SummonState(this));
+
         //registramos ahora el estado de persecucion
         FSM.RegisterState(new ChaseState(this, velocidad, RotacionVel));
 
         //comienza con el estado de patrulla
         FSM.SetState(typeof(PatrolState));
+    }
+
+    public void InvocarMinifantasmas()
+    {
+        Parilla parilla = FindFirstObjectByType<Parilla>();
+
+        if (miniGhostPrefab == null || target == null || parilla == null)  //si no hay prefab o target
+            return;
+
+        Nodo nodoSpirit = parilla.ObtenerNodoDesdePosicion(transform.position);
+        List<Nodo> vecinos = parilla.ObtenerVecinos(nodoSpirit);  //queremos guardarnos los nodos caminables vecinos a spirit
+
+        List<Nodo> candidatos = new List<Nodo>(vecinos);
+
+        foreach (Nodo vecino in vecinos)
+        {
+            foreach (Nodo otro in parilla.ObtenerVecinos(vecino))
+            {
+                if (otro != nodoSpirit && !candidatos.Contains(otro))
+                    candidatos.Add(otro);
+            }
+        }
+
+        int creados = 0;
+
+        foreach (Nodo candidato in candidatos)
+        {
+            Vector3 posicion = candidato.posicionMundo;
+            posicion.y = transform.position.y;
+
+            if (Vector3.Distance(posicion, transform.position) < 1.4f)
+                continue;
+
+            MiniGhostController miniGhost = Instantiate(miniGhostPrefab, posicion, transform.rotation);
+
+            miniGhost.AsignarJugador(target);
+            creados++;
+
+            if (creados == 3)
+                break;
+        }
     }
 
     //metodo que usara armor cuando sea necesario

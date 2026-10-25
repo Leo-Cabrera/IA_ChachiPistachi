@@ -10,7 +10,7 @@ public class InvestigateState : NpcState
         this.spirit = spirit;
 
         //le ponemos estas reglas de estado
-        AddTransition("PlayerDetected", typeof(ChaseState));
+        AddTransition("PlayerDetected", typeof(SummonState));
         AddTransition("AlertReceived", typeof(GoToAlertState));
         AddTransition("InvestigationFinished", typeof(PatrolState));
     }
