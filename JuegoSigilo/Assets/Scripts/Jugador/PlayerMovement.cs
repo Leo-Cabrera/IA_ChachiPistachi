@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float speed = 3f;
     [SerializeField] private float rotationSpeed = 10f;
 
-    //[SerializeField] private Animator animator;
+    [SerializeField] private Animator animator;
 
     private Vector2 movementInput;
 
@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
         // Evita que diagonal sea mas rapida.
         movementInput = Vector2.ClampMagnitude(movementInput, 1f);
 
-        //animator.SetBool("isWalking", movementInput.sqrMagnitude > 0.01f);
+        animator.SetBool("Walking", movementInput.sqrMagnitude > 0.01f);
     }
 
     private void FixedUpdate()

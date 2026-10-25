@@ -15,6 +15,7 @@ public class ArmorController : NpcController
     public bool withYaiko;
     [SerializeField] public Transform yaikoPos;
     [SerializeField] public Animator armorAnimator;
+    private Transform cabezaArmor;
 
     // NUEVO: aplicar el volumen de efectos guardado
     private void Start()
@@ -24,6 +25,9 @@ public class ArmorController : NpcController
             alertSoundSource.volume =
                 PlayerPrefs.GetFloat("SFXVolume", 0.3f);
         }
+
+        if (armorAnimator != null && armorAnimator.avatar != null && armorAnimator.avatar.isHuman)
+            cabezaArmor = armorAnimator.GetBoneTransform(HumanBodyBones.Head);
     }
 
     private void LateUpdate()
@@ -32,7 +36,26 @@ public class ArmorController : NpcController
             return;
 
         if (FSM.CurrentState is DefenseState)
+        {
+            if (cabezaArmor == null && armorAnimator.isActiveAndEnabled && armorAnimator.avatar != null && armorAnimator.avatar.isHuman)
+            {
+                cabezaArmor = armorAnimator.GetBoneTransform(HumanBodyBones.Head);
+            }
+
+            if (cabezaArmor != null && armorAnimator.isActiveAndEnabled)
+            {
+                float angulo = Mathf.Sin(Time.time * 2f) * 65f;
+                cabezaArmor.localRotation = Quaternion.Euler(0f, angulo, 0f);
+            }
+
+            if (Time.frameCount % 60 == 0)
+            {
+                Debug.Log("Armor Defense | cabeza: " +
+                    (cabezaArmor != null ? cabezaArmor.name : "null") +
+                    " | Animator activo: " + armorAnimator.isActiveAndEnabled);
+            }
             return;
+        }
 
         bool caminando = FSM.CurrentState is PatrolState || FSM.CurrentState is ChaseState;
 
