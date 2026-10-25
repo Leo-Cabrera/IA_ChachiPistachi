@@ -13684,6 +13684,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Jefe
       objectReference: {fileID: 0}
+    - target: {fileID: 6889157682238898761, guid: eaf09cd5ad1e195458a25737da42d2e3, type: 3}
+      propertyPath: m_TagString
+      value: Boss
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14607,6 +14611,30 @@ PrefabInstance:
     - target: {fileID: 4669364078677402, guid: 141a3c088bae48f42a579375904a411c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 662618756337526868, guid: 141a3c088bae48f42a579375904a411c, type: 3}
+      propertyPath: m_Size.y
+      value: 1.8427004
+      objectReference: {fileID: 0}
+    - target: {fileID: 662618756337526868, guid: 141a3c088bae48f42a579375904a411c, type: 3}
+      propertyPath: m_Size.z
+      value: 0.7814238
+      objectReference: {fileID: 0}
+    - target: {fileID: 662618756337526868, guid: 141a3c088bae48f42a579375904a411c, type: 3}
+      propertyPath: m_Center.x
+      value: 0.003688967
+      objectReference: {fileID: 0}
+    - target: {fileID: 662618756337526868, guid: 141a3c088bae48f42a579375904a411c, type: 3}
+      propertyPath: m_Center.y
+      value: 0.9285502
+      objectReference: {fileID: 0}
+    - target: {fileID: 662618756337526868, guid: 141a3c088bae48f42a579375904a411c, type: 3}
+      propertyPath: m_Center.z
+      value: 0.49261194
+      objectReference: {fileID: 0}
+    - target: {fileID: 662618756337526868, guid: 141a3c088bae48f42a579375904a411c, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
