@@ -10,6 +10,7 @@ public class Box : MonoBehaviour
     private CameraManager cameraManager;
     public GameObject jumpButton;
     public GameObject downButton;
+    public GameObject textSeconds;
     public float ButtonVel = 180f;
     public TextMeshProUGUI timerText;
     public GameObject fakePlayer;
@@ -24,6 +25,7 @@ public class Box : MonoBehaviour
     {
         downButton.SetActive(false);
         jumpButton.SetActive(false);
+        textSeconds.SetActive(false);
         timer = hideTime;
         fakePlayer.SetActive(false);
         cameraManager = FindFirstObjectByType<CameraManager>();
@@ -143,6 +145,7 @@ public class Box : MonoBehaviour
         onBox = true;
         downButton.SetActive(true);
         fakePlayer.SetActive(true);
+        textSeconds.SetActive(true);
         downButton.transform.position = jumpButton.transform.position;
         downButton.transform.rotation = jumpButton.transform.rotation;
 
@@ -163,6 +166,7 @@ public class Box : MonoBehaviour
         PlayerData.instance.DownBox();
         downButton.SetActive(false);
         fakePlayer.SetActive(false);
+        textSeconds.SetActive(false);
         jumpButton.transform.position = downButton.transform.position;
         jumpButton.transform.rotation = downButton.transform.rotation;
 
