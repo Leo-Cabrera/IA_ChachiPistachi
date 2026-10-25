@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class RefEnemy : MonoBehaviour {
+public class RefEnemy : MonoBehaviour
+{
     public bool coneVisibility;
     public bool areaVisibility;
     public Renderer targetRenderer;
@@ -12,7 +13,8 @@ public class RefEnemy : MonoBehaviour {
         changeVisibility();
     }
 
-    public void changeVisibility() {
+    public void changeVisibility()
+    {
         bool visible = coneVisibility || areaVisibility;  //si está en las zonas donde podemos verlo dará true
 
         if (visualModel != null) //si hemos asignado un objeto al campo de visualmodel

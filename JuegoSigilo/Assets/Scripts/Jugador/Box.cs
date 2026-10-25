@@ -6,7 +6,8 @@ using static UnityEngine.EventSystems.EventTrigger;
 public class Box : MonoBehaviour
 {
     public Transform box;
-    public Transform camTransform;
+    private Transform camTransform;
+    private CameraManager cameraManager;
     public GameObject jumpButton;
     public GameObject downButton;
     public float ButtonVel = 180f;
@@ -25,11 +26,25 @@ public class Box : MonoBehaviour
         jumpButton.SetActive(false);
         timer = hideTime;
         fakePlayer.SetActive(false);
+        cameraManager = FindFirstObjectByType<CameraManager>();
 
     }
 
     private void Update()
     {
+        if (cameraManager == null) return;
+
+
+
+        if (cameraManager.camaraCenital.activeSelf)
+        {
+            camTransform = cameraManager.camaraCenital.transform;
+        }
+        else
+        {
+            camTransform = cameraManager.camaraInclinada.transform;
+        }
+
         if (onBox)
         {
             timer -= Time.deltaTime;
@@ -40,6 +55,7 @@ public class Box : MonoBehaviour
                 DownBox();
             }
         }
+        
 
     }
 
@@ -128,6 +144,8 @@ public class Box : MonoBehaviour
         PlayerData.instance.OnBox();
         downButton.SetActive(true);
         fakePlayer.SetActive(true);
+        downButton.transform.position = jumpButton.transform.position;
+        downButton.transform.rotation = jumpButton.transform.rotation;
     }
 
     public void DownBox()
@@ -137,6 +155,8 @@ public class Box : MonoBehaviour
         PlayerData.instance.DownBox();
         downButton.SetActive(false);
         fakePlayer.SetActive(false);
+        jumpButton.transform.position = downButton.transform.position;
+        jumpButton.transform.rotation = downButton.transform.rotation;
 
     }
 }

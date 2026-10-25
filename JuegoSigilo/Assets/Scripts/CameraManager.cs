@@ -15,15 +15,22 @@ public class CameraManager : MonoBehaviour
         camaraInput = Vector2.zero;
 
         if (Keyboard.current.cKey.wasReleasedThisFrame) {
-            if (camaraCenital.activeSelf == true) {
-                camaraCenital.SetActive(false);
-                camaraInclinada.SetActive(true);
-            }
-            else {
-                camaraCenital.SetActive(true);
-                camaraInclinada.SetActive(false);
-            }
+            ChangeCamera();
         }
         
+    }
+
+    public void ChangeCamera() {
+        if (camaraCenital.activeSelf == true)
+        {
+            camaraCenital.SetActive(false);
+            camaraInclinada.SetActive(true);
+        }
+        else
+        {
+            camaraCenital.SetActive(true);
+            camaraInclinada.SetActive(false);
+        }
+
     }
 }
