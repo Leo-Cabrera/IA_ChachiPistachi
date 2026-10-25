@@ -773,6 +773,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4326255160476120691}
+  - {fileID: 4004132697338094441}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3849988264769632936
@@ -804,10 +805,15 @@ MonoBehaviour:
   velocidad: 3
   RotacionVel: 5
   tiempoPrediccion: 3
+  defenseTime: 10
+  defenseCrono: 0
   maxSpeed: 1
   arriveDistance: 0.4
   radioDeteccion: 50
   alertSoundSource: {fileID: 4296171144878846047}
+  withYaiko: 0
+  yaikoPos: {fileID: 0}
+  armorAnimator: {fileID: 7732379478732375124}
 --- !u!33 &4345535372671866117
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2634,6 +2640,61 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.006840855, y: 0.27721363, z: 0.007960916}
     m_Extent: {x: 0.7674391, y: 1.0089056, z: 0.46549633}
   m_DirtyAABB: 0
+--- !u!1 &8362120140666807351
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4004132697338094441}
+  - component: {fileID: 2880915435405688199}
+  m_Layer: 6
+  m_Name: ColliderYaiko
+  m_TagString: Gigante
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4004132697338094441
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8362120140666807351}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7588565684161198288}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &2880915435405688199
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8362120140666807351}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.79877156
+  m_Height: 1.5975431
+  m_Direction: 1
+  m_Center: {x: -0.016205471, y: 0, z: 0}
 --- !u!1 &8370909004759054322
 GameObject:
   m_ObjectHideFlags: 0

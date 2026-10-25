@@ -14985,6 +14985,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ArmChair (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7278827600706664458, guid: cbd84e147ff3fd842a3a639c83017426, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.079
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278827600706664458, guid: cbd84e147ff3fd842a3a639c83017426, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -27050,6 +27058,14 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 3.5
       objectReference: {fileID: 0}
+    - target: {fileID: 4947052109663379371, guid: 7ca6665e0cdbcad47ab9179a3efa4763, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687201822336116801, guid: 7ca6665e0cdbcad47ab9179a3efa4763, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7588565684161198288, guid: 7ca6665e0cdbcad47ab9179a3efa4763, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.76
@@ -27095,6 +27111,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ca6665e0cdbcad47ab9179a3efa4763, type: 3}
+--- !u!1001 &8213407090953213200
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2061131428008530635, guid: 3e8678c6db9312b4db9e2f5505e4b4ab, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -8.864462
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061131428008530635, guid: 3e8678c6db9312b4db9e2f5505e4b4ab, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.4017
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061131428008530635, guid: 3e8678c6db9312b4db9e2f5505e4b4ab, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -8.813219
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061131428008530635, guid: 3e8678c6db9312b4db9e2f5505e4b4ab, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9729919
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061131428008530635, guid: 3e8678c6db9312b4db9e2f5505e4b4ab, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061131428008530635, guid: 3e8678c6db9312b4db9e2f5505e4b4ab, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.23083946
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061131428008530635, guid: 3e8678c6db9312b4db9e2f5505e4b4ab, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061131428008530635, guid: 3e8678c6db9312b4db9e2f5505e4b4ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061131428008530635, guid: 3e8678c6db9312b4db9e2f5505e4b4ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -26.693
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061131428008530635, guid: 3e8678c6db9312b4db9e2f5505e4b4ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6375649110877162071, guid: 3e8678c6db9312b4db9e2f5505e4b4ab, type: 3}
+      propertyPath: m_Name
+      value: Yaiko
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3e8678c6db9312b4db9e2f5505e4b4ab, type: 3}
 --- !u!1001 &8884789275948869202
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27197,3 +27270,4 @@ SceneRoots:
   - {fileID: 1786176661}
   - {fileID: 906213792}
   - {fileID: 1105353506}
+  - {fileID: 8213407090953213200}
