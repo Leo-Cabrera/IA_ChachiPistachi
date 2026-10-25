@@ -13,7 +13,11 @@ public class ChaseState : NpcState
         this.velocidad = velocidad;
         this.rotacionVel = rotacionVel;
 
-        if (!(npc is MiniGhostController))
+        if (npc is ArmorController)
+        {
+            AddTransition("PlayerLost", typeof(DefenseState));
+        }
+        else if (!(npc is MiniGhostController))
         {
             AddTransition("PlayerLost", typeof(PatrolState));
         }

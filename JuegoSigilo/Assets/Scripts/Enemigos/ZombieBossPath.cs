@@ -15,15 +15,24 @@ public class ZombieBossPath : MonoBehaviour
     private List<Nodo> camino;
     private int indiceCamino = 0;
     private int indicePuntoActual = 0;
+    [SerializeField] private Animator animadorJefe;
 
     private void Start()
     {
+        if (animadorJefe == null)
+            animadorJefe = GetComponentInChildren<Animator>(true);
+
         // Busca en la escena un objeto que tenga el componente Parilla
         parilla = FindFirstObjectByType<Parilla>();
 
         // Muestra un error si no se encuentra la parrilla en la escena
         if (parilla == null)
             Debug.LogError("No se encuentra Parilla en la escena.");
+    }
+    private void LateUpdate()
+    {
+        if (animadorJefe != null)
+            animadorJefe.SetBool("Walk", true);
     }
 
     private void Update()

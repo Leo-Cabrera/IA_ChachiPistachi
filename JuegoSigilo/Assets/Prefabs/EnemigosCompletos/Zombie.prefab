@@ -425,11 +425,22 @@ MonoBehaviour:
   TiempoCambio: 4
   crono: 0
   direccionRandom: {x: 0, y: 0, z: 0}
+  distanciaDeteccion: 2
+  radioEvasion: 0.4
+  fuerzaEvasion: 2
+  capaObstaculos:
+    serializedVersion: 2
+    m_Bits: 0
+  capaEnemigos:
+    serializedVersion: 2
+    m_Bits: 0
   velocidad: 3
   RotacionVel: 5
   tiempoPrediccion: 0.5
   maxSpeed: 3
   arriveDistance: 0.4
+  animadorZombie: {fileID: 7073197403632838829}
+  jefe: {fileID: 0}
 --- !u!1001 &9021999069589718764
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -506,6 +517,11 @@ PrefabInstance:
 --- !u!1 &6943162656056149703 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2121061268389412907, guid: 7faaaae3c5ffc6349941e6442db15f75, type: 3}
+  m_PrefabInstance: {fileID: 9021999069589718764}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &7073197403632838829 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2242123880624614977, guid: 7faaaae3c5ffc6349941e6442db15f75, type: 3}
   m_PrefabInstance: {fileID: 9021999069589718764}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &7714878413219847293 stripped

@@ -14,6 +14,7 @@ public class SummonState : NpcState
     public override void Enter()
     {
         tiempoEnEstado = 0f;  //siempre que entremos en este estado, el tiempo se reinicia hasta cambiar al siguiente se reinicia
+        spirit.ReproducirInvocacion(); //llamada para la animaicion
         Debug.Log("Spirit: entra en SummonState");
     }
 
