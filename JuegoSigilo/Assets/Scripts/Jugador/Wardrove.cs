@@ -22,8 +22,20 @@ public class Wardrove : MonoBehaviour
 
     private bool inWardroveZone = false;
 
+    //Intento arreglar tema armadura
+    [SerializeField] private ArmorController armadura;
+    [SerializeField] private SpiritController espiritu;
+
     void Start()
     {
+        if (espiritu == null)
+        {
+            espiritu = FindFirstObjectByType<SpiritController>();
+        }
+        if (armadura == null)
+        {
+            armadura = FindFirstObjectByType<ArmorController>();
+        }
         exitButton.SetActive(false);
         hideButton.SetActive(false);
         textSeconds.SetActive(false);
@@ -89,10 +101,10 @@ public class Wardrove : MonoBehaviour
         if (distancia == 0f)
             return;
 
-        // Dirección deseada: del wardrove hacia la cámara
+        // Direcciï¿½n deseada: del wardrove hacia la cï¿½mara
         Vector3 direccionObjetivo = camTransform.position - wardrove.position;
 
-        // Órbita alrededor del eje Y del wardrove
+        // ï¿½rbita alrededor del eje Y del wardrove
         direccionObjetivo = Vector3.ProjectOnPlane(
             direccionObjetivo, wardrove.up
         );
@@ -157,6 +169,17 @@ public class Wardrove : MonoBehaviour
         {
             hiding = true;
             PlayerData.instance.Hide();
+
+            if (armadura != null)
+            {
+                armadura.JugadorSeHaEscondido();
+            }
+
+            if (espiritu != null)
+            {
+                espiritu.JugadorSeHaEscondido();
+            }
+
             exitButton.SetActive(true);
             textSeconds.SetActive(true);
             exitButton.transform.position = hideButton.transform.position;

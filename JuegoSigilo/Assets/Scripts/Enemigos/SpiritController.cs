@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class SpiritController : NpcController
 {
@@ -12,6 +13,37 @@ public class SpiritController : NpcController
     [SerializeField] private MiniGhostController miniGhostPrefab;
     [SerializeField] private Animator animadorSpirit;
     private Transform cabezaSpirit;
+
+    //Intentando arreglar tema armario
+    private bool esperandoTrasEscondite = false;
+
+    public bool EsperandoTrasEscondite => esperandoTrasEscondite;
+
+    public void JugadorSeHaEscondido()
+    {
+        if (!(FSM.CurrentState is ChaseState) || esperandoTrasEscondite)
+            return;
+
+        StartCoroutine(EsperarYVolverAPatrullar());
+    }
+
+    private IEnumerator EsperarYVolverAPatrullar()
+    {
+        esperandoTrasEscondite = true;
+
+        Debug.Log("Spirit: jugador escondido. Espero 2 segundos.");
+
+        yield return new WaitForSeconds(2f);
+
+        if (FSM.CurrentState is ChaseState)
+        {
+            FSM.TriggerEvent("PlayerLost");
+        }
+
+        esperandoTrasEscondite = false;
+    }
+
+    //Cerrado tema armario
 
     protected override void ConfigureStates()
     {

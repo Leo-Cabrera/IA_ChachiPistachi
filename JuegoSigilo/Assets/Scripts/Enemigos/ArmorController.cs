@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using System.Collections;
 
 public class ArmorController : NpcController
 {
@@ -16,6 +17,39 @@ public class ArmorController : NpcController
     [SerializeField] public Transform yaikoPos;
     [SerializeField] public Animator armorAnimator;
     private Transform cabezaArmor;
+
+    //Intentado arreglar tema de armarios no prometo nada
+    private bool esperandoTrasEscondite = false;
+
+    public bool EsperandoTrasEscondite => esperandoTrasEscondite;
+
+    public void JugadorSeHaEscondido()
+    {
+        // Solo actuamos si la armadura estaba persiguiendo.
+        if (!(FSM.CurrentState is ChaseState) || esperandoTrasEscondite)
+            return;
+
+        StartCoroutine(EsperarYVolverAPatrullar());
+    }
+
+    private IEnumerator EsperarYVolverAPatrullar()
+    {
+        esperandoTrasEscondite = true;
+
+        Debug.Log("Armor: el jugador se ha escondido. Espero 2 segundos.");
+
+        yield return new WaitForSeconds(2f);
+
+        // Solo cambiamos de estado si seguimos persiguiendo.
+        if (FSM.CurrentState is ChaseState)
+        {
+            FSM.TriggerEvent("PlayerHidden");
+        }
+
+        esperandoTrasEscondite = false;
+    }
+
+//Cerrado tema armarios
 
     // NUEVO: aplicar el volumen de efectos guardado
     private void Start()

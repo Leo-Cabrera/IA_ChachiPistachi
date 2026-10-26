@@ -16,6 +16,7 @@ public class ChaseState : NpcState
         if (npc is ArmorController)
         {
             AddTransition("PlayerLost", typeof(DefenseState));
+            AddTransition("PlayerHidden", typeof(PatrolState));
         }
         else if (!(npc is MiniGhostController))
         {
@@ -38,6 +39,14 @@ public class ChaseState : NpcState
     //se ejecuta en cada fotograma mientras dure este estado
     public override void Execute()
     {
+        if (npc is SpiritController spirit && spirit.EsperandoTrasEscondite)
+        {
+            return;
+        }
+        if (npc is ArmorController armor && armor.EsperandoTrasEscondite)
+        {
+            return;
+        }
         if (npc.target == null)  //si no existe la referencia del jugador se termina
             return;
 
