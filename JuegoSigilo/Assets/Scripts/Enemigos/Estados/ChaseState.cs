@@ -1,14 +1,16 @@
+
 using UnityEngine;
 using System;
 
-//estado de perseguir que tiene que heredar la estructura comun de los estados npc 
 public class ChaseState : NpcState
 {
     private float velocidad;
     private float rotacionVel;
 
-    //se ejecutara al crear el estado y le pasamos noc de la clase que hereda 
-    public ChaseState(NpcController npc, float velocidad, float rotacionVel) : base(npc)
+    public ChaseState(
+        NpcController npc,
+        float velocidad,
+        float rotacionVel) : base(npc)
     {
         this.velocidad = velocidad;
         this.rotacionVel = rotacionVel;
@@ -16,7 +18,7 @@ public class ChaseState : NpcState
         if (npc is ArmorController)
         {
             AddTransition("PlayerLost", typeof(DefenseState));
-            AddTransition("PlayerHidden", typeof(PatrolState));
+            AddTransition("PlayerHidden", typeof(DefenseState));
         }
         else if (!(npc is MiniGhostController))
         {
@@ -24,47 +26,38 @@ public class ChaseState : NpcState
         }
     }
 
-    public void ConfigurarTransicion(string evento, Type siguienteEstado)
+    public void ConfigurarTransicion(
+        string evento, Type siguienteEstado)
     {
         AddTransition(evento, siguienteEstado);
     }
 
-    //se ejecuta cada vez que el npc entra en el estado de persecucion
     public override void Enter()
     {
-        npc.ReiniciarCamino();  //cuando entre en chase tendra que recalcular su ruta para perseguir
+        npc.ReiniciarCamino();
         Debug.Log("NPC: comienzo a perseguir.");
     }
 
-    //se ejecuta en cada fotograma mientras dure este estado
     public override void Execute()
     {
-        if (npc is SpiritController spirit && spirit.EsperandoTrasEscondite)
-        {
-            return;
-        }
-        if (npc is ArmorController armor && armor.EsperandoTrasEscondite)
-        {
-            return;
-        }
-        if (npc is ZombieController zombie && zombie.EsperandoTrasEscondite)
-        {
-            return;
-        }
-        if (npc.target == null)  //si no existe la referencia del jugador se termina
+        if (npc is SpiritController spirit &&
+            spirit.EsperandoTrasEscondite)
             return;
 
-        //la posicion actual del jugador e la pasamos a ActualizarCamino, que calcula una ruta nueva si es necesario
+        if (npc is ArmorController armor &&
+            armor.EsperandoTrasEscondite)
+            return;
+
+        if (npc.target == null)
+            return;
+
         npc.ActualizarCamino(npc.target.position);
-
-        //usa la ruta guardada y las velocidades de este enemigo para avanzar hacia el siguiente nodo
         npc.MoverPorCamino(velocidad, rotacionVel);
     }
 
-    //se ejecuta en el momento en que salga del estado de persecucion
     public override void Exit()
     {
-        npc.ReiniciarCamino(); //cuando salga de chase descartamos la ruta de persecucion
+        npc.ReiniciarCamino();
         Debug.Log(npc.gameObject.name + ": dejo de perseguir.");
     }
 }
