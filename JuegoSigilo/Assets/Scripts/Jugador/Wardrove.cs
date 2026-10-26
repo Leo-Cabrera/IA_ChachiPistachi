@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using static UnityEngine.EventSystems.EventTrigger;
-using UnityEngine.InputSystem;
 
 public class Wardrove : MonoBehaviour
 {
@@ -37,13 +36,7 @@ public class Wardrove : MonoBehaviour
     {
         if (cameraManager == null) return;
 
-        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
-        {
-            if (hiding)
-                StopHiding();
-            else if (inWardroveZone)
-                Hide();
-        }
+
 
         if (cameraManager.camaraCenital.activeSelf)
         {
