@@ -38,7 +38,7 @@ public class ArmorController : NpcController
 
         Debug.Log("Armor: el jugador se ha escondido. Espero 2 segundos.");
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
 
         // Solo cambiamos de estado si seguimos persiguiendo.
         if (FSM.CurrentState is ChaseState)

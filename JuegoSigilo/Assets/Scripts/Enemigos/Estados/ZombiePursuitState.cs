@@ -18,6 +18,9 @@ public class ZombiePursuitState : NpcState
 
     public override void Execute()
     {
+        if (zombie.EsperandoTrasEscondite)
+            return;
+
         if (zombie.target == null)  //para evitar que salga error si el zombie no tiene target
             return;
 

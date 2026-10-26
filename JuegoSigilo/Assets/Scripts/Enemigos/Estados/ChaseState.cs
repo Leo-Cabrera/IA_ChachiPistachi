@@ -47,6 +47,10 @@ public class ChaseState : NpcState
         {
             return;
         }
+        if (npc is ZombieController zombie && zombie.EsperandoTrasEscondite)
+        {
+            return;
+        }
         if (npc.target == null)  //si no existe la referencia del jugador se termina
             return;
 

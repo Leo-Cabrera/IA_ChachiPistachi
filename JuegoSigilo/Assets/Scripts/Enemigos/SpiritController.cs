@@ -33,7 +33,7 @@ public class SpiritController : NpcController
 
         Debug.Log("Spirit: jugador escondido. Espero 2 segundos.");
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
 
         if (FSM.CurrentState is ChaseState)
         {

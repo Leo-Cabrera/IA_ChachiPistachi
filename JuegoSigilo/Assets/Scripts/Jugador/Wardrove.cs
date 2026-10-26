@@ -25,6 +25,7 @@ public class Wardrove : MonoBehaviour
     //Intento arreglar tema armadura
     [SerializeField] private ArmorController armadura;
     [SerializeField] private SpiritController espiritu;
+    [SerializeField] private ZombieController zombie;
 
     void Start()
     {
@@ -35,6 +36,10 @@ public class Wardrove : MonoBehaviour
         if (armadura == null)
         {
             armadura = FindFirstObjectByType<ArmorController>();
+        }
+        if (zombie == null)
+        {
+            zombie = FindFirstObjectByType<ZombieController>();
         }
         exitButton.SetActive(false);
         hideButton.SetActive(false);
@@ -178,6 +183,11 @@ public class Wardrove : MonoBehaviour
             if (espiritu != null)
             {
                 espiritu.JugadorSeHaEscondido();
+            }
+
+            if (zombie != null)
+            {
+                zombie.JugadorSeHaEscondido();
             }
 
             exitButton.SetActive(true);

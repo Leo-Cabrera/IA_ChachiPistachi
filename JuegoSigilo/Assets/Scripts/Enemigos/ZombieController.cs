@@ -18,6 +18,29 @@ public class ZombieController : NpcController
 
     public Vector3 PosicionCajaEscondite => posicionCajaEscondite;
 
+    
+    // Sistema para cuando el jugador se esconde en el armario.
+    private bool esperandoTrasEscondite = false;
+
+    public bool EsperandoTrasEscondite => esperandoTrasEscondite;
+
+    
+    
+    
+    public void JugadorSeHaEscondido()
+    {
+        if (!(FSM.CurrentState is ChaseState) &&
+            !(FSM.CurrentState is ZombiePursuitState))
+            return;
+
+        ReiniciarCamino();
+        FSM.SetState(typeof(PatrolState));
+
+        Debug.Log(gameObject.name + ": jugador escondido, vuelve a patrullar.");
+    }
+
+
+
     protected override void ConfigureStates()
     {
         // Estado inicial: seguir al jefe
