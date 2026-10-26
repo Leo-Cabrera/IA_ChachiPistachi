@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using static UnityEngine.EventSystems.EventTrigger;
+using UnityEngine.InputSystem;
 
 public class Box : MonoBehaviour
 {
@@ -36,8 +37,15 @@ public class Box : MonoBehaviour
 
     private void Update()
     {
-        if (cameraManager == null) return;
+        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            if (onBox)
+                DownBox();
+            else if (inBoxZone)
+                OnBox();
+        }
 
+        if (cameraManager == null) return;
 
 
         if (cameraManager.camaraCenital.activeSelf)

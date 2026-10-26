@@ -1,6 +1,7 @@
 
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class Wardrove : MonoBehaviour
 {
@@ -54,6 +55,14 @@ public class Wardrove : MonoBehaviour
 
     private void Update()
     {
+        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            if (hiding)
+                StopHiding();
+            else if (inWardroveZone)
+                Hide();
+        }
+
         if (cameraManager != null)
         {
             if (cameraManager.camaraCenital != null &&
