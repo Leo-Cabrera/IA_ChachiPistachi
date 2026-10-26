@@ -120,9 +120,7 @@ public class ArmorController : NpcController
             return;
         }
 
-        bool caminando =
-            FSM.CurrentState is PatrolState ||
-            FSM.CurrentState is ChaseState;
+        bool caminando = !esperandoTrasEscondite && (FSM.CurrentState is PatrolState || FSM.CurrentState is ChaseState);
 
         armorAnimator.SetBool("Walk", caminando);
     }

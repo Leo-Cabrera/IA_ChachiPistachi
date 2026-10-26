@@ -82,11 +82,8 @@ public class SpiritController : NpcController
         if (animadorSpirit == null || FSM == null)
             return;
 
-        bool caminando =
-            FSM.CurrentState is PatrolState ||
-            FSM.CurrentState is GoToAlertState ||
-            FSM.CurrentState is InvestigateState ||
-            FSM.CurrentState is ChaseState;
+        bool caminando = !esperandoTrasEscondite && (FSM.CurrentState is PatrolState || FSM.CurrentState is GoToAlertState ||
+            FSM.CurrentState is InvestigateState || FSM.CurrentState is ChaseState);
 
         animadorSpirit.SetBool("Walk", caminando);
 
