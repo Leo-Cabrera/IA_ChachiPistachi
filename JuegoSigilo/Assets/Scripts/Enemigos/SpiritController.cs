@@ -1,4 +1,6 @@
+
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class SpiritController : NpcController
@@ -6,39 +8,72 @@ public class SpiritController : NpcController
     public float velocidad = 5f;
     public float RotacionVel = 5f;
     public float tiempoPrediccion = 3f;
+
     [SerializeField] float maxSpeed = 5f;
-    [SerializeField] float arriveDistance = .4f;
+    [SerializeField] float arriveDistance = 0.4f;
+
     public Vector3 PosicionAlerta { get; private set; }
+
     [SerializeField] private MiniGhostController miniGhostPrefab;
     [SerializeField] private Animator animadorSpirit;
+
     private Transform cabezaSpirit;
+
+    private bool esperandoTrasEscondite = false;
+
+    public bool EsperandoTrasEscondite => esperandoTrasEscondite;
+
+    public void JugadorSeHaEscondido()
+    {
+        if (FSM == null || FSM.CurrentState == null)
+            return;
+
+        if (!(FSM.CurrentState is ChaseState) ||
+            esperandoTrasEscondite)
+            return;
+
+        StartCoroutine(EsperarYVolverAPatrullar());
+    }
+
+    private IEnumerator EsperarYVolverAPatrullar()
+    {
+        esperandoTrasEscondite = true;
+
+        Debug.Log("Spirit: jugador escondido. Espero 2 segundos.");
+
+        yield return new WaitForSeconds(2f);
+
+        if (FSM != null && FSM.CurrentState is ChaseState)
+        {
+            FSM.TriggerEvent("PlayerLost");
+        }
+
+        esperandoTrasEscondite = false;
+    }
 
     protected override void ConfigureStates()
     {
-        //FSM.RegisterState(new PatrolState(this, patrolDetectionRange)
+        PatrolState patrullaSpirit =
+            new PatrolState(this, velocidad, RotacionVel);
 
-        //creamos el estado de patrulla del espiritu
-        PatrolState patrullaSpirit = new PatrolState(this, velocidad, RotacionVel);  //para que adopte su velocidad inicial
+        patrullaSpirit.ConfigurarTransicion(
+            "AlertReceived",
+            typeof(GoToAlertState)
+        );
 
-        //esta sera la regla de transicion de patrulla a hacia el lugar del grito
-        patrullaSpirit.ConfigurarTransicion("AlertReceived", typeof(GoToAlertState));  
-
-        //registramos en la maquina de estados este estado teniendo en cuenta su transicion
         FSM.RegisterState(patrullaSpirit);
 
-        //registramos ahora el estado de ir hacia donde se encuentra el chillido de la armadura
-        FSM.RegisterState(new GoToAlertState(this, velocidad, RotacionVel));
+        FSM.RegisterState(
+            new GoToAlertState(this, velocidad, RotacionVel)
+        );
 
-        //registramos ahora el estado de investigar si esta el jugador una vez que ha llegado donde el chillido
         FSM.RegisterState(new InvestigateState(this));
-
-        //creamos y registramos el estado para que la fsm lo conozca
         FSM.RegisterState(new SummonState(this));
 
-        //registramos ahora el estado de persecucion
-        FSM.RegisterState(new ChaseState(this, velocidad, RotacionVel));
+        FSM.RegisterState(
+            new ChaseState(this, velocidad, RotacionVel)
+        );
 
-        //comienza con el estado de patrulla
         FSM.SetState(typeof(PatrolState));
     }
 
@@ -62,11 +97,15 @@ public class SpiritController : NpcController
         else
             animadorSpirit.speed = 1f;
 
-        if (FSM.CurrentState is InvestigateState && cabezaSpirit != null && animadorSpirit.isActiveAndEnabled)
+        if (FSM.CurrentState is InvestigateState &&
+            cabezaSpirit != null &&
+            animadorSpirit.isActiveAndEnabled)
         {
             float angulo = Mathf.Sin(Time.time * 2f) * 55f;
+
             cabezaSpirit.rotation =
-                Quaternion.AngleAxis(angulo, transform.up) * cabezaSpirit.rotation;
+                Quaternion.AngleAxis(angulo, transform.up) *
+                cabezaSpirit.rotation;
         }
     }
 
@@ -82,12 +121,15 @@ public class SpiritController : NpcController
     {
         Parilla parilla = FindFirstObjectByType<Parilla>();
 
-        if (miniGhostPrefab == null || target == null || parilla == null)  //si no hay prefab o target
+        if (miniGhostPrefab == null ||
+            target == null ||
+            parilla == null)
             return;
 
-        Nodo nodoSpirit = parilla.ObtenerNodoDesdePosicion(transform.position);
-        List<Nodo> vecinos = parilla.ObtenerVecinos(nodoSpirit);  //queremos guardarnos los nodos caminables vecinos a spirit
+        Nodo nodoSpirit =
+            parilla.ObtenerNodoDesdePosicion(transform.position);
 
+        List<Nodo> vecinos = parilla.ObtenerVecinos(nodoSpirit);
         List<Nodo> candidatos = new List<Nodo>(vecinos);
 
         foreach (Nodo vecino in vecinos)
@@ -109,7 +151,11 @@ public class SpiritController : NpcController
             if (Vector3.Distance(posicion, transform.position) < 1.4f)
                 continue;
 
-            MiniGhostController miniGhost = Instantiate(miniGhostPrefab, posicion, transform.rotation);
+            MiniGhostController miniGhost = Instantiate(
+                miniGhostPrefab,
+                posicion,
+                transform.rotation
+            );
 
             miniGhost.AsignarJugador(target);
             creados++;
@@ -119,41 +165,43 @@ public class SpiritController : NpcController
         }
     }
 
-    //metodo que usara armor cuando sea necesario
-    public void OnAlerted(Vector3 posicionGrito) //se le pasara la posicion de la armadura que haya pegado el grito
+    public void OnAlerted(Vector3 posicionGrito)
     {
         PosicionAlerta = posicionGrito;
-        FSM.TriggerEvent("AlertReceived");  //asi la fsm recibe el cambio de evento para que pueda pasar a otro estado
-        Debug.Log("Fantasma avisado. Estado: " + FSM.CurrentState.GetType().Name);
+
+        if (FSM == null)
+            return;
+
+        FSM.TriggerEvent("AlertReceived");
+
+        Debug.Log(
+            "Fantasma avisado. Estado: " +
+            FSM.CurrentState.GetType().Name
+        );
     }
 
-    //OnTriggerStay metodo que Unity llama repetidamente mientras otro collider permanece dentro de la zona trigger del fantasma
-    //usamos este porque el jugador podria estar ya dentro de la zona cuando el fantasma empieza a investigar
     private void OnTriggerStay(Collider otroCollider)
     {
-        //mientras haya maquina de estados, este en el estado investigar y el collider sea el de la capsula del jugador
-        if (FSM != null && FSM.CurrentState is InvestigateState && otroCollider.gameObject.CompareTag("Player") &&
+        if (FSM != null &&
+            FSM.CurrentState is InvestigateState &&
+            otroCollider.CompareTag("Player") &&
             otroCollider is CapsuleCollider)
         {
-            FSM.TriggerEvent("PlayerDetected");  //se ha detectado al jugador, se cambia de estado para poder hacer transicion
+            FSM.TriggerEvent("PlayerDetected");
         }
     }
 
-    private void OnTriggerExit(Collider otroCollider) //lo llama Unity cuando un collider sale de la zona trigger
+    private void OnTriggerExit(Collider otroCollider)
     {
-        //Debug.Log("Spirit: sale del trigger " + otroCollider.name
-        //+ " (" + otroCollider.GetType().Name + "), estado: "
-        //+ FSM.CurrentState.GetType().Name); 
-
-        //hay maquina de estados, estamos en el estado de persecucion y a quien perseguimos era a la capsula del jugador (quien sale)
-        if (FSM != null && FSM.CurrentState is ChaseState && otroCollider.gameObject.CompareTag("Player") &&
+        if (FSM != null &&
+            FSM.CurrentState is ChaseState &&
+            otroCollider.CompareTag("Player") &&
             otroCollider is CapsuleCollider)
         {
-            FSM.TriggerEvent("PlayerLost");  //entonces el jugador ha salido de la zona del fantasma, cambiamos el evento para cambiar estado
+            FSM.TriggerEvent("PlayerLost");
         }
     }
 
-    
     private void OnDrawGizmos()
     {
         if (Camino == null || Camino.Count == 0)
@@ -172,8 +220,12 @@ public class SpiritController : NpcController
 
     private void Start()
     {
-        if (animadorSpirit != null && animadorSpirit.avatar != null && animadorSpirit.avatar.isHuman)
-            cabezaSpirit = animadorSpirit.GetBoneTransform(HumanBodyBones.Head);
+        if (animadorSpirit != null &&
+            animadorSpirit.avatar != null &&
+            animadorSpirit.avatar.isHuman)
+        {
+            cabezaSpirit =
+                animadorSpirit.GetBoneTransform(HumanBodyBones.Head);
+        }
     }
-
 }

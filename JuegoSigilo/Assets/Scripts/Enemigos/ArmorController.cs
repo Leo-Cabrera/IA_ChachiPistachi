@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using System.Collections;
 
 public class ArmorController : NpcController
 {
@@ -8,16 +9,66 @@ public class ArmorController : NpcController
     public float tiempoPrediccion = 3f;
     public float defenseTime = 10f;
     public float defenseCrono = 0f;
+
     [SerializeField] float maxSpeed = 1f;
     [SerializeField] float arriveDistance = .4f;
     [SerializeField] private float radioDeteccion = 10f;
-    public AudioSource alertSoundSource; //sonido del grito
+
+    public AudioSource alertSoundSource;
     public bool withYaiko;
     [SerializeField] public Transform yaikoPos;
     [SerializeField] public Animator armorAnimator;
+
     private Transform cabezaArmor;
 
-    // NUEVO: aplicar el volumen de efectos guardado
+    private bool esperandoTrasEscondite = false;
+    public bool EsperandoTrasEscondite => esperandoTrasEscondite;
+
+    public void JugadorSeHaEscondido()
+    {
+        if (FSM == null ||
+            !(FSM.CurrentState is ChaseState) ||
+            esperandoTrasEscondite)
+        {
+            return;
+        }
+
+        StartCoroutine(EsperarYVolverAPatrullar());
+    }
+
+    private IEnumerator EsperarYVolverAPatrullar()
+    {
+        esperandoTrasEscondite = true;
+
+        Debug.Log("[ARMOR] Empieza la espera de 2 segundos.");
+
+        yield return new WaitForSeconds(2f);
+
+        if (FSM == null)
+        {
+            Debug.LogError("[ARMOR] FSM es null.");
+            esperandoTrasEscondite = false;
+            yield break;
+        }
+
+        Debug.Log("[ARMOR] Estado después de esperar: " +
+            (FSM.CurrentState != null
+                ? FSM.CurrentState.GetType().Name
+                : "null"));
+
+        if (FSM.CurrentState is ChaseState)
+        {
+            FSM.TriggerEvent("PlayerHidden");
+
+            Debug.Log("[ARMOR] Estado después del evento: " +
+                (FSM.CurrentState != null
+                    ? FSM.CurrentState.GetType().Name
+                    : "null"));
+        }
+
+        esperandoTrasEscondite = false;
+    }
+
     private void Start()
     {
         if (alertSoundSource != null)
@@ -26,8 +77,13 @@ public class ArmorController : NpcController
                 PlayerPrefs.GetFloat("SFXVolume", 0.3f);
         }
 
-        if (armorAnimator != null && armorAnimator.avatar != null && armorAnimator.avatar.isHuman)
-            cabezaArmor = armorAnimator.GetBoneTransform(HumanBodyBones.Head);
+        if (armorAnimator != null &&
+            armorAnimator.avatar != null &&
+            armorAnimator.avatar.isHuman)
+        {
+            cabezaArmor =
+                armorAnimator.GetBoneTransform(HumanBodyBones.Head);
+        }
     }
 
     private void LateUpdate()
@@ -37,68 +93,86 @@ public class ArmorController : NpcController
 
         if (FSM.CurrentState is DefenseState)
         {
-            if (cabezaArmor == null && armorAnimator.isActiveAndEnabled && armorAnimator.avatar != null && armorAnimator.avatar.isHuman)
+            if (cabezaArmor == null &&
+                armorAnimator.isActiveAndEnabled &&
+                armorAnimator.avatar != null &&
+                armorAnimator.avatar.isHuman)
             {
-                cabezaArmor = armorAnimator.GetBoneTransform(HumanBodyBones.Head);
+                cabezaArmor =
+                    armorAnimator.GetBoneTransform(HumanBodyBones.Head);
             }
 
             if (cabezaArmor != null && armorAnimator.isActiveAndEnabled)
             {
                 float angulo = Mathf.Sin(Time.time * 2f) * 65f;
-                cabezaArmor.localRotation = Quaternion.Euler(0f, angulo, 0f);
+                cabezaArmor.localRotation =
+                    Quaternion.Euler(0f, angulo, 0f);
             }
 
             if (Time.frameCount % 60 == 0)
             {
                 Debug.Log("Armor Defense | cabeza: " +
                     (cabezaArmor != null ? cabezaArmor.name : "null") +
-                    " | Animator activo: " + armorAnimator.isActiveAndEnabled);
+                    " | Animator activo: " +
+                    armorAnimator.isActiveAndEnabled);
             }
+
             return;
         }
 
-        bool caminando = FSM.CurrentState is PatrolState || FSM.CurrentState is ChaseState;
+        bool caminando =
+            FSM.CurrentState is PatrolState ||
+            FSM.CurrentState is ChaseState;
 
         armorAnimator.SetBool("Walk", caminando);
     }
 
     protected override void ConfigureStates()
     {
-        //FSM.RegisterState(new PatrolState(this, patrolDetectionRange)
+        PatrolState patrullaArmor =
+            new PatrolState(this, velocidad, RotacionVel);
 
-        //creamos el estado de patrulla de la armadura
-        PatrolState patrullaArmor = new PatrolState(this, velocidad, RotacionVel);
+        patrullaArmor.ConfigurarTransicion(
+            "PlayerDetected", typeof(ChaseState));
 
-        //guardamos la regla que este enemigo sigue, si detecta al jugador pasa a chase
-        patrullaArmor.ConfigurarTransicion("PlayerDetected", typeof(ChaseState));
-
-        //registramos la patrulla que acabamos de configurar para que pueda tener esa regla
         FSM.RegisterState(patrullaArmor);
 
-        ChaseState perseguirArmor = new ChaseState(this, velocidad, RotacionVel);
-        //registramos ahora el estado de persecucion
+        ChaseState perseguirArmor =
+            new ChaseState(this, velocidad, RotacionVel);
+
+        // La armadura pasa a defensa cuando pierde al jugador
+        // o cuando termina la espera tras esconderse.
+        perseguirArmor.ConfigurarTransicion(
+            "PlayerHidden", typeof(DefenseState));
+
         FSM.RegisterState(perseguirArmor);
 
-        DefenseState defend = new DefenseState(this, velocidad, RotacionVel, defenseTime, defenseCrono);
-        defend.ConfigurarTransicion("DefenseEnded", typeof(PatrolState));
+        DefenseState defend =
+            new DefenseState(
+                this, velocidad, RotacionVel,
+                defenseTime, defenseCrono);
 
-        //registramos el estado de defensa
+        defend.ConfigurarTransicion(
+            "DefenseEnded", typeof(PatrolState));
+
         FSM.RegisterState(defend);
 
-        //comienza con el estado de patrulla
         FSM.SetState(typeof(PatrolState));
     }
 
-    //se llama si algo entra en la zona de trigger de la armadura
     private void OnTriggerEnter(Collider otroCollider)
     {
-        if (FSM.CurrentState is PatrolState &&  otroCollider.gameObject.CompareTag("Player") && otroCollider is CapsuleCollider)
+        if (FSM == null)
+            return;
+
+        if (FSM.CurrentState is PatrolState &&
+            otroCollider.CompareTag("Player") &&
+            otroCollider is CapsuleCollider)
         {
             FSM.TriggerEvent("PlayerDetected");
 
             if (alertSoundSource != null)
             {
-                // NUEVO: actualizar el volumen antes de reproducir
                 alertSoundSource.volume =
                     PlayerPrefs.GetFloat("SFXVolume", 0.3f);
 
@@ -114,26 +188,32 @@ public class ArmorController : NpcController
         OnTriggerEnter(otroCollider);
     }
 
-    //se llama si algo sale de la zona de trigger de la armadura
     private void OnTriggerExit(Collider otroCollider)
     {
-        if (otroCollider.gameObject.CompareTag("Player") && otroCollider is CapsuleCollider)
+        if (FSM == null)
+            return;
+
+        if (otroCollider.CompareTag("Player") &&
+            otroCollider is CapsuleCollider)
         {
-            Debug.Log("jugador perdido");
+            Debug.Log("Jugador perdido");
             FSM.TriggerEvent("PlayerLost");
         }
-       
     }
 
     private void AlertarFantasmasCercanos()
     {
-        //almacena los fantasmas activos
-        SpiritController[] fantasmas = FindObjectsByType<SpiritController>(FindObjectsSortMode.None);
+        SpiritController[] fantasmas =
+            FindObjectsByType<SpiritController>(
+                FindObjectsSortMode.None);
 
         foreach (SpiritController fantasma in fantasmas)
         {
-            //mira la distancia de la armadura al fantasma
-            float distancia = Vector3.Distance(transform.position, fantasma.transform.position);
+            if (fantasma == null)
+                continue;
+
+            float distancia = Vector3.Distance(
+                transform.position, fantasma.transform.position);
 
             if (distancia <= radioDeteccion)
             {
@@ -142,7 +222,6 @@ public class ArmorController : NpcController
         }
     }
 
-    
     private void OnDrawGizmos()
     {
         if (Camino == null || Camino.Count == 0)
@@ -154,8 +233,7 @@ public class ArmorController : NpcController
         {
             Gizmos.DrawCube(
                 nodo.posicionMundo,
-                new Vector3(0.8f, 0.8f, 0.8f)
-            );
+                new Vector3(0.8f, 0.8f, 0.8f));
         }
     }
 
@@ -163,12 +241,15 @@ public class ArmorController : NpcController
     {
         withYaiko = true;
     }
+
     public void ExitYaikoZone()
     {
         withYaiko = false;
     }
+
     public void EndDefense()
     {
-        FSM.TriggerEvent("DefenseEnded");
+        if (FSM != null)
+            FSM.TriggerEvent("DefenseEnded");
     }
 }

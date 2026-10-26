@@ -21,17 +21,38 @@ public class PlayerData : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    private bool RecuperarJugador()
+    {
+        if (player != null)
+            return true;
+
+        player = GameObject.FindGameObjectWithTag("Player");
+
+        if (player == null)
+        {
+            Debug.LogError("PlayerData: no se encuentra ningún jugador con tag Player.");
+            return false;
+        }
+
+        return true;
+    }
    
 
 
     public void Hide()
     {
+        if (!RecuperarJugador())
+            return;
         hiding = true;
         player.SetActive(false);
     }
 
     public void StopHiding()
     {
+        if (!RecuperarJugador())
+            return;
+
         hiding = false;
         player.SetActive(true);
     }
